@@ -89,6 +89,26 @@ pnpm dev:frontend
 
 Vite 默认监听 `0.0.0.0:5173`。本机访问使用 `http://localhost:5173`，同一局域网中的其他设备使用开发机的局域网 IP 访问，例如 `http://192.168.1.100:5173`。
 
+### Workspace 依赖安装
+
+项目使用 pnpm workspace 统一管理依赖。推荐在仓库根目录使用 `--filter`，明确将依赖安装到对应应用：
+
+```bash
+# 安装前端运行时依赖
+pnpm --filter frontend-vue add @vueuse/core
+
+# 安装后端运行时依赖
+pnpm --filter backend-fastify add zod
+
+# 安装某个应用的开发依赖
+pnpm --filter frontend-vue add -D vitest
+
+# 安装根 workspace 的开发工具
+pnpm add -Dw prettier
+```
+
+进入 `apps/frontend` 或 `apps/backend` 后直接执行 `pnpm add <package>` 也可以，但从根目录使用 `--filter` 更容易确认依赖归属。只安装已有锁文件中的全部依赖时，在根目录执行 `pnpm install`；不要在根目录直接执行 `pnpm add`，除非明确使用 `-w` 将依赖添加到根 workspace。
+
 ### Docker Compose
 
 开发环境挂载源码并启用热更新：
