@@ -234,17 +234,6 @@ pnpm --filter backend-fastify build
 pnpm --filter backend-fastify start
 ```
 
-## 开发约定
-
-- 前端使用 Vue 3 Composition API 和 `<script setup lang="ts">`。
-- 新增后端路由时，放在 `apps/backend/src/routes/` 下，并在 `src/routes/index.ts` 注册。
-- 跨应用复用的类型或工具放入 `packages/shared`，数据库相关实现放入 `packages/database`。
-- 提交代码前至少运行受影响应用的 `pnpm type-check`；发布前再运行对应的 `pnpm build`。
-
-## 后续扩展
-
-数据库服务已由 Docker Compose 提供；应用接入数据库、共享 workspace 配置或 API 文档后，请同步更新相关配置和使用说明。
-
 ## License
 
 暂未指定 License。
