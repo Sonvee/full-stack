@@ -87,7 +87,7 @@ curl http://localhost:3001/health
 pnpm dev:frontend
 ```
 
-Vite 默认使用 `http://localhost:5173`，启动后按终端输出的地址访问即可。
+Vite 默认监听 `0.0.0.0:5173`。本机访问使用 `http://localhost:5173`，同一局域网中的其他设备使用开发机的局域网 IP 访问，例如 `http://192.168.1.100:5173`。
 
 ### Docker Compose
 
@@ -98,6 +98,29 @@ docker compose -f docker-compose.dev.yml up
 ```
 
 首次使用时，将根目录 `.env.example` 复制为 `.env`；Docker Compose 会自动加载 `.env`。开发容器从根 workspace 安装依赖并挂载整个仓库，前端地址为 `http://localhost:5173`，后端地址为 `http://localhost:3001`。PostgreSQL 和 Redis 分别映射到本机 `5432` 和 `6379`，示例数据库用户为 `root`，PostgreSQL 和 Redis 密码为 `root1234`。后端等待数据库和 Redis 健康后启动。
+
+卸载开发环境时，在仓库根目录执行：
+
+```bash
+# 删除开发容器和网络，保留镜像及数据卷
+docker compose -f docker-compose.dev.yml down
+
+# 同时删除 Compose 使用的镜像，保留数据卷
+docker compose -f docker-compose.dev.yml down --rmi all
+
+# 连同 PostgreSQL、Redis 数据卷一起删除（会清空本地数据）
+docker compose -f docker-compose.dev.yml down --rmi all -v
+```
+
+生产环境使用相同命令，将 `docker-compose.dev.yml` 参数去掉，例如：
+
+```bash
+docker compose down
+docker compose down --rmi all
+docker compose down --rmi all -v
+```
+
+其中 `-v` 会删除 Compose 管理的数据卷，只有确认不再需要本地数据库和 Redis 数据时才使用。
 
 生产环境使用根目录 `Dockerfile` 的 `frontend` 和 `backend` 构建阶段，Compose 会为两个服务构建独立镜像：
 
