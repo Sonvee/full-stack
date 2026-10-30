@@ -128,6 +128,24 @@ docker compose down --rmi all -v
 docker compose up --build -d
 ```
 
+### 推送到 Docker Hub
+
+生产 Compose 固定使用 `latest` 标签。发布版本时，先构建并推送 `latest`，再复制为对应的版本标签：
+
+```powershell
+docker login
+$version = "1.0.0"
+docker compose -f docker-compose.yml build frontend backend
+docker push sonve/full-stack:frontend-latest
+docker push sonve/full-stack:backend-latest
+docker tag sonve/full-stack:frontend-latest "sonve/full-stack:frontend-$version"
+docker tag sonve/full-stack:backend-latest "sonve/full-stack:backend-$version"
+docker push "sonve/full-stack:frontend-$version"
+docker push "sonve/full-stack:backend-$version"
+```
+
+默认使用的镜像标签为 `sonve/full-stack:frontend-latest` 和 `sonve/full-stack:backend-latest`。示例命令额外生成 `sonve/full-stack:frontend-1.0.0` 和 `sonve/full-stack:backend-1.0.0`。
+
 生产前端默认映射到本机 `80`，后端映射到 `3001`。数据库和 Redis 不映射到宿主机端口；数据保存在 `postgres_data` 和 `redis_data` 卷中。数据库用户、PostgreSQL 和 Redis 密码及端口均可在根目录 `.env` 中修改。`.env.example` 中的值仅为示例，部署时请替换密码，并使用 URL 安全字符。停止生产服务使用 `docker compose down`。
 
 有待执行的数据库迁移时，先启动数据库，再运行一次迁移任务：

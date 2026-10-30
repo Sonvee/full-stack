@@ -3,6 +3,7 @@ name: full-stack-prod
 services:
   frontend:
     container_name: full-stack-prod-frontend
+    image: sonve/full-stack:frontend-latest
     build:
       context: .
       dockerfile: Dockerfile
@@ -13,6 +14,7 @@ services:
 
   backend:
     container_name: full-stack-prod-backend
+    image: sonve/full-stack:backend-latest
     build:
       context: .
       dockerfile: Dockerfile
