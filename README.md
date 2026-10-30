@@ -65,10 +65,10 @@ pnpm install
 pnpm dev
 ```
 
-后端默认监听 `http://localhost:3000`。健康检查：
+后端默认监听 `http://localhost:3001`。健康检查：
 
 ```bash
-curl http://localhost:3000/health
+curl http://localhost:3001/health
 ```
 
 预期响应：
@@ -97,7 +97,7 @@ Vite 默认使用 `http://localhost:5173`，启动后按终端输出的地址访
 docker compose -f docker-compose.dev.yml up
 ```
 
-首次使用时，将根目录 `.env.example` 复制为 `.env`；Docker Compose 会自动加载 `.env`。前端地址为 `http://localhost:5173`，后端地址为 `http://localhost:3000`。PostgreSQL 和 Redis 分别映射到本机 `5432` 和 `6379`，示例数据库用户为 `root`，PostgreSQL 和 Redis 密码为 `root1234`。后端等待数据库和 Redis 健康后启动。
+首次使用时，将根目录 `.env.example` 复制为 `.env`；Docker Compose 会自动加载 `.env`。前端地址为 `http://localhost:5173`，后端地址为 `http://localhost:3001`。PostgreSQL 和 Redis 分别映射到本机 `5432` 和 `6379`，示例数据库用户为 `root`，PostgreSQL 和 Redis 密码为 `root1234`。后端等待数据库和 Redis 健康后启动。
 
 生产环境使用根目录 `Dockerfile` 的 `frontend` 和 `backend` 构建阶段，Compose 会为两个服务构建独立镜像：
 
@@ -105,7 +105,7 @@ docker compose -f docker-compose.dev.yml up
 docker compose up --build -d
 ```
 
-生产前端默认映射到本机 `80`，后端映射到 `3000`。数据库和 Redis 不映射到宿主机端口；数据保存在 `postgres_data` 和 `redis_data` 卷中。数据库用户、PostgreSQL 和 Redis 密码及端口均可在根目录 `.env` 中修改。`.env.example` 中的值仅为示例，部署时请替换密码，并使用 URL 安全字符。停止生产服务使用 `docker compose down`。
+生产前端默认映射到本机 `80`，后端映射到 `3001`。数据库和 Redis 不映射到宿主机端口；数据保存在 `postgres_data` 和 `redis_data` 卷中。数据库用户、PostgreSQL 和 Redis 密码及端口均可在根目录 `.env` 中修改。`.env.example` 中的值仅为示例，部署时请替换密码，并使用 URL 安全字符。停止生产服务使用 `docker compose down`。
 
 有待执行的数据库迁移时，先启动数据库，再运行一次迁移任务：
 
@@ -121,7 +121,7 @@ docker compose --profile tools run --rm migrate
 | 变量 | 默认值 | 说明 |
 | --- | --- | --- |
 | `HOST` | `0.0.0.0` | 服务监听地址 |
-| `PORT` | `3000` | 服务监听端口 |
+| `PORT` | `3001` | 服务监听端口 |
 | `DATABASE_URL` | `postgresql://root:root1234@localhost:5432/app` | PostgreSQL 连接地址 |
 | `REDIS_URL` | `redis://:root1234@localhost:6379` | Redis 连接地址 |
 
