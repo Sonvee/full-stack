@@ -2,6 +2,7 @@ name: full-stack-dev
 
 services:
   frontend:
+    container_name: full-stack-dev-frontend
     image: node:24-alpine
     working_dir: /app
     command: sh -c "corepack enable && pnpm install && pnpm dev -- --host 0.0.0.0"
@@ -12,6 +13,7 @@ services:
       - frontend_node_modules:/app/node_modules
 
   backend:
+    container_name: full-stack-dev-backend
     image: node:24-alpine
     working_dir: /app
     command: sh -c "corepack enable && pnpm install && pnpm dev"
@@ -32,6 +34,7 @@ services:
       - backend_node_modules:/app/node_modules
 
   database:
+    container_name: full-stack-dev-database
     image: postgres:17-alpine
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-app}
@@ -48,6 +51,7 @@ services:
       retries: 5
 
   redis:
+    container_name: full-stack-dev-redis
     image: redis:7-alpine
     command: sh -c 'exec redis-server --appendonly yes --requirepass "$$REDIS_PASSWORD"'
     environment:
