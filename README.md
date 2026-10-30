@@ -210,30 +210,6 @@ Linux/macOS 可使用：
 PORT=3001 pnpm dev:backend
 ```
 
-## 常用命令
-
-### 根目录
-
-```bash
-pnpm install       # 安装整个 workspace 的依赖
-pnpm type-check    # 检查所有 workspace 包
-pnpm build         # 构建所有 workspace 包
-pnpm dev:frontend  # 启动前端开发服务器
-pnpm dev:backend   # 启动后端开发服务器
-pnpm format        # 格式化前端 src 目录
-```
-
-### 按 workspace 包执行
-
-```bash
-pnpm --filter frontend-vue dev
-pnpm --filter frontend-vue type-check
-pnpm --filter backend-fastify dev
-pnpm --filter backend-fastify type-check
-pnpm --filter backend-fastify build
-pnpm --filter backend-fastify start
-```
-
 ## License
 
 暂未指定 License。
