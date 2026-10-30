@@ -1,0 +1,9 @@
+packages:
+  - apps/*
+  - packages/*
+
+sharedWorkspaceLockfile: true
+linkWorkspacePackages: true
+preferWorkspacePackages: true
+allowBuilds:
+  esbuild: true

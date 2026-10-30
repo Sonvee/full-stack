@@ -22,9 +22,12 @@
 
 ```text
 .
+├─ package.json             # 根 workspace 脚本与 pnpm 版本声明
+├─ pnpm-workspace.yaml      # workspace 范围与 pnpm 配置
+├─ pnpm-lock.yaml           # 统一依赖锁文件
 ├─ apps/
-│  ├─ frontend/            # Vue 3 前端应用，独立 pnpm 项目
-│  └─ backend/             # Fastify 后端服务，独立 pnpm 项目
+│  ├─ frontend/            # Vue 3 前端应用
+│  └─ backend/             # Fastify 后端服务
 ├─ packages/
 │  ├─ config/              # 共享配置（当前为目录占位）
 │  ├─ database/            # 数据库相关代码（当前为目录占位）
@@ -53,16 +56,15 @@ pnpm --version
 
 ## 本地开发
 
-前端和后端目前是两个独立的 pnpm 项目，需要分别安装依赖并启动。
+仓库使用根目录的 pnpm workspace 统一管理前端、后端和共享 packages，依赖安装与锁文件统一在仓库根目录维护。
 
 ### 启动后端
 
-后端启动时会连接 PostgreSQL 和 Redis。请先确保本机 PostgreSQL、Redis 分别监听 `localhost:5432`、`localhost:6379`，或从仓库根目录运行 `docker compose -f docker-compose.dev.yml up database redis` 启动开发依赖。
+后端启动时会连接 PostgreSQL 和 Redis。请先确保本机 PostgreSQL、Redis 分别监听 `localhost:5432`、`localhost:6379`，或从仓库根目录运行 `docker compose -f docker-compose.dev.yml up -d database redis` 启动开发依赖。
 
 ```bash
-cd apps/backend
 pnpm install
-pnpm dev
+pnpm dev:backend
 ```
 
 后端默认监听 `http://localhost:3001`。健康检查：
@@ -82,9 +84,7 @@ curl http://localhost:3001/health
 在另一个终端执行：
 
 ```bash
-cd apps/frontend
-pnpm install
-pnpm dev
+pnpm dev:frontend
 ```
 
 Vite 默认使用 `http://localhost:5173`，启动后按终端输出的地址访问即可。
@@ -97,7 +97,7 @@ Vite 默认使用 `http://localhost:5173`，启动后按终端输出的地址访
 docker compose -f docker-compose.dev.yml up
 ```
 
-首次使用时，将根目录 `.env.example` 复制为 `.env`；Docker Compose 会自动加载 `.env`。前端地址为 `http://localhost:5173`，后端地址为 `http://localhost:3001`。PostgreSQL 和 Redis 分别映射到本机 `5432` 和 `6379`，示例数据库用户为 `root`，PostgreSQL 和 Redis 密码为 `root1234`。后端等待数据库和 Redis 健康后启动。
+首次使用时，将根目录 `.env.example` 复制为 `.env`；Docker Compose 会自动加载 `.env`。开发容器从根 workspace 安装依赖并挂载整个仓库，前端地址为 `http://localhost:5173`，后端地址为 `http://localhost:3001`。PostgreSQL 和 Redis 分别映射到本机 `5432` 和 `6379`，示例数据库用户为 `root`，PostgreSQL 和 Redis 密码为 `root1234`。后端等待数据库和 Redis 健康后启动。
 
 生产环境使用根目录 `Dockerfile` 的 `frontend` 和 `backend` 构建阶段，Compose 会为两个服务构建独立镜像：
 
@@ -125,7 +125,7 @@ docker compose --profile tools run --rm migrate
 | `DATABASE_URL` | `postgresql://root:root1234@localhost:5432/app` | PostgreSQL 连接地址 |
 | `REDIS_URL` | `redis://:root1234@localhost:6379` | Redis 连接地址 |
 
-Drizzle schema 位于 `apps/backend/src/db/schema.ts`，配置文件为 `apps/backend/drizzle.config.ts`。添加业务表后，在 `apps/backend` 目录生成并执行迁移：
+Drizzle schema 位于 `apps/backend/src/db/schema.ts`，配置文件为 `apps/backend/drizzle.config.ts`。添加业务表后，在仓库根目录生成并执行迁移：
 
 ```bash
 pnpm db:generate
@@ -135,38 +135,38 @@ pnpm db:migrate
 例如：
 
 ```bash
-cd apps/backend
 $env:PORT=3001
-pnpm dev
+pnpm dev:backend
 ```
 
 Linux/macOS 可使用：
 
 ```bash
-PORT=3001 pnpm dev
+PORT=3001 pnpm dev:backend
 ```
 
 ## 常用命令
 
-### 前端
+### 根目录
 
 ```bash
-cd apps/frontend
-pnpm dev          # 启动开发服务器
-pnpm type-check   # 类型检查
-pnpm build        # 类型检查并构建生产资源
-pnpm preview      # 预览生产构建
-pnpm format       # 格式化 src 目录
+pnpm install       # 安装整个 workspace 的依赖
+pnpm type-check    # 检查所有 workspace 包
+pnpm build         # 构建所有 workspace 包
+pnpm dev:frontend  # 启动前端开发服务器
+pnpm dev:backend   # 启动后端开发服务器
+pnpm format        # 格式化前端 src 目录
 ```
 
-### 后端
+### 按 workspace 包执行
 
 ```bash
-cd apps/backend
-pnpm dev          # 监听模式启动
-pnpm type-check   # 类型检查
-pnpm build        # 编译到 dist/
-pnpm start        # 启动编译后的服务
+pnpm --filter frontend-vue dev
+pnpm --filter frontend-vue type-check
+pnpm --filter backend-fastify dev
+pnpm --filter backend-fastify type-check
+pnpm --filter backend-fastify build
+pnpm --filter backend-fastify start
 ```
 
 ## 开发约定

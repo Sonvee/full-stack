@@ -44,7 +44,7 @@ services:
       context: .
       dockerfile: Dockerfile
       target: backend-build
-    command: ["pnpm", "db:migrate"]
+    command: ["pnpm", "--filter", "backend-fastify", "db:migrate"]
     environment:
       DATABASE_URL: postgresql://${POSTGRES_USER:-root}:${POSTGRES_PASSWORD:-root1234}@database:5432/${POSTGRES_DB:-app}
     depends_on:

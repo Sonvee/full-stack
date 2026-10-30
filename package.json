@@ -1,0 +1,20 @@
+{
+  "name": "full-stack",
+  "version": "0.0.0",
+  "private": true,
+  "packageManager": "pnpm@11.0.9",
+  "engines": {
+    "node": ">=22.18.0"
+  },
+  "scripts": {
+    "dev:frontend": "pnpm --filter frontend-vue dev",
+    "dev:backend": "pnpm --filter backend-fastify dev",
+    "type-check": "pnpm -r type-check",
+    "build": "pnpm -r build",
+    "build:frontend": "pnpm --filter frontend-vue build",
+    "build:backend": "pnpm --filter backend-fastify build",
+    "format": "pnpm --filter frontend-vue format",
+    "db:generate": "pnpm --filter backend-fastify db:generate",
+    "db:migrate": "pnpm --filter backend-fastify db:migrate"
+  }
+}
