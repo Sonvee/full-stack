@@ -148,6 +148,30 @@ docker push "sonve/full-stack:backend-$version"
 
 生产前端默认映射到本机 `80`，后端映射到 `3001`。数据库和 Redis 不映射到宿主机端口；数据保存在 `postgres_data` 和 `redis_data` 卷中。数据库用户、PostgreSQL 和 Redis 密码及端口均可在根目录 `.env` 中修改。`.env.example` 中的值仅为示例，部署时请替换密码，并使用 URL 安全字符。停止生产服务使用 `docker compose down`。
 
+### 服务器生产环境部署
+
+服务器只需要安装 Docker、Docker Compose，并上传 `docker-compose.yml`。以下命令需要在 `docker-compose.yml` 所在目录执行。生产环境建议同时创建 `.env`，配置数据库密码、Redis 密码和端口。Docker Hub 仓库为私有仓库时，先登录；公开仓库可跳过登录：
+
+```bash
+docker login
+docker compose pull
+docker compose up -d
+docker compose ps
+```
+
+发布新镜像后，在服务器更新：
+
+```bash
+docker compose pull
+docker compose up -d
+```
+
+停止服务器上的生产服务：
+
+```bash
+docker compose down
+```
+
 有待执行的数据库迁移时，先启动数据库，再运行一次迁移任务：
 
 ```bash
