@@ -1,6 +1,6 @@
 # AGENTS.md
 
-本文档定义本项目的协作约定，适用于仓库根目录及其所有子目录。更深层目录中的 `AGENTS.md` 可以补充或细化对应目录的规则。
+本文档适用于仓库根目录及其所有子目录。更深层的 `AGENTS.md` 可以补充对应目录的规则。
 
 ## 项目结构
 
@@ -10,18 +10,25 @@
 │  ├─ frontend/            # Vue 3 前端应用
 │  └─ backend/             # Fastify 后端服务
 ├─ packages/
-│  ├─ database/            # Drizzle schema、迁移与数据库访问
-│  ├─ config/              # 共享 TypeScript、Oxlint、Oxfmt 等配置
-│  └─ shared/              # 前后端共享类型和工具（按需增加）
-├─ docs/                   # 架构、开发、API 和部署文档
-├─ scripts/                # 项目维护和自动化脚本
-├─ package.json            # 根工作区脚本
-├─ docker-compose.yml      # 本地开发与部署编排
-├─ pnpm-workspace.yaml     # pnpm workspace 配置
+│  ├─ database/            # 数据库代码预留
+│  ├─ config/              # 共享配置预留
+│  └─ shared/              # 共享类型和工具预留
+├─ docs/                   # 项目文档
+├─ scripts/                # 项目脚本
+├─ Dockerfile              # 前后端生产镜像多阶段构建
+├─ docker-compose.yml      # 生产服务编排
+├─ docker-compose.dev.yml  # 本地开发服务编排
+├─ docker/                 # 容器运行配置
 ├─ AGENTS.md               # 项目协作与代码规范
 └─ README.md
 ```
 
 ## 开发规范
 
+- 使用 TypeScript；前端遵循 Vue 3 Composition API 与 `<script setup>`。
+- 前后端是独立 pnpm 项目，在对应的 `apps/frontend` 或 `apps/backend` 目录执行命令。
+- 按职责组织代码，复用逻辑放入合适的共享模块；避免无关重构和重复实现。
+- 更新功能或配置时同步维护相关文档；新增依赖前确认现有依赖无法满足需求。
+- 完成修改后运行受影响应用的 `pnpm type-check`；涉及构建时再运行 `pnpm build`。
+- 使用中文沟通和编写文档，技术名词、标识符和命令保留原文。
 

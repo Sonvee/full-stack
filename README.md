@@ -1,51 +1,185 @@
 # Full-Stack 项目模板
 
-一个面向现代 Web 应用的前后端分离全栈项目模板。
+一个前后端分离的 TypeScript 全栈项目脚手架，当前包含一个 Vue 3 前端应用和一个 Fastify 后端服务。
 
-项目采用 Vue 3 构建前端，Fastify 提供后端 API，PostgreSQL 负责数据存储，并通过 Docker 统一开发与部署环境。
+## 当前状态
+
+- 前端：Vue 3 + Vite，入口页面位于 `apps/frontend/src/App.vue`。
+- 后端：Fastify，已提供 `GET /health` 健康检查接口。
+- 数据库：后端使用 PostgreSQL、`pg` 连接池和 Drizzle ORM；业务表按需求定义在 `apps/backend/src/db/schema.ts`。
+- Docker Compose：开发和生产环境分别由 `docker-compose.dev.yml` 与 `docker-compose.yml` 管理。
 
 ## 技术栈
 
 | 层级 | 技术 |
 | --- | --- |
-| 前端 | Vue 3、Vite、TypeScript、Tailwind CSS |
-| 状态与工具 | Pinia、VueUse |
-| 后端 | Node.js、Fastify、TypeScript |
-| 数据库 | PostgreSQL、Drizzle ORM |
-| 工程化 | pnpm、Oxlint、Oxfmt、TypeScript |
-| 部署 | Docker、Docker Compose |
+| 前端 | Vue 3、Vite、TypeScript、Vue Router、Pinia |
+| 后端 | Node.js、Fastify、TypeScript、tsx |
+| 工程化 | pnpm、Vue TSC、Oxlint/Oxfmt 配置（按应用启用） |
+| 运行环境 | Node.js `>=22.18.0` |
 
-## 目录规划
+## 目录结构
 
 ```text
 .
 ├─ apps/
-│  ├─ frontend/            # Vue 3 前端应用
-│  └─ backend/             # Fastify 后端服务
+│  ├─ frontend/            # Vue 3 前端应用，独立 pnpm 项目
+│  └─ backend/             # Fastify 后端服务，独立 pnpm 项目
 ├─ packages/
-│  ├─ database/            # Drizzle schema、迁移与数据库访问
-│  ├─ config/              # 共享 TypeScript、Oxlint、Oxfmt 等配置
-│  └─ shared/              # 前后端共享类型和工具（按需增加）
-├─ docs/                   # 架构、开发、API 和部署文档
-├─ scripts/                # 项目维护和自动化脚本
-├─ package.json            # 根工作区脚本
-├─ docker-compose.yml      # 本地开发与部署编排
-├─ pnpm-workspace.yaml     # pnpm workspace 配置
-├─ AGENTS.md               # 项目协作与代码规范
+│  ├─ config/              # 共享配置（当前为目录占位）
+│  ├─ database/            # 数据库相关代码（当前为目录占位）
+│  └─ shared/              # 前后端共享类型和工具（当前为目录占位）
+├─ docs/                   # 项目文档
+├─ scripts/                # 项目脚本
+├─ Dockerfile              # 生产镜像多阶段构建
+├─ docker-compose.yml      # 生产服务编排
+├─ docker-compose.dev.yml  # 本地开发服务编排
+├─ docker/                 # 容器运行配置（Nginx）
+├─ AGENTS.md               # 项目协作约定
 └─ README.md
+```
+
+## 环境要求
+
+- Node.js `22.18.0` 或更高版本
+- pnpm
+
+查看 Node.js 和 pnpm 版本：
+
+```bash
+node --version
+pnpm --version
+```
+
+## 本地开发
+
+前端和后端目前是两个独立的 pnpm 项目，需要分别安装依赖并启动。
+
+### 启动后端
+
+后端启动时会连接 PostgreSQL 和 Redis。请先确保本机 PostgreSQL、Redis 分别监听 `localhost:5432`、`localhost:6379`，或从仓库根目录运行 `docker compose -f docker-compose.dev.yml up database redis` 启动开发依赖。
+
+```bash
+cd apps/backend
+pnpm install
+pnpm dev
+```
+
+后端默认监听 `http://localhost:3000`。健康检查：
+
+```bash
+curl http://localhost:3000/health
+```
+
+预期响应：
+
+```json
+{"status":"ok"}
+```
+
+### 启动前端
+
+在另一个终端执行：
+
+```bash
+cd apps/frontend
+pnpm install
+pnpm dev
+```
+
+Vite 默认使用 `http://localhost:5173`，启动后按终端输出的地址访问即可。
+
+### Docker Compose
+
+开发环境挂载源码并启用热更新：
+
+```bash
+docker compose -f docker-compose.dev.yml up
+```
+
+首次使用时，将根目录 `.env.example` 复制为 `.env`；Docker Compose 会自动加载 `.env`。前端地址为 `http://localhost:5173`，后端地址为 `http://localhost:3000`。PostgreSQL 和 Redis 分别映射到本机 `5432` 和 `6379`，示例数据库用户为 `root`，PostgreSQL 和 Redis 密码为 `root1234`。后端等待数据库和 Redis 健康后启动。
+
+生产环境使用根目录 `Dockerfile` 的 `frontend` 和 `backend` 构建阶段，Compose 会为两个服务构建独立镜像：
+
+```bash
+docker compose up --build -d
+```
+
+生产前端默认映射到本机 `80`，后端映射到 `3000`。数据库和 Redis 不映射到宿主机端口；数据保存在 `postgres_data` 和 `redis_data` 卷中。数据库用户、PostgreSQL 和 Redis 密码及端口均可在根目录 `.env` 中修改。`.env.example` 中的值仅为示例，部署时请替换密码，并使用 URL 安全字符。停止生产服务使用 `docker compose down`。
+
+有待执行的数据库迁移时，先启动数据库，再运行一次迁移任务：
+
+```bash
+docker compose up -d database
+docker compose --profile tools run --rm migrate
+```
+
+## 环境变量
+
+后端支持以下环境变量：
+
+| 变量 | 默认值 | 说明 |
+| --- | --- | --- |
+| `HOST` | `0.0.0.0` | 服务监听地址 |
+| `PORT` | `3000` | 服务监听端口 |
+| `DATABASE_URL` | `postgresql://root:root1234@localhost:5432/app` | PostgreSQL 连接地址 |
+| `REDIS_URL` | `redis://:root1234@localhost:6379` | Redis 连接地址 |
+
+Drizzle schema 位于 `apps/backend/src/db/schema.ts`，配置文件为 `apps/backend/drizzle.config.ts`。添加业务表后，在 `apps/backend` 目录生成并执行迁移：
+
+```bash
+pnpm db:generate
+pnpm db:migrate
+```
+
+例如：
+
+```bash
+cd apps/backend
+$env:PORT=3001
+pnpm dev
+```
+
+Linux/macOS 可使用：
+
+```bash
+PORT=3001 pnpm dev
+```
+
+## 常用命令
+
+### 前端
+
+```bash
+cd apps/frontend
+pnpm dev          # 启动开发服务器
+pnpm type-check   # 类型检查
+pnpm build        # 类型检查并构建生产资源
+pnpm preview      # 预览生产构建
+pnpm format       # 格式化 src 目录
+```
+
+### 后端
+
+```bash
+cd apps/backend
+pnpm dev          # 监听模式启动
+pnpm type-check   # 类型检查
+pnpm build        # 编译到 dist/
+pnpm start        # 启动编译后的服务
 ```
 
 ## 开发约定
 
+- 前端使用 Vue 3 Composition API 和 `<script setup lang="ts">`。
+- 新增后端路由时，放在 `apps/backend/src/routes/` 下，并在 `src/routes/index.ts` 注册。
+- 跨应用复用的类型或工具放入 `packages/shared`，数据库相关实现放入 `packages/database`。
+- 提交代码前至少运行受影响应用的 `pnpm type-check`；发布前再运行对应的 `pnpm build`。
 
-## 本地开发
+## 后续扩展
 
-
-## 环境变量
-
-
-## Docker 部署
-
+数据库服务已由 Docker Compose 提供；应用接入数据库、共享 workspace 配置或 API 文档后，请同步更新相关配置和使用说明。
 
 ## License
 
+暂未指定 License。
