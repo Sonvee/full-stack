@@ -26,6 +26,7 @@
 ## 开发规范
 
 - 使用 TypeScript；前端遵循 Vue 3 Composition API 与 `<script setup>`。
+- 涉及 shadcn-vue 的组件安装、使用、样式定制、调试或更新时，必须先阅读并遵守 [.agents/skills/shadcn-vue/SKILL.md](.agents/skills/shadcn-vue/SKILL.md)，并按其要求读取相关参考文件。
 - 前后端是独立 pnpm 项目，在对应的 `apps/frontend` 或 `apps/backend` 目录执行命令。
 - 按职责组织代码，复用逻辑放入合适的共享模块；避免无关重构和重复实现。
 - 前端编写工具逻辑前，先检查原生 JavaScript API、项目已有工具、`@vueuse/core` 和 `es-toolkit`；Vue 响应式及浏览器交互优先使用 VueUse，通用数据处理优先复用 `es-toolkit`，按需导入，避免重复造轮子。

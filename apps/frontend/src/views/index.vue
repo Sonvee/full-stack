@@ -42,6 +42,27 @@
                 阅读 Vue 文档
               </a>
             </div>
+
+            <section
+              aria-labelledby="button-demo-title"
+              class="mt-10 flex flex-col gap-4 text-foreground"
+            >
+              <h2 id="button-demo-title" class="text-lg font-semibold">shadcn-vue Button 示例</h2>
+              <div class="flex flex-wrap items-center gap-3">
+                <Button type="button" @click="clickCount++">点击试试</Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  :disabled="clickCount === 0"
+                  @click="clickCount = 0"
+                >
+                  重置计数
+                </Button>
+                <Button type="button" variant="secondary" size="sm">小号按钮</Button>
+                <Button type="button" disabled>禁用按钮</Button>
+              </div>
+              <p class="text-sm text-muted-foreground" role="status">已点击 {{ clickCount }} 次</p>
+            </section>
           </div>
 
           <aside
@@ -68,6 +89,11 @@
   </div>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import { shallowRef } from 'vue'
+import { Button } from '@/components/ui/button'
+
+const clickCount = shallowRef(0)
+</script>
 
 <style lang="scss" scoped></style>
