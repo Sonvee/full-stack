@@ -28,10 +28,10 @@
 - 使用 TypeScript；前端遵循 Vue 3 Composition API 与 `<script setup>`。
 - 前后端是独立 pnpm 项目，在对应的 `apps/frontend` 或 `apps/backend` 目录执行命令。
 - 按职责组织代码，复用逻辑放入合适的共享模块；避免无关重构和重复实现。
+- 前端编写工具逻辑前，先检查原生 JavaScript API、项目已有工具、`@vueuse/core` 和 `es-toolkit`；Vue 响应式及浏览器交互优先使用 VueUse，通用数据处理优先复用 `es-toolkit`，按需导入，避免重复造轮子。
 - 更新功能或配置时同步维护相关文档；新增依赖前确认现有依赖无法满足需求。
 - 完成修改后运行受影响应用的 `pnpm type-check`；涉及构建时再运行 `pnpm build`。
 - 使用中文沟通和编写文档，技术名词、标识符和命令保留原文。
-- 执行任何 pnpm 命令前，必须先核实版本切换、store 配置及权限回退均不会产生 `.pnpm-store`；无法确认时禁止执行，且禁止使用或依赖 `.pnpm-store`。
 - 命令首次执行失败后，只允许基于明确的新诊断进行一次重试；重试仍然失败时必须立即停止继续尝试，并通知用户手动运行失败的命令，同时说明准确的错误信息和所需的环境条件。
 - 开发过程中修改后端代码后，如需同步更新由 Docker Compose 部署的开发环境，必须及时提示用户手动运行 `docker compose -f docker-compose.dev.yml up -d` 或必要的相关更新命令。
 

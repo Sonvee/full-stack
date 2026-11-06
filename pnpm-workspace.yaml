@@ -3,6 +3,7 @@ packages:
   - packages/*
 
 sharedWorkspaceLockfile: true
+storeDir: .pnpm-store
 linkWorkspacePackages: true
 preferWorkspacePackages: true
 allowBuilds:

@@ -1,134 +1,73 @@
 <template>
-  <main class="home">
-    <section class="demo-card" aria-labelledby="demo-title">
-      <span class="demo-card__badge">Sass / SCSS</span>
-      <h1 id="demo-title" class="demo-card__title">给首页添一点颜色。</h1>
-      <p class="demo-card__description">
-        这是一个简单的 Sass 示例：用变量统一颜色，用嵌套组织样式。
-      </p>
-      <ul class="demo-card__features" aria-label="本页使用的 Sass 语法">
-        <li>$变量</li>
-        <li>嵌套选择器</li>
-        <li>&amp;:hover</li>
-      </ul>
-      <details class="demo-card__example">
-        <summary class="demo-card__toggle">查看 SCSS 写法</summary>
-        <pre class="demo-card__code"><code>$primary: #087f5b;
+  <div class="flex min-h-svh flex-col bg-emerald-50/60 font-sans text-emerald-950">
+    <header
+      class="mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-4 px-6 py-8 sm:px-10"
+    >
+      <span class="text-lg font-bold tracking-tight">Full Stack</span>
+      <span class="text-sm text-emerald-800">你的下一个起点<i class="sv-icon-logo"></i></span>
+    </header>
 
-.demo-card {
-  &amp;__toggle {
-    background: $primary;
+    <main class="flex flex-1 items-center px-6 py-12 sm:px-10 sm:py-20">
+      <section aria-labelledby="welcome-title" class="mx-auto w-full max-w-5xl">
+        <div
+          class="flex flex-col items-start gap-12 lg:flex-row lg:items-end lg:justify-between lg:gap-16"
+        >
+          <div class="min-w-0 max-w-2xl">
+            <p class="mb-6 text-sm font-medium text-emerald-700">欢迎来到你的全栈项目</p>
+            <h1
+              id="welcome-title"
+              class="text-5xl leading-tight font-semibold tracking-tight break-words sm:text-7xl"
+            >
+              从这里，<br />
+              <span class="text-emerald-600">让想法发生。</span>
+            </h1>
+            <p class="mt-8 max-w-lg text-base leading-8 text-emerald-900/70 sm:text-lg">
+              用 Vue 构建交互，用 Tailwind CSS 描绘界面。下一次精彩，从你的第一行代码开始。
+            </p>
+            <div class="mt-10 flex flex-wrap gap-4">
+              <a
+                href="https://tailwindcss.com/docs"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex min-h-12 items-center justify-center rounded-xl bg-emerald-700 px-6 py-3 text-sm font-semibold text-white hover:bg-emerald-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald-700"
+              >
+                探索 Tailwind CSS
+              </a>
+              <a
+                href="https://cn.vuejs.org/guide/introduction.html"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex min-h-12 items-center justify-center rounded-xl border border-emerald-800/20 bg-white px-6 py-3 text-sm font-semibold hover:bg-emerald-100 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald-700"
+              >
+                阅读 Vue 文档
+              </a>
+            </div>
+          </div>
 
-    &amp;:hover {
-      background: #065f46;
-    }
-  }
-}</code></pre>
-      </details>
-    </section>
-  </main>
+          <aside
+            aria-label="项目技术栈"
+            class="w-full border-t border-emerald-900/15 pt-6 lg:w-52 lg:shrink-0 lg:border-t-0 lg:border-l lg:pt-0 lg:pl-8"
+          >
+            <p class="mb-5 text-sm text-emerald-800">构建你的下一步</p>
+            <ul class="flex flex-wrap gap-x-6 gap-y-4 text-lg font-medium lg:flex-col">
+              <li>Vue 3</li>
+              <li>TypeScript</li>
+              <li>Tailwind CSS</li>
+            </ul>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <footer
+      class="mx-auto flex w-full max-w-6xl flex-wrap justify-between gap-3 px-6 py-8 text-xs text-emerald-900/60 sm:px-10"
+    >
+      <span>保持好奇，开始创造。</span>
+      <span>Built with Vue &amp; Tailwind CSS</span>
+    </footer>
+  </div>
 </template>
 
 <script lang="ts" setup></script>
 
-<style lang="scss" scoped>
-// 修改这个变量，徽标和按钮会一起更换主题色。
-$primary: #087f5b;
-$primary-hover: #065f46;
-$text: #16352b;
-$muted: #52665f;
-$border: #dbe9e2;
-
-.home {
-  box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: calc(100svh - 16px);
-  padding: clamp(24px, 5vw, 64px);
-  background: #f0f7f3;
-  color: $text;
-  font-family: system-ui, sans-serif;
-  line-height: 1.7;
-}
-
-.demo-card {
-  box-sizing: border-box;
-  width: 100%;
-  max-width: 640px;
-  padding: clamp(24px, 5vw, 48px);
-  border: 1px solid $border;
-  border-radius: 24px;
-  background: #fff;
-  box-shadow: 0 16px 48px rgba($primary, 0.08);
-
-  // & 代表外层选择器，这里编译为 .demo-card__badge。
-  &__badge {
-    display: inline-block;
-    padding: 4px 12px;
-    border-radius: 8px;
-    background: rgba($primary, 0.08);
-    color: $primary;
-    font-size: 14px;
-    font-weight: 600;
-  }
-
-  &__title {
-    margin: 24px 0 12px;
-    font-size: clamp(28px, 5vw, 40px);
-    line-height: 1.3;
-  }
-
-  &__description {
-    margin: 0;
-    color: $muted;
-    font-size: 16px;
-  }
-
-  &__features {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px 24px;
-    margin: 24px 0;
-    padding-left: 20px;
-    color: $muted;
-    font-size: 14px;
-  }
-
-  &__toggle {
-    box-sizing: border-box;
-    width: fit-content;
-    min-height: 44px;
-    padding: 10px 18px;
-    border-radius: 10px;
-    background: $primary;
-    color: #fff;
-    cursor: pointer;
-    transition: background-color 160ms ease;
-
-    &:hover {
-      background: $primary-hover;
-    }
-
-    &:focus-visible {
-      outline: 3px solid $primary;
-      outline-offset: 4px;
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      transition: none;
-    }
-  }
-
-  &__code {
-    overflow-x: auto;
-    margin: 20px 0 0;
-    padding: 20px;
-    border: 1px solid $border;
-    border-radius: 12px;
-    background: #f5f9f6;
-    font-size: 14px;
-    line-height: 1.6;
-  }
-}
-</style>
+<style lang="scss" scoped></style>
