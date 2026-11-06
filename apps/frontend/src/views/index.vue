@@ -25,6 +25,9 @@
               用 Vue 构建交互，用 Tailwind CSS 描绘界面。下一次精彩，从你的第一行代码开始。
             </p>
             <div class="mt-10 flex flex-wrap gap-4">
+              <Button as-child size="lg" class="min-h-12">
+                <RouterLink :to="{ name: 'about' }">关于项目</RouterLink>
+              </Button>
               <a
                 href="https://tailwindcss.com/docs"
                 target="_blank"
@@ -91,6 +94,7 @@
 
 <script lang="ts" setup>
 import { shallowRef } from 'vue'
+import { RouterLink } from 'vue-router'
 import { Button } from '@/components/ui/button'
 
 const clickCount = shallowRef(0)

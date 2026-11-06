@@ -2,13 +2,6 @@
 
 一个前后端分离的 TypeScript 全栈项目脚手架，当前包含一个 Vue 3 前端应用和一个 Fastify 后端服务。
 
-## 当前状态
-
-- 前端：Vue 3 + Vite，入口页面位于 `apps/frontend/src/App.vue`。
-- 后端：Fastify，已提供 `GET /health` 健康检查接口。
-- 数据库：后端使用 PostgreSQL、`pg` 连接池和 Drizzle ORM；业务表按需求定义在 `apps/backend/src/db/schema.ts`。
-- Docker Compose：开发和生产环境分别由 `docker-compose.dev.yml` 与 `docker-compose.yml` 管理。
-
 ## 技术栈
 
 | 层级 | 技术 |
