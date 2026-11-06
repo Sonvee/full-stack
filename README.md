@@ -13,9 +13,10 @@
 
 | 层级 | 技术 |
 | --- | --- |
-| 前端 | Vue 3、Vite、TypeScript、Vue Router、Pinia、Tailwind CSS |
-| 后端 | Node.js、Fastify、TypeScript、tsx |
-| 工程化 | pnpm、Vue TSC、Oxlint/Oxfmt 配置（按应用启用） |
+| 前端 | Vue 3、Vite、TypeScript、Vue Router、Pinia、Tailwind CSS、shadcn-vue、VueUse |
+| 后端 | Node.js、Fastify、TypeScript |
+| 工程化 | pnpm、Vue TSC、Oxlint/Oxfmt |
+| 容器化部署 | Docker、Docker Compose |
 | 运行环境 | Node.js `>=22.18.0` |
 
 ## 目录结构
