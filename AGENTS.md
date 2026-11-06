@@ -38,30 +38,8 @@
 
 ## Git 提交规范
 
-- AI 可以协助执行 `git add` 暂存改动，并编写符合下述规范的提交标题与描述。
-- AI 不得执行 `git commit`、`git push` 或通过其他工具、接口进行等效的提交、上传操作；提交和上传必须由开发者本人手动执行。
-
-采用 Conventional Commits，格式为 `type(scope): 描述`：类型和范围使用英文小写，描述使用中文；范围可用 `frontend`、`backend`、`readme` 等，也可省略。
-
-| 类型 | 用途 |
-| --- | --- |
-| `feat` | 新增功能 |
-| `fix` | 修复问题 |
-| `docs` | 修改文档 |
-| `style` | 调整代码格式，不涉及界面样式 |
-| `refactor` | 重构代码，保持功能行为 |
-| `perf` | 优化性能 |
-| `test` | 新增或修改测试 |
-| `build` | 修改构建配置或依赖 |
-| `ci` | 修改持续集成流程 |
-| `chore` | 其他维护工作 |
-| `revert` | 撤销提交 |
-
-示例：
-
-```text
-feat(frontend): 添加 Button 示例
-docs(readme): 补充 Docker 技术栈
-```
-
-每次提交围绕一件完整的事情，描述写清楚改动；不兼容变更在冒号前加 `!`，例如 `feat(api)!: 调整用户接口返回字段`，并在提交正文说明影响和迁移方式。
+- AI 可以暂存、编写提交信息并执行 `git commit`；禁止执行 `git push` 或等效远程上传，推送由开发者手动完成。
+- 采用 Conventional Commits：`type(scope): 中文描述`，类型和范围使用英文小写，范围可省略。例如：`docs(agents): 更新 Git 规范`。
+- 类型：`feat` 功能、`fix` 修复、`docs` 文档、`style` 代码格式、`refactor` 重构、`perf` 性能、`test` 测试、`build` 构建与依赖、`ci` 持续集成、`chore` 维护、`revert` 撤销。
+- 每次提交只做一件完整的事；简单改动只写简短标题，必要时再补充正文。
+- 不兼容变更在冒号前加 `!`，并在正文说明影响和迁移方式。
