@@ -83,6 +83,23 @@ pnpm dev:frontend
 
 Vite 默认监听 `0.0.0.0:5173`。本机访问使用 `http://localhost:5173`，同一局域网中的其他设备使用开发机的局域网 IP 访问，例如 `http://192.168.1.100:5173`。
 
+### 管理端布局
+
+首页仅保留项目名称和「进入管理端」按钮。启动前端后，访问 `/admin` 或点击该按钮即可预览管理端。布局参考 shadcn-vue `sidebar-08`，包含内嵌内容区、可折叠的侧栏与子菜单、移动端抽屉导航、动态面包屑和底部菜单。
+
+布局入口位于 `apps/frontend/src/layouts/admin-layout/index.vue`，导航组件放在同目录的 `components` 中。管理端子路由统一配置在 `apps/frontend/src/router/admin-routes.ts`，菜单根据路由的 `children`、`meta.title` 和 `meta.icon` 递归生成，面包屑根据当前匹配的路由层级生成。直接访问深层链接时会自动展开对应的菜单分组。
+
+| 菜单层级 | 演示页面 | 访问路径 |
+| --- | --- | --- |
+| 一级 | 工作台、布局说明 | `/admin`、`/admin/guide` |
+| 一级 | 消息中心 | `/admin/notifications` |
+| 二级 | 页面示例 → 按钮交互、排版展示 | `/admin/examples/buttons`、`/admin/examples/typography` |
+| 三级 | 系统演示 → 权限管理 → 角色列表、成员列表 | `/admin/system/access/roles`、`/admin/system/access/members` |
+
+页面示例、系统演示和权限管理的父级地址会跳转到各自的默认子页面。演示页面仅使用静态数据和组件本地状态，刷新或离开页面后恢复初始状态。
+
+当前仅提供布局与页面导航，尚未接入身份认证及业务接口。
+
 ### Workspace 依赖安装
 
 项目使用 pnpm workspace 统一管理依赖。推荐在仓库根目录使用 `--filter`，明确将依赖安装到对应应用：

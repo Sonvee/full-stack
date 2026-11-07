@@ -1,0 +1,23 @@
+<template>
+  <AvatarFallback
+    data-slot="avatar-fallback"
+    v-bind="delegatedProps"
+    :class="cn('bg-muted flex size-full items-center justify-center rounded-full', props.class)"
+  >
+    <slot />
+  </AvatarFallback>
+</template>
+
+<script lang="ts" setup>
+import type { AvatarFallbackProps } from 'reka-ui'
+import type { HTMLAttributes } from 'vue'
+import { reactiveOmit } from '@vueuse/core'
+import { cn } from 'cn'
+import { AvatarFallback } from 'reka-ui'
+
+const props = defineProps<AvatarFallbackProps & { class?: HTMLAttributes['class'] }>()
+
+const delegatedProps = reactiveOmit(props, 'class')
+</script>
+
+<style lang="scss" scoped></style>

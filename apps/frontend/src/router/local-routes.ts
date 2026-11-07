@@ -1,4 +1,5 @@
 import type { RouteRecordRaw } from 'vue-router'
+import { adminRoutes } from './admin-routes'
 
 export const localRoutes: RouteRecordRaw[] = [
   {
@@ -7,8 +8,8 @@ export const localRoutes: RouteRecordRaw[] = [
     component: () => import('../views/index.vue'),
   },
   {
-    path: '/about',
-    name: 'about',
-    component: () => import('../views/about/index.vue'),
+    path: '/admin',
+    component: () => import('../layouts/admin-layout/index.vue'),
+    children: adminRoutes,
   },
 ]
