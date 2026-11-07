@@ -3,7 +3,7 @@
     <Button
       variant="outline"
       size="sm"
-      class="hidden w-40 justify-between gap-2 rounded-lg text-muted-foreground sm:flex"
+      class="hidden w-42 justify-between gap-2 rounded-lg text-muted-foreground sm:flex"
       aria-label="搜索页面"
       @click="openSearch"
     >
@@ -11,7 +11,7 @@
         <i class="sv-icon-magnify shrink-0" aria-hidden="true" />
         <span class="truncate">搜索页面</span>
       </span>
-      <kbd class="shrink-0 rounded border bg-background px-1.5 py-0.5 text-[10px]">Ctrl K</kbd>
+      <Kbd class="shrink-0">Ctrl + K</Kbd>
     </Button>
     <Button
       variant="ghost"
@@ -32,9 +32,10 @@
         <DialogTitle class="sr-only">搜索页面</DialogTitle>
         <DialogDescription class="sr-only">输入页面名称或路径来筛选页面。</DialogDescription>
 
-        <div class="flex h-12 items-center gap-3 border-b px-4">
-          <i class="sv-icon-magnify shrink-0 text-muted-foreground" aria-hidden="true" />
-          <Input
+        <InputGroup
+          class="h-12 rounded-none border-0 border-b shadow-none has-[[data-slot=input-group-control]:focus-visible]:ring-0"
+        >
+          <InputGroupInput
             v-model="query"
             type="search"
             role="combobox"
@@ -47,11 +48,12 @@
             "
             autofocus
             placeholder="搜索页面"
-            class="h-10 border-0 bg-transparent px-0 shadow-none focus-visible:ring-0"
             @keydown="handleSearchKeydown"
           />
-          <kbd class="shrink-0 rounded border bg-muted px-1.5 py-0.5 text-[10px]">ESC</kbd>
-        </div>
+          <InputGroupAddon class="pl-4">
+            <span class="sv-icon-magnify" aria-hidden="true" />
+          </InputGroupAddon>
+        </InputGroup>
 
         <div class="max-h-[min(60vh,24rem)] overflow-y-auto p-2">
           <p class="px-2 py-1.5 text-xs font-medium text-muted-foreground">页面</p>
@@ -73,7 +75,7 @@
               @mouseenter="activeIndex = index"
               @click="navigateTo(page.name)"
             >
-              <i class="sv-icon-arrowright shrink-0 text-muted-foreground" aria-hidden="true" />
+              <i :class="[page.icon, 'shrink-0 text-muted-foreground']" aria-hidden="true" />
               <span class="min-w-0 flex-1 truncate">{{ page.title }}</span>
               <span class="hidden shrink-0 truncate text-xs text-muted-foreground sm:block">
                 {{ page.path }}
@@ -88,9 +90,9 @@
         <div
           class="flex items-center gap-4 border-t bg-muted/30 px-4 py-2 text-xs text-muted-foreground"
         >
-          <span><kbd class="rounded border bg-background px-1">↑↓</kbd> 选择</span>
-          <span><kbd class="rounded border bg-background px-1">↵</kbd> 打开</span>
-          <span><kbd class="rounded border bg-background px-1">Esc</kbd> 关闭</span>
+          <span><Kbd>↑↓</Kbd> 选择</span>
+          <span><Kbd>↵</Kbd> 打开</span>
+          <span><Kbd>Esc</Kbd> 关闭</span>
         </div>
       </DialogContent>
     </DialogPortal>
@@ -101,7 +103,8 @@
 import { computed, onBeforeUnmount, onMounted, shallowRef, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group'
+import { Kbd } from '@/components/ui/kbd'
 import {
   DialogContent,
   DialogDescription,
@@ -121,12 +124,13 @@ const pages = router.getRoutes().flatMap((route) => {
     typeof route.name !== 'string' ||
     !route.name.startsWith('admin-') ||
     route.redirect ||
-    typeof route.meta.title !== 'string'
+    typeof route.meta.title !== 'string' ||
+    typeof route.meta.icon !== 'string'
   ) {
     return []
   }
 
-  return [{ name: route.name, title: route.meta.title, path: route.path }]
+  return [{ name: route.name, title: route.meta.title, path: route.path, icon: route.meta.icon }]
 })
 
 const filteredPages = computed(() => {
