@@ -7,7 +7,7 @@
           as="button"
           type="button"
           :is-active="isActive"
-          class="group/menu-toggle"
+          class="group/menu-toggle w-full"
         >
           <i :class="item.meta?.icon" aria-hidden="true" />
           <span>{{ item.meta?.title }}</span>
