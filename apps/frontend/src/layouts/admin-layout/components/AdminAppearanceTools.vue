@@ -1,5 +1,9 @@
 <template>
-  <div class="ml-auto flex shrink-0 items-center gap-2" role="group" aria-label="外观设置">
+  <div class="ml-auto flex shrink-0 items-center gap-2" role="group" aria-label="管理工具栏">
+    <AdminPageSearch />
+
+    <Separator orientation="vertical" class="mx-1 data-[orientation=vertical]:h-4" />
+
     <DropdownMenu>
       <DropdownMenuTrigger as-child>
         <Button
@@ -82,6 +86,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Separator } from '@/components/ui/separator'
 import { appearanceModes, themeColors, useAppearance } from '@/composables/use-appearance'
+import AdminPageSearch from './AdminPageSearch.vue'
 
 const { themeColor, mode, selectedColor, selectedMode } = useAppearance()
 </script>
