@@ -7,7 +7,7 @@
           as="button"
           type="button"
           :is-active="isActive"
-          class="group/menu-toggle w-full"
+          class="group/menu-toggle w-full translate-x-0"
         >
           <i :class="item.meta?.icon" aria-hidden="true" />
           <span>{{ item.meta?.title }}</span>
@@ -18,7 +18,7 @@
         </component>
       </CollapsibleTrigger>
       <CollapsibleContent>
-        <SidebarMenuSub>
+        <SidebarMenuSub class="mr-0 translate-x-0 pr-0">
           <AdminNavigationItem
             v-for="child in item.children"
             :key="child.path"
@@ -30,7 +30,7 @@
     </component>
   </Collapsible>
   <component :is="containerComponent" v-else>
-    <component :is="buttonComponent" as-child :is-active="isActive">
+    <component :is="buttonComponent" as-child :is-active="isActive" class="w-full translate-x-0">
       <RouterLink :to="{ name: item.name }" @click="setOpenMobile(false)">
         <i :class="item.meta?.icon" aria-hidden="true" />
         <span>{{ item.meta?.title }}</span>
