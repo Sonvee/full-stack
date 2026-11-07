@@ -5,11 +5,11 @@
         <DropdownMenuTrigger as-child>
           <SidebarMenuButton size="lg" aria-label="打开管理端菜单">
             <Avatar class="size-8 rounded-lg">
-              <AvatarFallback class="rounded-lg">AD</AvatarFallback>
+              <AvatarFallback class="rounded-lg">超</AvatarFallback>
             </Avatar>
             <div class="flex min-w-0 flex-1 flex-col text-left leading-tight">
-              <span class="truncate font-medium">管理端</span>
-              <span class="truncate text-xs">布局预览</span>
+              <span class="truncate font-medium">超级管理员</span>
+              <span class="truncate text-xs">admin</span>
             </div>
             <i class="sv-icon-unfoldmore" aria-hidden="true" />
           </SidebarMenuButton>
@@ -20,8 +20,17 @@
           align="end"
           :side-offset="4"
         >
+          <DropdownMenuLabel class="flex items-center gap-2 px-2 py-1.5">
+            <Avatar class="size-8 rounded-lg">
+              <AvatarFallback class="rounded-lg">超</AvatarFallback>
+            </Avatar>
+            <span class="flex min-w-0 flex-col gap-0.5 leading-tight">
+              <span class="truncate font-semibold">超级管理员</span>
+              <span class="truncate text-xs font-normal text-muted-foreground">admin</span>
+            </span>
+          </DropdownMenuLabel>
+          <DropdownMenuSeparator />
           <DropdownMenuGroup>
-            <DropdownMenuLabel>管理控制台</DropdownMenuLabel>
             <DropdownMenuItem as-child>
               <RouterLink :to="{ name: 'admin-guide' }" @click="setOpenMobile(false)">
                 <i class="sv-icon-informationoutline" aria-hidden="true" />
@@ -35,6 +44,13 @@
               </RouterLink>
             </DropdownMenuItem>
           </DropdownMenuGroup>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem as-child variant="destructive">
+            <RouterLink :to="{ name: 'login' }" @click="setOpenMobile(false)">
+              <i class="sv-icon-logout" aria-hidden="true" />
+              退出登录
+            </RouterLink>
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </SidebarMenuItem>
@@ -50,6 +66,7 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import {
