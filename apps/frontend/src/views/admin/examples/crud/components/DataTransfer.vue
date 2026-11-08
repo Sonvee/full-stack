@@ -59,6 +59,7 @@ onChange(async (files) => {
   }
 })
 
+/** 将调用方传入的全部筛选结果下载为 JSON，并在下载触发后释放临时 URL。 */
 function exportRecords() {
   const blob = new Blob([JSON.stringify(records, null, 2)], {
     type: 'application/json;charset=utf-8',

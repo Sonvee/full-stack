@@ -1,0 +1,25 @@
+<template>
+  <CalendarGrid
+    data-slot="calendar-grid"
+    :class="cn('w-full border-collapse', props.class)"
+    v-bind="forwardedProps"
+  >
+    <slot />
+  </CalendarGrid>
+</template>
+
+<script lang="ts" setup>
+import type { CalendarGridProps } from 'reka-ui'
+import type { HTMLAttributes } from 'vue'
+import { reactiveOmit } from '@vueuse/core'
+import { cn } from 'cn'
+import { CalendarGrid, useForwardProps } from 'reka-ui'
+
+const props = defineProps<CalendarGridProps & { class?: HTMLAttributes['class'] }>()
+
+const delegatedProps = reactiveOmit(props, 'class')
+
+const forwardedProps = useForwardProps(delegatedProps)
+</script>
+
+<style lang="scss" scoped></style>

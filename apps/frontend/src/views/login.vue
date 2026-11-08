@@ -29,7 +29,7 @@
 
             <Field>
               <FieldLabel for="login-email">邮箱</FieldLabel>
-              <Input
+              <SvInput
                 id="login-email"
                 name="email"
                 type="email"
@@ -43,7 +43,7 @@
 
             <Field>
               <FieldLabel for="login-password">密码</FieldLabel>
-              <Input
+              <SvInput
                 id="login-password"
                 name="password"
                 type="password"
@@ -94,7 +94,7 @@ import {
   FieldLabel,
   FieldSeparator,
 } from '@/components/ui/field'
-import { Input } from '@/components/ui/input'
+import SvInput from '@/components/SvInput/SvInput.vue'
 
 const showLoginNotice = shallowRef(false)
 </script>

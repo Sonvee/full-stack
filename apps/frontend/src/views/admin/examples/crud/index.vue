@@ -10,39 +10,26 @@
       <Badge variant="outline">本地示例</Badge>
     </header>
 
-    <Alert
-      v-if="notice"
-      :variant="notice.error ? 'destructive' : 'default'"
-      class="relative shrink-0 pr-12"
-    >
-      <AlertTitle>{{ notice.error ? '操作未完成' : '操作结果' }}</AlertTitle>
-      <AlertDescription>{{ notice.text }}</AlertDescription>
-      <Button
-        variant="ghost"
-        size="icon-sm"
-        class="absolute top-2 right-2"
-        aria-label="关闭操作提示"
-        @click="notice = null"
-      >
-        <i class="sv-icon-close" aria-hidden="true" />
-      </Button>
-    </Alert>
-
     <FilterForm v-show="showFilters" @search="filters = $event" />
-    <DataTable
-      :records="records"
-      :filters="filters"
+    <TableToolbar
+      :selection="selectedRecords"
       :show-filters="showFilters"
       @create="openActionDialog(null)"
-      @edit="openActionDialog"
       @delete="pendingDelete = $event"
       @refresh="refresh"
       @toggle-filters="showFilters = !showFilters"
     >
-      <template #tools="{ filteredRecords }">
-        <DataTransfer :records="filteredRecords" @import="importRecords" @notice="showNotice" />
-      </template>
-    </DataTable>
+      <DataTransfer :records="filteredRecords" @import="importRecords" @notice="showNotice" />
+    </TableToolbar>
+    <DataTable
+      :records="records"
+      :filters="filters"
+      @create="openActionDialog(null)"
+      @edit="openActionDialog"
+      @delete="pendingDelete = $event"
+      @selection-change="selectedRecords = $event"
+      @filtered-change="filteredRecords = $event"
+    />
 
     <ActionDialog
       v-if="actionDialogOpen"
@@ -73,7 +60,7 @@
 
 <script lang="ts" setup>
 import { shallowRef } from 'vue'
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { toast } from 'vue-sonner'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -85,11 +72,11 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
 import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
 import ActionDialog from './components/ActionDialog.vue'
 import FilterForm from './components/FilterForm.vue'
 import DataTable from './components/DataTable.vue'
 import DataTransfer from './components/DataTransfer.vue'
+import TableToolbar from './components/TableToolbar.vue'
 import { createDemoRecords } from './demo-data'
 import {
   defaultFilterValues,
@@ -99,16 +86,19 @@ import {
 } from './data-model'
 
 const records = shallowRef<DataRecord[]>(createDemoRecords())
+/** 工具栏消费表格发布的选择和筛选结果，导出包含符合条件的所有页面数据。 */
+const selectedRecords = shallowRef<DataRecord[]>([])
+const filteredRecords = shallowRef<DataRecord[]>([])
 let nextRecordNumber = records.value.length + 1
 const filters = shallowRef<FilterValues>({ ...defaultFilterValues })
 const showFilters = shallowRef(true)
 const actionDialogOpen = shallowRef(false)
 const editingRecord = shallowRef<DataRecord | null>(null)
 const pendingDelete = shallowRef<DataRecord[]>([])
-const notice = shallowRef<{ text: string; error: boolean } | null>(null)
-
+/** 将页面操作及导入导出反馈交给全局 Sonner 通知，避免挤占表格可用高度。 */
 function showNotice(text: string, error = false) {
-  notice.value = { text, error }
+  if (error) toast.error(text)
+  else toast.success(text)
 }
 
 function openActionDialog(record: DataRecord | null) {
@@ -149,6 +139,10 @@ function importRecords(drafts: FormValues[]) {
   showNotice(`已导入 ${drafts.length} 条数据；若未显示，请检查当前筛选条件或页码`)
 }
 
+/**
+ * 为已校验的表单值生成页面内唯一的递增编号及本地创建日期。
+ * 调用会消耗一个编号；删除数据后也不复用已有编号。
+ */
 function createRecord(draft: FormValues): DataRecord {
   const now = new Date()
   // 使用本地日期，避免 UTC 日期在午夜前后偏移。
