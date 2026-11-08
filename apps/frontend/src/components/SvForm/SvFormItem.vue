@@ -10,28 +10,23 @@
       <span v-if="props.required" class="text-destructive" aria-hidden="true">*</span
       >{{ props.label }}
     </FieldLabel>
-    <slot
-      :id="inputId"
-      :invalid="!!errors.length"
-      :disabled="context.disabled.value"
-      :error-id="errors.length ? errorId : undefined"
-    />
+    <slot />
     <FieldDescription v-if="$slots.description"><slot name="description" /></FieldDescription>
     <FieldError v-if="errors.length" :id="errorId" :errors="errors" />
   </Field>
 </template>
 
 <script lang="ts" setup>
-import { computed, inject, nextTick, useId } from 'vue'
+import { computed, inject, nextTick, provide, useId } from 'vue'
 import { useField } from 'vee-validate'
 import { Field, FieldDescription, FieldError, FieldLabel } from '@/components/ui/field'
-import { svFormKey } from './context'
+import { svFormFieldKey, svFormKey } from './context'
 
 /**
- * prop 对应 SvForm.rules 的字段路径，label 关联控件 id，required 仅展示必填标记。
+ * prop 对应 SvForm.rules 的字段路径，label 关联内部自定义控件，required 仅展示必填标记。
  *
  * @remarks
- * 控件应使用插槽提供的 id、invalid、errorId、disabled 绑定无障碍和禁用属性。
+ * 内部的 SvInput、SvDictSelect、SvDatePicker 会自动接收 id、校验和禁用状态。
  * 值通过调用方 v-model 维护；失焦、change 以及表单提交时由 VeeValidate 校验。
  */
 interface SvFormItemProps {
@@ -48,7 +43,14 @@ if (!context) {
 const disabled = context.disabled
 const generatedId = useId()
 const inputId = computed(() => props.for || `sv-field-${generatedId}`)
-const errorId = computed(() => `${inputId.value}-error`)
+const invalid = computed(() => errors.value.length > 0)
+const errorId = computed(() => (invalid.value ? `${inputId.value}-error` : undefined))
+provide(svFormFieldKey, {
+  id: inputId.value,
+  invalid,
+  errorId,
+  disabled: context.disabled,
+})
 const { errors, validate, setTouched } = useField(() => props.prop, undefined, {
   keepValueOnUnmount: true,
   validateOnValueUpdate: false,

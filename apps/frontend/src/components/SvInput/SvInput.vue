@@ -5,15 +5,21 @@
     v-bind="$attrs"
     v-model="value"
     :class="props.class"
-    :disabled="props.disabled"
+    :id="inputId"
+    :aria-invalid="ariaInvalid"
+    :aria-describedby="ariaDescribedby"
+    :disabled="inputDisabled"
     :readonly="props.readonly"
   />
-  <InputGroup v-else :class="props.class" :data-disabled="props.disabled || undefined">
+  <InputGroup v-else :class="props.class" :data-disabled="inputDisabled || undefined">
     <InputGroupInput
       ref="input"
       v-bind="$attrs"
       v-model="value"
-      :disabled="props.disabled"
+      :id="inputId"
+      :aria-invalid="ariaInvalid"
+      :aria-describedby="ariaDescribedby"
+      :disabled="inputDisabled"
       :readonly="props.readonly"
     />
     <InputGroupAddon v-if="canClear" align="inline-end">
@@ -32,9 +38,10 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, useTemplateRef, type HTMLAttributes } from 'vue'
+import { computed, inject, useAttrs, useTemplateRef, type HTMLAttributes } from 'vue'
 import { useFocus, useVModel } from '@vueuse/core'
 import { Input } from '@/components/ui/input'
+import { svFormFieldKey } from '@/components/SvForm/context'
 import {
   InputGroup,
   InputGroupAddon,
@@ -61,6 +68,14 @@ interface SvInputProps {
 }
 
 const props = withDefaults(defineProps<SvInputProps>(), { clearable: false })
+const attrs = useAttrs()
+const formField = inject(svFormFieldKey, undefined)
+const inputId = computed(() => (attrs.id as string | undefined) ?? formField?.id)
+const ariaInvalid = computed(() => attrs['aria-invalid'] ?? formField?.invalid.value)
+const ariaDescribedby = computed(
+  () => attrs['aria-describedby'] ?? formField?.errorId.value,
+)
+const inputDisabled = computed(() => props.disabled ?? formField?.disabled.value ?? false)
 const emit = defineEmits<{
   'update:modelValue': [value: string | number]
   clear: []
@@ -74,7 +89,7 @@ const inputElement = computed<HTMLInputElement | undefined>(() => input.value?.$
 const { focused } = useFocus(inputElement, { preventScroll: true })
 const canClear = computed(
   () =>
-    !props.disabled &&
+    !inputDisabled.value &&
     !props.readonly &&
     value.value !== undefined &&
     String(value.value).length > 0,

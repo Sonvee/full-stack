@@ -8,178 +8,45 @@
     <h2 id="record-filters-title" class="shrink-0 text-sm font-medium">条件筛选</h2>
     <SvForm
       ref="filterForm"
-      v-model:model="draft"
+      v-model:model="formData"
       class="flex min-h-0 flex-col gap-3"
       content-class="filter-form-grid grid min-h-0 overflow-y-auto gap-4 p-1"
       @submit="submit"
     >
-      <SvFormItem
-        v-slot="{ id, invalid, errorId, disabled }"
-        prop="a-input"
-        label="数据项甲"
-      >
-        <SvInput
-          :id="id"
-          v-model="draft['a-input']"
-          clearable
-          placeholder="请输入数据项甲"
-          :disabled="disabled"
-          :aria-invalid="invalid"
-          :aria-describedby="errorId"
-        />
+      <SvFormItem prop="aInput" label="数据项甲">
+        <SvInput v-model="formData.aInput" clearable placeholder="请输入数据项甲" />
       </SvFormItem>
-      <SvFormItem
-        v-slot="{ id, invalid, errorId, disabled }"
-        prop="b-input"
-        label="数据项乙"
-      >
-        <SvInput
-          :id="id"
-          v-model="draft['b-input']"
-          clearable
-          placeholder="请输入数据项乙"
-          :disabled="disabled"
-          :aria-invalid="invalid"
-          :aria-describedby="errorId"
-        />
+      <SvFormItem prop="bInput" label="数据项乙">
+        <SvInput v-model="formData.bInput" clearable placeholder="请输入数据项乙" />
       </SvFormItem>
-      <SvFormItem
-        v-slot="{ id, invalid, errorId, disabled }"
-        prop="c-input"
-        label="数据项丙"
-      >
-        <SvInput
-          :id="id"
-          v-model="draft['c-input']"
-          clearable
-          placeholder="请输入数据项丙"
-          :disabled="disabled"
-          :aria-invalid="invalid"
-          :aria-describedby="errorId"
-        />
+      <SvFormItem prop="cInput" label="数据项丙">
+        <SvInput v-model="formData.cInput" clearable placeholder="请输入数据项丙" />
       </SvFormItem>
-      <SvFormItem
-        v-slot="{ id, invalid, errorId, disabled }"
-        prop="d-select"
-        label="数据项丁"
-      >
-        <Select v-model="draft['d-select']" :disabled="disabled">
-          <SelectTrigger :id="id" class="w-full" :aria-invalid="invalid" :aria-describedby="errorId">
-            <SelectValue placeholder="全部" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectItem value="__all__">全部</SelectItem>
-              <SelectItem v-for="option in dSelectOptions" :key="option" :value="option">
-                {{ option }}
-              </SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+      <SvFormItem prop="dSelect" label="数据项丁">
+        <SvDictSelect v-model="formData.dSelect" :dict-list="dictData.dSelect" label-key="label" value-key="value" placeholder="全部" />
       </SvFormItem>
-      <SvFormItem
-        v-slot="{ id, invalid, errorId, disabled }"
-        prop="e-select"
-        label="数据项戊"
-      >
-        <Select v-model="draft['e-select']" :disabled="disabled">
-          <SelectTrigger :id="id" class="w-full" :aria-invalid="invalid" :aria-describedby="errorId">
-            <SelectValue placeholder="全部" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectItem value="__all__">全部</SelectItem>
-              <SelectItem v-for="option in eSelectOptions" :key="option" :value="option">
-                {{ option }}
-              </SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+      <SvFormItem prop="eSelect" label="数据项戊">
+        <SvDictSelect v-model="formData.eSelect" :dict-list="dictData.eSelect" label-key="label" value-key="value" placeholder="全部" />
       </SvFormItem>
-      <SvFormItem
-        v-slot="{ id, invalid, errorId, disabled }"
-        prop="f-select"
-        label="数据项己"
-      >
-        <Select v-model="draft['f-select']" :disabled="disabled">
-          <SelectTrigger :id="id" class="w-full" :aria-invalid="invalid" :aria-describedby="errorId">
-            <SelectValue placeholder="全部" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectItem value="__all__">全部</SelectItem>
-              <SelectItem v-for="option in fSelectOptions" :key="option" :value="option">
-                {{ option }}
-              </SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+      <SvFormItem prop="fSelect" label="数据项己">
+        <SvDictSelect v-model="formData.fSelect" :dict-list="dictData.fSelect" label-key="label" value-key="value" placeholder="全部" />
       </SvFormItem>
-      <SvFormItem
-        v-slot="{ id, invalid, errorId, disabled }"
-        prop="g-select"
-        label="数据项庚"
-      >
-        <Select v-model="draft['g-select']" :disabled="disabled">
-          <SelectTrigger :id="id" class="w-full" :aria-invalid="invalid" :aria-describedby="errorId">
-            <SelectValue placeholder="全部" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectItem value="__all__">全部</SelectItem>
-              <SelectItem v-for="option in gSelectOptions" :key="option" :value="option">
-                {{ option }}
-              </SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+      <SvFormItem prop="gSelect" label="数据项庚">
+        <SvDictSelect v-model="formData.gSelect" :dict-list="dictData.gSelect" label-key="label" value-key="value" placeholder="全部" />
       </SvFormItem>
-      <SvFormItem
-        v-slot="{ id, invalid, errorId, disabled }"
-        prop="id"
-        label="数据编号"
-      >
-        <SvInput
-          :id="id"
-          v-model="draft.id"
-          clearable
-          placeholder="请输入数据编号"
-          :disabled="disabled"
-          :aria-invalid="invalid"
-          :aria-describedby="errorId"
-        />
+      <SvFormItem prop="id" label="数据编号">
+        <SvInput v-model="formData.id" clearable placeholder="请输入数据编号" />
       </SvFormItem>
-      <SvFormItem
-        v-slot="{ id, invalid, errorId, disabled }"
-        prop="createdRange"
-        label="创建日期"
-      >
-        <SvDatePicker
-          :id="id"
-          v-model="draft.createdRange"
-          type="daterange"
-          :disabled="disabled"
-          :aria-invalid="invalid"
-          :aria-describedby="errorId"
-        />
+      <SvFormItem prop="createdRange" label="创建日期">
+        <SvDatePicker v-model="formData.createdRange" type="daterange" />
       </SvFormItem>
       <template #footer>
         <div class="flex shrink-0 flex-wrap items-center justify-end gap-2">
-          <Button type="submit" size="sm"
-            ><i class="sv-icon-magnify" aria-hidden="true" data-icon="inline-start" />查询</Button
-          >
+          <Button type="submit" size="sm"><i class="sv-icon-magnify" aria-hidden="true" data-icon="inline-start" />查询</Button>
           <Button type="button" variant="outline" size="sm" @click="reset">重置</Button>
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            :aria-expanded="expanded"
-            @click="toggleExpanded"
+          <Button type="button" variant="ghost" size="sm" :aria-expanded="expanded" @click="toggleExpanded"
             >{{ expanded ? '收起条件' : '展开条件'
-            }}<i
-              :class="expanded ? 'sv-icon-chevronup' : 'sv-icon-chevrondown'"
-              aria-hidden="true"
-              data-icon="inline-end"
+            }}<i :class="expanded ? 'sv-icon-chevronup' : 'sv-icon-chevrondown'" aria-hidden="true" data-icon="inline-end"
           /></Button>
         </div>
       </template>
@@ -188,53 +55,56 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, shallowRef, useTemplateRef } from 'vue'
+import { inject, ref, shallowRef, useTemplateRef } from 'vue'
 import SvDatePicker from '@/components/SvDatePicker/SvDatePicker.vue'
 import type { SvDatePickerValue } from '@/components/SvDatePicker/types'
 import SvForm from '@/components/SvForm/SvForm.vue'
 import type { SvFormInstance } from '@/components/SvForm/types'
 import SvFormItem from '@/components/SvForm/SvFormItem.vue'
 import SvInput from '@/components/SvInput/SvInput.vue'
+import SvDictSelect from '@/components/SvDictSelect/SvDictSelect.vue'
 import { Button } from '@/components/ui/button'
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
-import {
-  defaultDemoFilterValues,
-  demoFields,
-  type DemoFilterValues,
-} from '@/api/demo'
+import type { DemoFilterValues } from '../dict-data'
+import { demoDictKey } from '../dict-data'
 
 const emit = defineEmits<{ search: [filters: DemoFilterValues] }>()
+const dictData = inject(demoDictKey)
+if (!dictData) {
+  throw new Error('CRUD 示例字典数据未提供')
+}
 /** 日期组件仅提交完整范围，空值在查询时映射为空字符串边界。 */
 type FilterFormValues = Omit<DemoFilterValues, 'createdFrom' | 'createdTo'> & {
   createdRange: SvDatePickerValue
 }
+const defaultDemoFilterValues: DemoFilterValues = {
+  aInput: '',
+  bInput: '',
+  cInput: '',
+  dSelect: '',
+  eSelect: '',
+  fSelect: '',
+  gSelect: '',
+  id: '',
+  createdFrom: '',
+  createdTo: ''
+}
 const { createdFrom, createdTo, ...textDefaults } = defaultDemoFilterValues
-const dSelectOptions = demoFields[3]?.options ?? []
-const eSelectOptions = demoFields[4]?.options ?? []
-const fSelectOptions = demoFields[5]?.options ?? []
-const gSelectOptions = demoFields[6]?.options ?? []
-const draft = ref<FilterFormValues>({
+const formData = ref<FilterFormValues>({
   ...textDefaults,
-  createdRange: createdFrom && createdTo ? [createdFrom, createdTo] : null,
+  createdRange: createdFrom && createdTo ? [createdFrom, createdTo] : null
 })
 const expanded = shallowRef(false)
 const filterForm = useTemplateRef<SvFormInstance>('filterForm')
-/** 标准化文本和“全部”选项，并展开日期范围供列表筛选。 */
+/** 标准化筛选文本，并展开日期范围供列表筛选。 */
 function submit({ createdRange, ...filters }: FilterFormValues) {
-  const normalized = Object.fromEntries(
-    Object.entries(filters).map(([key, value]) => [key, value === '__all__' ? '' : value.trim()]),
-  ) as Omit<DemoFilterValues, 'createdFrom' | 'createdTo'>
+  const normalized = Object.fromEntries(Object.entries(filters).map(([key, value]) => [key, value.trim()])) as Omit<
+    DemoFilterValues,
+    'createdFrom' | 'createdTo'
+  >
   emit('search', {
     ...normalized,
     createdFrom: Array.isArray(createdRange) ? createdRange[0] : '',
-    createdTo: Array.isArray(createdRange) ? createdRange[1] : '',
+    createdTo: Array.isArray(createdRange) ? createdRange[1] : ''
   })
 }
 
