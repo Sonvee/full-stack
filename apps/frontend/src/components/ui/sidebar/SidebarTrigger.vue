@@ -1,3 +1,17 @@
+<script setup lang="ts">
+import type { HTMLAttributes } from "vue"
+import { PanelLeft } from "@lucide/vue"
+import { cn } from "cn"
+import { Button } from '@/components/ui/button'
+import { useSidebar } from "./utils"
+
+const props = defineProps<{
+  class?: HTMLAttributes["class"]
+}>()
+
+const { toggleSidebar } = useSidebar()
+</script>
+
 <template>
   <Button
     data-sidebar="trigger"
@@ -8,22 +22,6 @@
     @click="toggleSidebar"
   >
     <PanelLeft />
-    <span class="sr-only">展开或收起侧栏</span>
+    <span class="sr-only">Toggle Sidebar</span>
   </Button>
 </template>
-
-<script lang="ts" setup>
-import type { HTMLAttributes } from 'vue'
-import { PanelLeft } from '@lucide/vue'
-import { cn } from 'cn'
-import { Button } from '@/components/ui/button'
-import { useSidebar } from './utils'
-
-const props = defineProps<{
-  class?: HTMLAttributes['class']
-}>()
-
-const { toggleSidebar } = useSidebar()
-</script>
-
-<style lang="scss" scoped></style>

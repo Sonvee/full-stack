@@ -1,3 +1,12 @@
+<script setup lang="ts">
+import type { HTMLAttributes } from "vue"
+import { cn } from "cn"
+
+const props = defineProps<{
+  class?: HTMLAttributes["class"]
+}>()
+</script>
+
 <template>
   <div
     data-slot="sidebar-group"
@@ -7,14 +16,3 @@
     <slot />
   </div>
 </template>
-
-<script lang="ts" setup>
-import type { HTMLAttributes } from 'vue'
-import { cn } from 'cn'
-
-const props = defineProps<{
-  class?: HTMLAttributes['class']
-}>()
-</script>
-
-<style lang="scss" scoped></style>

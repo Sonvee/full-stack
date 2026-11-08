@@ -1,3 +1,12 @@
+<script lang="ts" setup>
+import type { HTMLAttributes } from "vue"
+import { cn } from "cn"
+
+const props = defineProps<{
+  class?: HTMLAttributes["class"]
+}>()
+</script>
+
 <template>
   <span
     data-slot="breadcrumb-page"
@@ -9,14 +18,3 @@
     <slot />
   </span>
 </template>
-
-<script lang="ts" setup>
-import type { HTMLAttributes } from 'vue'
-import { cn } from 'cn'
-
-const props = defineProps<{
-  class?: HTMLAttributes['class']
-}>()
-</script>
-
-<style lang="scss" scoped></style>

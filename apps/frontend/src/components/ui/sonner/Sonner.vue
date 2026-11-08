@@ -1,3 +1,12 @@
+<script lang="ts" setup>
+import type { ToasterProps } from "vue-sonner"
+import { CircleCheckIcon, InfoIcon, Loader2Icon, OctagonXIcon, TriangleAlertIcon, XIcon } from "@lucide/vue"
+import { cn } from "cn"
+import { Toaster as Sonner } from "vue-sonner"
+
+const props = defineProps<ToasterProps>()
+</script>
+
 <template>
   <Sonner
     :class="cn('toaster group', props.class)"
@@ -10,35 +19,24 @@
     v-bind="props"
   >
     <template #success-icon>
-      <i class="sv-icon-checkboxmarkedcircleoutline" aria-hidden="true" />
+      <CircleCheckIcon class="size-4" />
     </template>
     <template #info-icon>
-      <i class="sv-icon-informationoutline" aria-hidden="true" />
+      <InfoIcon class="size-4" />
     </template>
     <template #warning-icon>
-      <i class="sv-icon-alertoutline" aria-hidden="true" />
+      <TriangleAlertIcon class="size-4" />
     </template>
     <template #error-icon>
-      <i class="sv-icon-closeoctagonoutline" aria-hidden="true" />
+      <OctagonXIcon class="size-4" />
     </template>
     <template #loading-icon>
       <div>
-        <i class="sv-icon-refresh animate-spin" aria-hidden="true" />
+        <Loader2Icon class="size-4 animate-spin" />
       </div>
     </template>
     <template #close-icon>
-      <i class="sv-icon-close" aria-hidden="true" />
+      <XIcon class="size-4" />
     </template>
   </Sonner>
 </template>
-
-<script lang="ts" setup>
-import type { ToasterProps } from 'vue-sonner'
-import { cn } from 'cn'
-import { Toaster as Sonner } from 'vue-sonner'
-
-/** 保留 Sonner 全部配置，并复用项目主题变量与 iconfont 图标。 */
-const props = defineProps<ToasterProps>()
-</script>
-
-<style lang="scss" scoped></style>

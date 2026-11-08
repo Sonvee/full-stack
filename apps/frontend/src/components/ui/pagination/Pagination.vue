@@ -1,3 +1,19 @@
+<script setup lang="ts">
+import type { PaginationRootEmits, PaginationRootProps } from "reka-ui"
+import type { HTMLAttributes } from "vue"
+import { reactiveOmit } from "@vueuse/core"
+import { cn } from "cn"
+import { PaginationRoot, useForwardPropsEmits } from "reka-ui"
+
+const props = defineProps<PaginationRootProps & {
+  class?: HTMLAttributes["class"]
+}>()
+const emits = defineEmits<PaginationRootEmits>()
+
+const delegatedProps = reactiveOmit(props, "class")
+const forwarded = useForwardPropsEmits(delegatedProps, emits)
+</script>
+
 <template>
   <PaginationRoot
     v-slot="slotProps"
@@ -8,23 +24,3 @@
     <slot v-bind="slotProps" />
   </PaginationRoot>
 </template>
-
-<script lang="ts" setup>
-import type { PaginationRootEmits, PaginationRootProps } from 'reka-ui'
-import type { HTMLAttributes } from 'vue'
-import { reactiveOmit } from '@vueuse/core'
-import { cn } from 'cn'
-import { PaginationRoot, useForwardPropsEmits } from 'reka-ui'
-
-const props = defineProps<
-  PaginationRootProps & {
-    class?: HTMLAttributes['class']
-  }
->()
-const emits = defineEmits<PaginationRootEmits>()
-
-const delegatedProps = reactiveOmit(props, 'class')
-const forwarded = useForwardPropsEmits(delegatedProps, emits)
-</script>
-
-<style lang="scss" scoped></style>

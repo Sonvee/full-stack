@@ -1,16 +1,17 @@
-<template>
-  <div data-slot="empty-title" :class="cn('text-lg font-medium tracking-tight', props.class)">
-    <slot />
-  </div>
-</template>
-
-<script lang="ts" setup>
-import type { HTMLAttributes } from 'vue'
-import { cn } from 'cn'
+<script setup lang="ts">
+import type { HTMLAttributes } from "vue"
+import { cn } from "cn"
 
 const props = defineProps<{
-  class?: HTMLAttributes['class']
+  class?: HTMLAttributes["class"]
 }>()
 </script>
 
-<style lang="scss" scoped></style>
+<template>
+  <div
+    data-slot="empty-title"
+    :class="cn('text-lg font-medium tracking-tight', props.class)"
+  >
+    <slot />
+  </div>
+</template>

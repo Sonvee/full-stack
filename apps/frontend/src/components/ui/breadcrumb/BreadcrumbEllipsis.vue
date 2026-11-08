@@ -1,3 +1,13 @@
+<script lang="ts" setup>
+import type { HTMLAttributes } from "vue"
+import { MoreHorizontal } from "@lucide/vue"
+import { cn } from "cn"
+
+const props = defineProps<{
+  class?: HTMLAttributes["class"]
+}>()
+</script>
+
 <template>
   <span
     data-slot="breadcrumb-ellipsis"
@@ -11,15 +21,3 @@
     <span class="sr-only">More</span>
   </span>
 </template>
-
-<script lang="ts" setup>
-import type { HTMLAttributes } from 'vue'
-import { MoreHorizontal } from '@lucide/vue'
-import { cn } from 'cn'
-
-const props = defineProps<{
-  class?: HTMLAttributes['class']
-}>()
-</script>
-
-<style lang="scss" scoped></style>

@@ -1,3 +1,17 @@
+<script lang="ts" setup>
+import type { RangeCalendarHeadCellProps } from "reka-ui"
+import type { HTMLAttributes } from "vue"
+import { reactiveOmit } from "@vueuse/core"
+import { cn } from "cn"
+import { RangeCalendarHeadCell, useForwardProps } from "reka-ui"
+
+const props = defineProps<RangeCalendarHeadCellProps & { class?: HTMLAttributes["class"] }>()
+
+const delegatedProps = reactiveOmit(props, "class")
+
+const forwardedProps = useForwardProps(delegatedProps)
+</script>
+
 <template>
   <RangeCalendarHeadCell
     data-slot="range-calendar-head-cell"
@@ -7,19 +21,3 @@
     <slot />
   </RangeCalendarHeadCell>
 </template>
-
-<script lang="ts" setup>
-import type { RangeCalendarHeadCellProps } from 'reka-ui'
-import type { HTMLAttributes } from 'vue'
-import { reactiveOmit } from '@vueuse/core'
-import { cn } from 'cn'
-import { RangeCalendarHeadCell, useForwardProps } from 'reka-ui'
-
-const props = defineProps<RangeCalendarHeadCellProps & { class?: HTMLAttributes['class'] }>()
-
-const delegatedProps = reactiveOmit(props, 'class')
-
-const forwardedProps = useForwardProps(delegatedProps)
-</script>
-
-<style lang="scss" scoped></style>

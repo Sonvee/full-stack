@@ -1,3 +1,23 @@
+<script setup lang="ts">
+import type { SelectItemProps } from "reka-ui"
+import type { HTMLAttributes } from "vue"
+import { Check } from "@lucide/vue"
+import { reactiveOmit } from "@vueuse/core"
+import { cn } from "cn"
+import {
+  SelectItem,
+  SelectItemIndicator,
+  SelectItemText,
+  useForwardProps,
+} from "reka-ui"
+
+const props = defineProps<SelectItemProps & { class?: HTMLAttributes["class"] }>()
+
+const delegatedProps = reactiveOmit(props, "class")
+
+const forwardedProps = useForwardProps(delegatedProps)
+</script>
+
 <template>
   <SelectItem
     data-slot="select-item"
@@ -22,20 +42,3 @@
     </SelectItemText>
   </SelectItem>
 </template>
-
-<script lang="ts" setup>
-import type { SelectItemProps } from 'reka-ui'
-import type { HTMLAttributes } from 'vue'
-import { Check } from '@lucide/vue'
-import { reactiveOmit } from '@vueuse/core'
-import { cn } from 'cn'
-import { SelectItem, SelectItemIndicator, SelectItemText, useForwardProps } from 'reka-ui'
-
-const props = defineProps<SelectItemProps & { class?: HTMLAttributes['class'] }>()
-
-const delegatedProps = reactiveOmit(props, 'class')
-
-const forwardedProps = useForwardProps(delegatedProps)
-</script>
-
-<style lang="scss" scoped></style>

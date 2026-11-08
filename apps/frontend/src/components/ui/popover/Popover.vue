@@ -1,12 +1,6 @@
-<template>
-  <PopoverRoot v-slot="slotProps" data-slot="popover" v-bind="forwarded">
-    <slot v-bind="slotProps" />
-  </PopoverRoot>
-</template>
-
-<script lang="ts" setup>
-import type { PopoverRootEmits, PopoverRootProps } from 'reka-ui'
-import { PopoverRoot, useForwardPropsEmits } from 'reka-ui'
+<script setup lang="ts">
+import type { PopoverRootEmits, PopoverRootProps } from "reka-ui"
+import { PopoverRoot, useForwardPropsEmits } from "reka-ui"
 
 const props = defineProps<PopoverRootProps>()
 const emits = defineEmits<PopoverRootEmits>()
@@ -14,4 +8,12 @@ const emits = defineEmits<PopoverRootEmits>()
 const forwarded = useForwardPropsEmits(props, emits)
 </script>
 
-<style lang="scss" scoped></style>
+<template>
+  <PopoverRoot
+    v-slot="slotProps"
+    data-slot="popover"
+    v-bind="forwarded"
+  >
+    <slot v-bind="slotProps" />
+  </PopoverRoot>
+</template>
