@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "skills": {
+    "code-with-docs": {
+      "source": "Sonvee/sv-ai",
+      "sourceType": "github",
+      "skillPath": "skills/code-with-docs/SKILL.md",
+      "computedHash": "cfebbba4b3daf535d563942fdc559e6b8626d8d14aba563201dfafed5886f35b"
+    },
+    "shadcn-vue": {
+      "source": "unovue/shadcn-vue",
+      "sourceType": "github",
+      "skillPath": "skills/shadcn-vue/SKILL.md",
+      "computedHash": "8f889bee4622048473cab8272b5bbcdf3e0e83929afb1b444adf572fa9c252a3"
+    },
+    "sove-coding-style": {
+      "source": "Sonvee/sv-ai",
+      "sourceType": "github",
+      "skillPath": "skills/sove-coding-style/SKILL.md",
+      "computedHash": "0134e3983ae28321189690f35d5362f05cbb840c6b2fbfcc78bd7daed6b0731e"
+    },
+    "sove-skills": {
+      "source": "Sonvee/sv-ai",
+      "sourceType": "github",
+      "skillPath": "skills/sove-skills/SKILL.md",
+      "computedHash": "42b679fe36fe8de84c56c94e192f67abd2dde67111cbe244dd94c6eaa6c30441"
+    }
+  }
+}
