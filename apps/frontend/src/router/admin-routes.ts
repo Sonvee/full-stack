@@ -27,6 +27,12 @@ export const adminRoutes: RouteRecordRaw[] = [
     meta: { title: '页面示例', icon: 'sv-icon-muban' },
     children: [
       {
+        path: 'crud',
+        name: 'admin-crud',
+        component: () => import('../views/admin/examples/crud/index.vue'),
+        meta: { title: 'CRUD 模板', icon: 'sv-icon-table', fixedHeight: true },
+      },
+      {
         path: 'buttons',
         name: 'admin-buttons',
         component: () => import('../views/admin/examples/buttons/index.vue'),

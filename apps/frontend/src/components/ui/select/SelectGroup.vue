@@ -1,0 +1,14 @@
+<template>
+  <SelectGroup data-slot="select-group" v-bind="props">
+    <slot />
+  </SelectGroup>
+</template>
+
+<script lang="ts" setup>
+import type { SelectGroupProps } from 'reka-ui'
+import { SelectGroup } from 'reka-ui'
+
+const props = defineProps<SelectGroupProps>()
+</script>
+
+<style lang="scss" scoped></style>

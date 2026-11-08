@@ -1,0 +1,14 @@
+<template>
+  <DialogTrigger data-slot="dialog-trigger" v-bind="props">
+    <slot />
+  </DialogTrigger>
+</template>
+
+<script lang="ts" setup>
+import type { DialogTriggerProps } from 'reka-ui'
+import { DialogTrigger } from 'reka-ui'
+
+const props = defineProps<DialogTriggerProps>()
+</script>
+
+<style lang="scss" scoped></style>
