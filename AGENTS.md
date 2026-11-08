@@ -31,6 +31,7 @@
 ## 开发规范
 
 - 使用 TypeScript；前端遵循 Vue 3 Composition API 与 `<script setup>`。
+- 项目自有 JavaScript / TypeScript 代码以清晰易读为先；`if`、`else`、`for`、`while` 等控制流必须使用完整的 `{}` 代码块并换行，即使只有一条语句也不得省略，避免为缩短代码而过度简写。
 - 涉及 shadcn-vue 的组件安装、使用、样式定制、调试或更新时，必须先阅读并遵守 [.agents/skills/shadcn-vue/SKILL.md](.agents/skills/shadcn-vue/SKILL.md)，并按其要求读取相关参考文件。
 - 项目采用 pnpm workspace，统一使用根目录的 `pnpm-lock.yaml`；应用命令在对应目录执行，或在根目录通过 `pnpm --filter` 执行。
 - 按职责组织代码，复用逻辑放入合适的共享模块；避免无关重构和重复实现。

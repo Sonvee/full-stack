@@ -12,7 +12,9 @@ const slots = defineSlots<{
   header?: () => VNode[]
 }>()
 const context = inject(svTableKey)
-if (!context) throw new Error('SvTableColumn 必须位于 SvTable 内')
+if (!context) {
+  throw new Error('SvTableColumn 必须位于 SvTable 内')
+}
 const id = useId()
 const marker = useTemplateRef<HTMLElement>('marker')
 context.register({

@@ -1,13 +1,6 @@
 <template>
   <form v-bind="$attrs" novalidate @submit="submit">
-    <FieldGroup
-      :class="cn(props.columns && 'grid', props.contentClass)"
-      :style="
-        props.columns
-          ? { gridTemplateColumns: `repeat(${props.columns}, minmax(0, 1fr))` }
-          : undefined
-      "
-    >
+    <FieldGroup :class="props.contentClass">
       <slot :is-submitting="isSubmitting" />
     </FieldGroup>
     <slot name="footer" :is-submitting="isSubmitting" />
@@ -19,7 +12,6 @@ import { computed, provide, watch, type HTMLAttributes } from 'vue'
 import { cloneDeep } from 'es-toolkit'
 import { useForm } from 'vee-validate'
 import { FieldGroup } from '@/components/ui/field'
-import { cn } from '@/lib/utils'
 import { svFormKey } from './context'
 import type { SvFormInstance, SvFormRules } from './types'
 
@@ -30,12 +22,11 @@ defineOptions({ inheritAttrs: false })
  *
  * @remarks
  * 使用 v-model:model 可接收 resetFields 的初始快照；字段控件仍直接绑定 model 属性。
- * columns 控制 FieldGroup 列数，contentClass 仅影响字段布局，其他属性透传 form。
+ * contentClass 控制字段布局，其他属性透传 form。
  */
 interface SvFormProps {
   rules?: SvFormRules
   disabled?: boolean
-  columns?: number
   contentClass?: HTMLAttributes['class']
 }
 
@@ -60,7 +51,9 @@ watch(model, (value) => form.setValues(cloneDeep(value), false), { deep: true, f
 /** 校验整个表单；即使字段被折叠卸载，其 schema 规则仍会执行。 */
 const submit = form.handleSubmit(
   (values) => {
-    if (!props.disabled) emit('submit', values as T)
+    if (!props.disabled) {
+      emit('submit', values as T)
+    }
   },
   ({ errors }) => emit('invalid', errors),
 )

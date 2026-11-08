@@ -18,8 +18,12 @@ export function parsePickerBoundary(
   value: string | undefined,
   withTime: boolean,
 ): { date: CalendarDate | undefined; time: string } {
-  if (!value) return { date: undefined, time: '00:00:00' }
-  if (!withTime) return { date: parseDate(value), time: '00:00:00' }
+  if (!value) {
+    return { date: undefined, time: '00:00:00' }
+  }
+  if (!withTime) {
+    return { date: parseDate(value), time: '00:00:00' }
+  }
   const parsed = parseDateTime(value)
   return { date: toCalendarDate(parsed), time: parsed.toString().split('T')[1]! }
 }
@@ -38,7 +42,9 @@ export function serializePickerBoundary(
   time: string,
   withTime: boolean,
 ): string {
-  if (!withTime) return date.toString()
+  if (!withTime) {
+    return date.toString()
+  }
   return parseDateTime(`${date}T${time.length === 5 ? `${time}:00` : time}`).toString()
 }
 
@@ -50,7 +56,9 @@ export function serializePickerBoundary(
  * @returns 空值显示为空，其余值将 ISO 日期时间中的 T 显示为空格。
  */
 export function formatPickerValue(value: SvDatePickerValue, separator: string): string {
-  if (!value) return ''
+  if (!value) {
+    return ''
+  }
   return (Array.isArray(value) ? value : [value])
     .map((part) => part.replace('T', ' '))
     .join(` ${separator} `)

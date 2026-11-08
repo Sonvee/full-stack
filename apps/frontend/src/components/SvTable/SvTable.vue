@@ -11,10 +11,10 @@
     "
   >
     <div hidden aria-hidden="true"><slot /></div>
-    <slot name="toolbar" :selection="selectedRows" :filtered-data="filteredRows" />
-    <div class="min-h-0 flex-1 overflow-hidden rounded-lg border">
+    <div
+      class="min-h-0 flex-1 overflow-hidden rounded-lg border [&>[data-slot=table-container]]:h-full"
+    >
       <Table
-        container-class="h-full"
         :class="props.tableClass"
         tabindex="0"
         role="region"
@@ -98,19 +98,11 @@
         </TableBody>
       </Table>
     </div>
-    <SvTablePagination
-      v-if="props.pagination"
-      v-model:page-num="pageNum"
-      v-model:page-size="pageSize"
-      :total="filteredRows.length"
-      :selected="selectedRows.length"
-      :page-sizes="props.pageSizes"
-    />
   </section>
 </template>
 
 <script lang="ts" setup generic="T extends object">
-import { computed, onUpdated, provide, shallowRef, watch, type HTMLAttributes } from 'vue'
+import { computed, Fragment, h, onUpdated, provide, shallowRef, watch, type HTMLAttributes } from 'vue'
 import {
   createColumnHelper,
   FlexRender,
@@ -131,7 +123,6 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { cn } from '@/lib/utils'
-import SvTablePagination from './SvTablePagination.vue'
 import { svTableKey } from './context'
 import { svTableFeatures } from './table-features'
 import type { SvTableColumnDefinition, SvTableInstance } from './types'
@@ -141,16 +132,15 @@ import type { SvTableColumnDefinition, SvTableInstance } from './types'
  *
  * @remarks
  * rowKey 必须唯一且稳定。默认填满父级剩余高度，父级须有确定高度并允许子级收缩。
- * pagination 默认关闭；pageNum 从 1 开始，pageSize 默认 10，两者均支持 v-model。
+ * pagination 仅控制数据分页，默认关闭；分页栏由调用方按需引入。
+ * pageNum 从 1 开始，pageSize 默认 10，两者均支持 v-model。
  * filters 采用 TanStack ColumnFiltersState，修改筛选或每页条数会回到首页。
- * toolbar 插槽提供 selection 与 filteredData，后者包含分页前的筛选、排序结果。
  */
 interface SvTableProps {
   data: T[]
   rowKey: string | ((row: T) => string)
   filters?: ColumnFiltersState
   pagination?: boolean
-  pageSizes?: number[]
   height?: number | string
   tableClass?: HTMLAttributes['class']
   caption?: string
@@ -158,7 +148,6 @@ interface SvTableProps {
 const props = withDefaults(defineProps<SvTableProps>(), {
   filters: () => [],
   pagination: false,
-  pageSizes: () => [10, 20, 50],
   caption: '数据表格，可滚动查看',
 })
 const emit = defineEmits<{
@@ -186,11 +175,14 @@ onUpdated(() => {
   const ordered = [...definitions.value].sort((a, b) => {
     const first = a.getElement()
     const second = b.getElement()
-    if (!first || !second || first === second) return 0
+    if (!first || !second || first === second) {
+      return 0
+    }
     return first.compareDocumentPosition(second) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1
   })
-  if (ordered.some((column, index) => column !== definitions.value[index]))
+  if (ordered.some((column, index) => column !== definitions.value[index])) {
     definitions.value = ordered
+  }
 })
 /** 字段列使用 prop 作为筛选键；展示列可显式指定 columnKey，所有键须唯一。 */
 function columnId(column: SvTableColumnDefinition) {
@@ -200,18 +192,28 @@ const columnById = computed(
   () => new Map(definitions.value.map((column) => [columnId(column), column])),
 )
 const helper = createColumnHelper<typeof svTableFeatures, T>()
+/** 插槽返回的节点数组需包装为 Fragment，避免 FlexRender 将数组识别为组件定义。 */
 const columns = computed(() =>
   helper.columns(
     definitions.value.map((column) => {
       const config = {
         id: columnId(column),
-        header: () => column.header?.() ?? column.props.label ?? '',
+        header: () => {
+          if (column.header) {
+            return h(Fragment, null, column.header())
+          }
+          return column.props.label ?? ''
+        },
         enableSorting: !!column.props.prop && column.props.sortable,
         filterFn: column.props.filterType || ('includesString' as const),
         cell: (context: { row: { original: T; index: number }; getValue: () => unknown }) => {
           const index = context.row.index
-          if (column.cell) return column.cell({ row: context.row.original, $index: index })
-          if (column.props.type === 'index') return index + 1
+          if (column.cell) {
+            return h(Fragment, null, column.cell({ row: context.row.original, $index: index }))
+          }
+          if (column.props.type === 'index') {
+            return index + 1
+          }
           return String(context.getValue() ?? '')
         },
       }

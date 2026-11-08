@@ -166,8 +166,12 @@ const isRange = computed(() => props.type === 'daterange' || props.type === 'dat
 const withTime = computed(() => props.type === 'datetime' || props.type === 'datetimerange')
 const displayValue = computed(() => formatPickerValue(modelValue.value, props.rangeSeparator))
 const draftValue = computed<SvDatePickerValue>(() => {
-  if (!range.value.start || (isRange.value && !range.value.end)) return null
-  if (withTime.value && (!startTime.value || (isRange.value && !endTime.value))) return null
+  if (!range.value.start || (isRange.value && !range.value.end)) {
+    return null
+  }
+  if (withTime.value && (!startTime.value || (isRange.value && !endTime.value))) {
+    return null
+  }
   const start = serializePickerBoundary(
     toCalendarDate(range.value.start),
     startTime.value,
@@ -203,26 +207,36 @@ function resetDraft() {
 
 /** 管理浮层生命周期，打开前读取当前绑定值，关闭时丢弃草稿。 */
 function setOpen(value: boolean) {
-  if (value && (props.disabled || props.readonly)) return
-  if (value) resetDraft()
+  if (value && (props.disabled || props.readonly)) {
+    return
+  }
+  if (value) {
+    resetDraft()
+  }
   open.value = value
 }
 
 /** 接收单日选择，纯日期模式立即提交；日期时间模式等待确认。 */
 function selectDate(value: DateValue | undefined) {
   range.value = { start: value, end: undefined }
-  if (!withTime.value && value) commit()
+  if (!withTime.value && value) {
+    commit()
+  }
 }
 
 /** 接收官方已排序的范围，只在两个边界均选中后提交纯日期范围。 */
 function selectRange(value: DateRange) {
   range.value = value
-  if (!withTime.value && value.start && value.end) commit()
+  if (!withTime.value && value.start && value.end) {
+    commit()
+  }
 }
 
 /** 提交有效草稿，并发送与 v-model 一致的 change 事件。 */
 function commit() {
-  if (!canConfirm.value) return
+  if (!canConfirm.value) {
+    return
+  }
   modelValue.value = draftValue.value
   emit('change', draftValue.value)
   open.value = false

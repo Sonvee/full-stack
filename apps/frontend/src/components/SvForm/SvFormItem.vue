@@ -13,7 +13,6 @@
     <slot
       :id="inputId"
       :invalid="!!errors.length"
-      :error="errorMessage"
       :disabled="context.disabled.value"
       :error-id="errors.length ? errorId : undefined"
     />
@@ -43,19 +42,26 @@ interface SvFormItemProps {
 }
 const props = defineProps<SvFormItemProps>()
 const context = inject(svFormKey)
-if (!context) throw new Error('SvFormItem 必须位于 SvForm 内')
+if (!context) {
+  throw new Error('SvFormItem 必须位于 SvForm 内')
+}
+const disabled = context.disabled
 const generatedId = useId()
 const inputId = computed(() => props.for || `sv-field-${generatedId}`)
 const errorId = computed(() => `${inputId.value}-error`)
-const { errors, errorMessage, validate, setTouched } = useField(() => props.prop, undefined, {
+const { errors, validate, setTouched } = useField(() => props.prop, undefined, {
   keepValueOnUnmount: true,
   validateOnValueUpdate: false,
 })
 
 /** 在整个表单项失去焦点后标记已访问并校验，避免在项内按钮之间移动时重复触发。 */
 async function validateOnBlur(event: FocusEvent) {
-  if ((event.currentTarget as HTMLElement).contains(event.relatedTarget as Node | null)) return
-  if (context!.disabled.value) return
+  if ((event.currentTarget as HTMLElement).contains(event.relatedTarget as Node | null)) {
+    return
+  }
+  if (disabled.value) {
+    return
+  }
   setTouched(true)
   await nextTick()
   await validate()
@@ -63,7 +69,9 @@ async function validateOnBlur(event: FocusEvent) {
 
 /** 等待控件 v-model 同步后校验选择或清空产生的 change。 */
 async function validateOnChange() {
-  if (context!.disabled.value) return
+  if (disabled.value) {
+    return
+  }
   await nextTick()
   await validate()
 }
