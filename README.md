@@ -57,11 +57,12 @@ pnpm --version
 后端启动时会连接 PostgreSQL 和 Redis。请先确保本机 PostgreSQL、Redis 分别监听 `localhost:5432`、`localhost:6379`，或从仓库根目录运行 `docker compose -f docker-compose.dev.yml up -d database redis` 启动开发依赖。
 
 ```bash
-pnpm install
 pnpm dev:backend
 ```
 
-后端默认监听 `http://localhost:3001`。健康检查：
+后端默认监听 `http://localhost:3001`。
+
+健康检查：
 
 ```bash
 curl http://localhost:3001/health
@@ -80,8 +81,6 @@ curl http://localhost:3001/health
 ```bash
 pnpm dev:frontend
 ```
-
-Vite 默认监听 `0.0.0.0:5173`。本机访问使用 `http://localhost:5173`，同一局域网中的其他设备使用开发机的局域网 IP 访问，例如 `http://192.168.1.100:5173`。
 
 ### 管理端布局
 
