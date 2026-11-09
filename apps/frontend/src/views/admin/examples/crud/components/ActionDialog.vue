@@ -11,7 +11,6 @@
         :rules="rules"
         class="flex min-h-0 min-w-0 flex-col gap-4"
         content-class="grid min-h-0 min-w-0 overflow-x-hidden overflow-y-auto gap-4 p-1 sm:grid-cols-2"
-        @submit="submit"
       >
         <SvFormItem prop="aInput" label="数据项甲">
           <SvInput v-model="formData.aInput" clearable placeholder="请输入数据项甲" :maxlength="100" />

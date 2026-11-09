@@ -10,7 +10,6 @@
       v-model:model="formData"
       class="flex min-h-0 flex-col gap-3"
       content-class="filter-form-grid grid min-h-0 overflow-y-auto gap-4 p-1"
-      @submit="submit"
     >
       <SvFormItem prop="aInput" label="数据项甲">
         <SvInput v-model="formData.aInput" clearable placeholder="请输入数据项甲" />
@@ -41,12 +40,12 @@
       </SvFormItem>
       <template #footer>
         <div class="flex shrink-0 flex-wrap items-center justify-end gap-2">
-          <Button type="submit" size="sm"><i class="sv-icon-magnify" data-icon="inline-start" />查询</Button>
+          <Button type="button" size="sm" @click="toConfirm"><i class="sv-icon-magnify" data-icon="inline-start" />查询</Button>
           <Button type="button" variant="outline" size="sm" @click="reset">重置</Button>
-          <Button type="button" variant="ghost" size="sm" :aria-expanded="expanded" @click="toggleExpanded"
-            >{{ expanded ? '收起条件' : '展开条件'
-            }}<i :class="expanded ? 'sv-icon-chevronup' : 'sv-icon-chevrondown'" data-icon="inline-end"
-          /></Button>
+          <Button type="button" variant="ghost" size="sm" :aria-expanded="expanded" @click="toggleExpanded">
+            {{ expanded ? '收起条件' : '展开条件' }}
+            <i :class="expanded ? 'sv-icon-chevronup' : 'sv-icon-chevrondown'" data-icon="inline-end" />
+          </Button>
         </div>
       </template>
     </SvForm>
@@ -94,6 +93,15 @@ function submit({ createdRange, ...filters }: FilterFormValues) {
   emit('search', {
     ...normalized,
     createdRange: Array.isArray(createdRange) ? createdRange : null
+  })
+}
+
+/** 校验通过后提交当前筛选条件。 */
+function toConfirm() {
+  void filterFormRef.value?.validate((valid) => {
+    if (valid) {
+      submit({ ...formData.value })
+    }
   })
 }
 
