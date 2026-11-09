@@ -144,9 +144,9 @@ async function toQuery() {
   loading.value = true
 
   try {
-    const response = await apiQuery(queryParams.value)
-    tableData.value = response.data || []
-    total.value = response.total || 0
+    const res = await apiQuery(queryParams.value)
+    tableData.value = res.data || []
+    total.value = res.total || 0
   } finally {
     loading.value = false
   }
@@ -198,9 +198,9 @@ function toUpdate(row?: unknown) {
  * @param form - 已通过弹窗校验的表单数据。
  */
 async function toConfirm(form: DemoFormModel) {
-  const response = apMode.value === 'edit' ? await apiUpdate(form) : await apiAdd(form)
+  const res = apMode.value === 'edit' ? await apiUpdate(form) : await apiAdd(form)
 
-  ElMessage.success(response.msg)
+  ElMessage.success(res.msg)
   apOpen.value = false
   toRefresh()
 }

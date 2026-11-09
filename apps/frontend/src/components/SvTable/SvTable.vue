@@ -23,9 +23,6 @@
               :key="header.id"
               scope="col"
               :style="columnStyle(header.column.id)"
-              :aria-sort="
-                header.column.getCanSort() ? sortDirection(header.column.getIsSorted()) : undefined
-              "
             >
               <Checkbox
                 v-if="columnById.get(header.column.id)?.props.type === 'selection'"
@@ -34,7 +31,6 @@
                   (table.getIsSomePageRowsSelected() ? 'indeterminate' : false)
                 "
                 :disabled="!table.getRowModel().rows.length"
-                aria-label="选择当前页全部数据"
                 @update:model-value="table.toggleAllPageRowsSelected($event === true)"
               />
               <Button
@@ -54,7 +50,6 @@
                           : 'sv-icon-sort',
                     )
                   "
-                  aria-hidden="true"
                   data-icon="inline-end"
                 />
               </Button>
@@ -72,7 +67,6 @@
               <Checkbox
                 v-if="columnById.get(cell.column.id)?.props.type === 'selection'"
                 :model-value="row.getIsSelected()"
-                :aria-label="`选择第 ${row.index + 1} 条数据`"
                 @update:model-value="row.toggleSelected($event === true)"
               />
               <FlexRender v-else :cell="cell" />
@@ -281,10 +275,6 @@ watch(
   },
 )
 
-/** 将引擎排序值映射为 ARIA 表头状态。 */
-function sortDirection(value: false | 'asc' | 'desc') {
-  return value === 'asc' ? 'ascending' : value === 'desc' ? 'descending' : 'none'
-}
 /** 宽度仅作用于列；选择列默认保留适合复选框的空间。 */
 function columnStyle(id: string) {
   const column = columnById.value.get(id)

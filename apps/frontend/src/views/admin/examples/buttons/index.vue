@@ -15,7 +15,7 @@
       </div>
       <Separator />
       <div class="flex flex-wrap items-center justify-between gap-4">
-        <p class="text-sm text-muted-foreground" role="status">已点击 {{ count }} 次</p>
+        <p class="text-sm text-muted-foreground">已点击 {{ count }} 次</p>
         <Button variant="outline" size="sm" :disabled="count === 0" @click="count = 0"
           >重置计数</Button
         >

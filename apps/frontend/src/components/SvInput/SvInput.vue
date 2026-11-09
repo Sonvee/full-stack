@@ -7,7 +7,6 @@
     :class="props.class"
     :id="inputId"
     :aria-invalid="ariaInvalid"
-    :aria-describedby="ariaDescribedby"
     :disabled="inputDisabled"
     :readonly="props.readonly"
   />
@@ -18,7 +17,6 @@
       v-model="value"
       :id="inputId"
       :aria-invalid="ariaInvalid"
-      :aria-describedby="ariaDescribedby"
       :disabled="inputDisabled"
       :readonly="props.readonly"
     />
@@ -26,12 +24,11 @@
       <InputGroupButton
         type="button"
         size="icon-xs"
-        aria-label="清空输入"
         title="清空输入"
         @mousedown.prevent
         @click="clear"
       >
-        <i class="sv-icon-close" aria-hidden="true" />
+        <i class="sv-icon-close" />
       </InputGroupButton>
     </InputGroupAddon>
   </InputGroup>
@@ -72,9 +69,6 @@ const attrs = useAttrs()
 const formField = inject(svFormFieldKey, undefined)
 const inputId = computed(() => (attrs.id as string | undefined) ?? formField?.id)
 const ariaInvalid = computed(() => attrs['aria-invalid'] ?? formField?.invalid.value)
-const ariaDescribedby = computed(
-  () => attrs['aria-describedby'] ?? formField?.errorId.value,
-)
 const inputDisabled = computed(() => props.disabled ?? formField?.disabled.value ?? false)
 const emit = defineEmits<{
   'update:modelValue': [value: string | number]

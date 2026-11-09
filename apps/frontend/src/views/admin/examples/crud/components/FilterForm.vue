@@ -1,6 +1,5 @@
 <template>
   <section
-    id="record-filters"
     class="filter-form flex min-h-0 min-w-0 max-h-[70%] shrink flex-col gap-3 rounded-lg border p-4"
     :class="{ 'is-expanded': expanded }"
   >
@@ -42,7 +41,7 @@
       <div class="filter-form-actions flex min-w-0 flex-wrap items-center justify-end gap-2 self-end">
         <Button type="button" @click="toConfirm"><i class="sv-icon-magnify" data-icon="inline-start" />查询</Button>
         <Button type="button" variant="outline" @click="reset">重置</Button>
-        <Button class="filter-form-toggle" type="button" variant="ghost" :aria-expanded="expanded" @click="toggleExpanded">
+        <Button class="filter-form-toggle" type="button" variant="ghost" @click="toggleExpanded">
           {{ expanded ? '收起条件' : '展开条件' }}
           <i :class="expanded ? 'sv-icon-chevronup' : 'sv-icon-chevrondown'" data-icon="inline-end" />
         </Button>

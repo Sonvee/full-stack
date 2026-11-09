@@ -15,11 +15,10 @@ export interface SvFormContext {
   validateOn: (prop: string, trigger: SvFormTrigger) => Promise<boolean>
 }
 
-/** 表单项向其直接控件提供的无障碍、校验和禁用状态。 */
+/** 表单项向其直接控件提供的标签关联、校验和禁用状态。 */
 export interface SvFormFieldContext {
   id: string
   invalid: ComputedRef<boolean>
-  errorId: ComputedRef<string | undefined>
   disabled: ComputedRef<boolean>
 }
 

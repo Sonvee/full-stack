@@ -10,7 +10,6 @@
           variant="ghost"
           size="icon-sm"
           class="rounded-lg"
-          :aria-label="`主题色：${selectedColor.label}`"
           :title="`主题色：${selectedColor.label}`"
         >
           <i class="sv-icon-palette" />
@@ -45,7 +44,6 @@
           variant="ghost"
           size="icon-sm"
           class="rounded-lg"
-          :aria-label="`显示模式：${selectedMode.label}`"
           :title="`显示模式：${selectedMode.label}`"
         >
           <i :class="selectedMode.icon" />

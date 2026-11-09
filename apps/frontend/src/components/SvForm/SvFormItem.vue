@@ -8,14 +8,14 @@
   >
     <FieldLabel v-if="props.label" :for="inputId" :style="labelStyle">
       <span ref="labelContentRef" :class="{ 'shrink-0 whitespace-nowrap': horizontal }">
-        <span v-if="required" class="text-destructive" aria-hidden="true">*</span
+        <span v-if="required" class="text-destructive">*</span
         >{{ props.label }}
       </span>
     </FieldLabel>
     <FieldContent class="min-w-0 gap-2" :class="{ 'w-0': horizontal }">
       <slot />
       <FieldDescription v-if="$slots.description"><slot name="description" /></FieldDescription>
-      <FieldError v-if="errors.length" :id="errorId" :errors="errors" />
+      <FieldError v-if="errors.length" :errors="errors" />
     </FieldContent>
   </Field>
 </template>
@@ -76,11 +76,9 @@ const required = computed(() => props.required ?? getFormRules(context.rules.val
 const generatedId = useId()
 const inputId = computed(() => props.for || `sv-field-${generatedId}`)
 const invalid = computed(() => errors.value.length > 0)
-const errorId = computed(() => (invalid.value ? `${inputId.value}-error` : undefined))
 provide(svFormFieldKey, {
   id: inputId.value,
   invalid,
-  errorId,
   disabled: context.disabled,
 })
 // 观察实际绑定值，兼容 Select 等不冒泡原生 change 事件的控件；重置同轮跳过校验。

@@ -9,20 +9,19 @@
 
     <!-- 表格工具栏 -->
     <div class="flex shrink-0 flex-wrap items-center gap-2">
-      <Button @click="toAdd"> <i class="sv-icon-plus" data-icon="inline-start" />新增 </Button>
+      <Button @click="toAdd"> <i class="sv-icon-plus" data-icon="inline-start" />新增</Button>
       <Button variant="outline" :disabled="selectedList.length === 0" @click="toDelete()">
         <i class="sv-icon-delete" data-icon="inline-start" />删除
       </Button>
-      <Button variant="outline" @click="importList"> <i class="sv-icon-import" data-icon="inline-start" />导入 </Button>
-      <Button variant="outline" @click="exportList"> <i class="sv-icon-export" data-icon="inline-start" />导出 </Button>
+      <Button variant="outline" @click="importList"> <i class="sv-icon-import" data-icon="inline-start" />导入</Button>
+      <Button variant="outline" @click="exportList"> <i class="sv-icon-export" data-icon="inline-start" />导出</Button>
       <span class="min-w-0 flex-1" />
-      <Button variant="outline" size="icon" aria-label="刷新" title="刷新" @click="toRefresh">
+      <Button variant="outline" size="icon" title="刷新" @click="toRefresh">
         <i class="sv-icon-refresh" />
       </Button>
       <Button
         variant="outline"
         size="icon"
-        :aria-label="showFilters ? '隐藏筛选' : '显示筛选'"
         :title="showFilters ? '隐藏筛选' : '显示筛选'"
         @click="toToggleFilter"
       >
@@ -157,7 +156,9 @@ const actionMode = shallowRef<'add' | 'update'>('add')
 const pendingDeleteList = shallowRef<DemoListItem[]>([])
 const actionDialogRef = useTemplateRef('actionDialogRef')
 
-onMounted(toQuery)
+onMounted(async () => {
+  toQuery()
+})
 
 /** 提交筛选条件并从第一页重新查询。 */
 function toSearch(values: Omit<DemoQueryParams, 'pageNum' | 'pageSize'>) {
@@ -167,9 +168,9 @@ function toSearch(values: Omit<DemoQueryParams, 'pageNum' | 'pageSize'>) {
 
 /** 查询列表并更新表格数据和总数。 */
 async function toQuery() {
-  const response = await apiDemoList(queryParams.value)
-  dataList.value = response.data || []
-  total.value = response.total || 0
+  const res = await apiDemoList(queryParams.value)
+  dataList.value = res.data || []
+  total.value = res.total || 0
 }
 
 /** 使用当前筛选和分页条件刷新列表。 */

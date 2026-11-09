@@ -7,7 +7,7 @@
       </div>
       <Button variant="outline" :disabled="allRead" @click="allRead = true">全部标为已读</Button>
     </div>
-    <p class="text-sm text-muted-foreground" role="status">
+    <p class="text-sm text-muted-foreground">
       {{ allRead ? '所有消息已读' : '有 3 条未读消息' }}
     </p>
     <ul class="flex flex-col gap-4">

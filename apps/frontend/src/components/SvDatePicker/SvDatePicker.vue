@@ -9,10 +9,7 @@
           :placeholder="props.placeholder || (isRange ? '请选择日期范围' : '请选择日期')"
           :id="inputId"
           :aria-invalid="ariaInvalid"
-          :aria-describedby="ariaDescribedby"
           :disabled="controlDisabled"
-          :aria-expanded="open"
-          aria-haspopup="dialog"
           readonly
           @click="setOpen(true)"
           @keydown.enter.space.down.prevent="setOpen(true)"
@@ -22,21 +19,20 @@
             v-if="props.clearable && modelValue && !controlDisabled && !props.readonly"
             type="button"
             size="icon-xs"
-            aria-label="清空日期"
             title="清空日期"
             @mousedown.prevent
             @click="clear"
-            ><i class="sv-icon-close" aria-hidden="true"
-          /></InputGroupButton>
+          >
+            <i class="sv-icon-close" />
+          </InputGroupButton>
           <PopoverTrigger as-child>
             <InputGroupButton
               type="button"
               size="icon-xs"
               :disabled="controlDisabled || props.readonly"
-              aria-label="选择日期"
               title="选择日期"
             >
-              <i class="sv-icon-calendar" aria-hidden="true" />
+              <i class="sv-icon-calendar" />
             </InputGroupButton>
           </PopoverTrigger>
         </InputGroupAddon>
@@ -167,9 +163,6 @@ const attrs = useAttrs()
 const formField = inject(svFormFieldKey, undefined)
 const inputId = computed(() => (attrs.id as string | undefined) ?? formField?.id)
 const ariaInvalid = computed(() => attrs['aria-invalid'] ?? formField?.invalid.value)
-const ariaDescribedby = computed(
-  () => attrs['aria-describedby'] ?? formField?.errorId.value,
-)
 const controlDisabled = computed(() => props.disabled ?? formField?.disabled.value ?? false)
 /** 仅保存已确认的完整值；日期时间不转换为 UTC，空值统一为 null。 */
 const modelValue = defineModel<SvDatePickerValue>({ default: null })

@@ -1,6 +1,6 @@
 <template>
   <footer class="flex shrink-0 flex-wrap items-center justify-between gap-3">
-    <p class="text-sm text-muted-foreground" role="status">
+    <p class="text-sm text-muted-foreground">
       共 {{ total }} 条<span v-if="selected !== undefined">，已选择 {{ selected }} 条</span>
     </p>
     <div class="flex flex-wrap items-center gap-3">
@@ -24,29 +24,20 @@
         :sibling-count="0"
         show-edges
         class="w-auto"
-        aria-label="数据列表分页"
       >
         <PaginationContent v-slot="{ items }">
-          <PaginationPrevious size="icon-sm" aria-label="上一页"
-            ><i class="sv-icon-chevronleft" aria-hidden="true"
-          /></PaginationPrevious>
+          <PaginationPrevious size="icon-sm"><i class="sv-icon-chevronleft" /></PaginationPrevious>
           <template v-for="(item, index) in items" :key="index">
             <PaginationItem
               v-if="item.type === 'page'"
               :value="item.value"
               :is-active="item.value === pageNum"
               size="icon-sm"
-              :aria-label="`第 ${item.value} 页`"
               >{{ item.value }}</PaginationItem
             >
-            <PaginationEllipsis v-else :index="index"
-              ><span aria-hidden="true">…</span
-              ><span class="sr-only">更多页码</span></PaginationEllipsis
-            >
+            <PaginationEllipsis v-else>…</PaginationEllipsis>
           </template>
-          <PaginationNext size="icon-sm" aria-label="下一页"
-            ><i class="sv-icon-chevronright" aria-hidden="true"
-          /></PaginationNext>
+          <PaginationNext size="icon-sm"><i class="sv-icon-chevronright" /></PaginationNext>
         </PaginationContent>
       </Pagination>
     </div>

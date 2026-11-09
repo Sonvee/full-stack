@@ -54,7 +54,7 @@
 
             <Field>
               <Button type="submit">登录</Button>
-              <FieldDescription role="status">
+              <FieldDescription>
                 {{ showLoginNotice ? '登录服务尚未接入，暂时无法登录。你可以先预览管理端。' : '' }}
               </FieldDescription>
             </Field>

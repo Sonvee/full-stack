@@ -4,7 +4,6 @@
       variant="outline"
       size="sm"
       class="hidden w-42 justify-between gap-2 rounded-lg text-muted-foreground sm:flex"
-      aria-label="搜索页面"
       @click="openSearch"
     >
       <span class="flex min-w-0 items-center gap-2">
@@ -17,7 +16,6 @@
       variant="ghost"
       size="icon-sm"
       class="rounded-lg sm:hidden"
-      aria-label="搜索页面"
       title="搜索页面"
       @click="openSearch"
     >
@@ -38,14 +36,6 @@
           <InputGroupInput
             v-model="query"
             type="search"
-            role="combobox"
-            aria-label="搜索页面"
-            aria-autocomplete="list"
-            aria-controls="admin-page-search-results"
-            :aria-expanded="isOpen"
-            :aria-activedescendant="
-              filteredPages[activeIndex] ? `admin-page-search-result-${activeIndex}` : undefined
-            "
             autofocus
             placeholder="搜索页面"
             @keydown="handleSearchKeydown"
@@ -57,19 +47,11 @@
 
         <div class="max-h-[min(60vh,24rem)] overflow-y-auto p-2">
           <p class="px-2 py-1.5 text-xs font-medium text-muted-foreground">页面</p>
-          <div
-            v-if="filteredPages.length"
-            id="admin-page-search-results"
-            role="listbox"
-            aria-label="管理页面"
-          >
+          <div v-if="filteredPages.length">
             <button
               v-for="(page, index) in filteredPages"
-              :id="`admin-page-search-result-${index}`"
               :key="page.name"
               type="button"
-              role="option"
-              :aria-selected="activeIndex === index"
               class="flex h-9 w-full items-center gap-2 rounded-md px-2 text-left text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground"
               :class="{ 'bg-accent text-accent-foreground': activeIndex === index }"
               @mouseenter="activeIndex = index"
@@ -82,7 +64,7 @@
               </span>
             </button>
           </div>
-          <p v-else class="px-2 py-8 text-center text-sm text-muted-foreground" role="status">
+          <p v-else class="px-2 py-8 text-center text-sm text-muted-foreground">
             没有找到匹配的页面
           </p>
         </div>

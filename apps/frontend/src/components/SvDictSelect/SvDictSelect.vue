@@ -4,7 +4,6 @@
       v-bind="$attrs"
       :id="inputId"
       :aria-invalid="ariaInvalid"
-      :aria-describedby="ariaDescribedby"
       :class="cn('w-full', props.class)"
       :disabled="selectDisabled"
     >
@@ -56,9 +55,6 @@ const attrs = useAttrs()
 const formField = inject(svFormFieldKey, undefined)
 const inputId = computed(() => (attrs.id as string | undefined) ?? formField?.id)
 const ariaInvalid = computed(() => attrs['aria-invalid'] ?? formField?.invalid.value)
-const ariaDescribedby = computed(
-  () => attrs['aria-describedby'] ?? formField?.errorId.value,
-)
 const selectDisabled = computed(() => props.disabled ?? formField?.disabled.value ?? false)
 const model = defineModel<any>()
 const selectedValue = computed(() =>
