@@ -1,9 +1,9 @@
 <template>
   <form v-bind="$attrs" novalidate @submit.prevent="submit">
     <FieldGroup :class="props.contentClass">
-      <slot :is-submitting="isSubmitting" />
+      <slot />
     </FieldGroup>
-    <slot name="footer" :is-submitting="isSubmitting" />
+    <slot name="footer" />
   </form>
 </template>
 
@@ -43,7 +43,7 @@ const form = useForm<Record<string, unknown>>({
   keepValuesOnUnmount: true,
 })
 const rules = computed<SvFormRules>(() => props.rules || {})
-const { validate, validateField, validateOn, clearValidate, validationVersion, isValidating: isSubmitting } =
+const { validate, validateField, validateOn, clearValidate, validationVersion, isValidating } =
   useFormValidation(model, rules, form)
 provide(svFormKey, { disabled: computed(() => props.disabled), model, rules, validationVersion, validateOn })
 
@@ -52,7 +52,7 @@ watch(model, (value) => form.setValues(cloneDeep(value), false), { deep: true, f
 
 /** 保留原生提交契约，供筛选表单与回车提交使用。 */
 async function submit() {
-  if (props.disabled || isSubmitting.value) {
+  if (props.disabled || isValidating.value) {
     return
   }
   if (await validate()) {

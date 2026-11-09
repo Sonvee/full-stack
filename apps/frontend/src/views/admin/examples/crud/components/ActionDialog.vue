@@ -34,17 +34,15 @@
         <SvFormItem prop="gSelect" label="数据项庚">
           <SvDictSelect v-model="formData.gSelect" :dict-list="dict_g_select" label-key="label" value-key="value" />
         </SvFormItem>
-        <template #footer="{ isSubmitting }">
-          <DialogFooter class="shrink-0">
-            <DialogClose as-child>
-              <Button type="button" variant="outline">取消</Button>
-            </DialogClose>
-            <Button type="submit" :disabled="isSubmitting" @click.prevent="toConfirm">
-              {{ mode === 'add' ? '新增' : '保存修改' }}
-            </Button>
-          </DialogFooter>
-        </template>
       </SvForm>
+      <DialogFooter class="shrink-0">
+        <DialogClose as-child>
+          <Button type="button" variant="outline">取消</Button>
+        </DialogClose>
+        <Button type="button" @click="toConfirm">
+          {{ mode === 'add' ? '新增' : '保存修改' }}
+        </Button>
+      </DialogFooter>
     </DialogContent>
   </Dialog>
 </template>
