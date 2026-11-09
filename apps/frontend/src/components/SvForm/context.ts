@@ -1,8 +1,13 @@
-import type { ComputedRef, InjectionKey } from 'vue'
+import type { ComputedRef, InjectionKey, Ref } from 'vue'
+import type { SvFormRules, SvFormTrigger } from './types'
 
 /** 同一表单内字段共享的交互配置；校验状态由 VeeValidate 自身上下文提供。 */
 export interface SvFormContext {
   disabled: ComputedRef<boolean>
+  model: Readonly<Ref<Record<string, unknown>>>
+  rules: ComputedRef<SvFormRules>
+  validationVersion: Readonly<Ref<number>>
+  validateOn: (prop: string, trigger: SvFormTrigger) => Promise<boolean>
 }
 
 /** 表单项向其直接控件提供的无障碍、校验和禁用状态。 */

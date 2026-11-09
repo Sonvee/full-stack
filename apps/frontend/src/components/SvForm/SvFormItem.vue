@@ -4,10 +4,9 @@
     :data-disabled="context.disabled.value || undefined"
     class="min-w-0 gap-2"
     @focusout="validateOnBlur"
-    @change="validateOnChange"
   >
     <FieldLabel v-if="props.label" :for="inputId">
-      <span v-if="props.required" class="text-destructive" aria-hidden="true">*</span
+      <span v-if="required" class="text-destructive" aria-hidden="true">*</span
       >{{ props.label }}
     </FieldLabel>
     <slot />
@@ -17,13 +16,16 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, inject, nextTick, provide, useId } from 'vue'
-import { useField } from 'vee-validate'
+import { computed, inject, nextTick, provide, useId, watch } from 'vue'
+import { cloneDeep } from 'es-toolkit'
+import { get } from 'es-toolkit/compat'
+import { useFormContext } from 'vee-validate'
 import { Field, FieldDescription, FieldError, FieldLabel } from '@/components/ui/field'
 import { svFormFieldKey, svFormKey } from './context'
+import { getFormRules } from './validation'
 
 /**
- * prop 对应 SvForm.rules 的字段路径，label 关联内部自定义控件，required 仅展示必填标记。
+ * prop 对应 SvForm.rules 的字段路径，必填标记默认从规则推导，也可通过 required 覆盖。
  *
  * @remarks
  * 内部的 SvInput、SvDictSelect、SvDatePicker 会自动接收 id、校验和禁用状态。
@@ -35,12 +37,15 @@ interface SvFormItemProps {
   for?: string
   required?: boolean
 }
-const props = defineProps<SvFormItemProps>()
+const props = withDefaults(defineProps<SvFormItemProps>(), { required: undefined })
 const context = inject(svFormKey)
 if (!context) {
   throw new Error('SvFormItem 必须位于 SvForm 内')
 }
-const disabled = context.disabled
+const { disabled, validationVersion, validateOn } = context
+const { errorBag } = useFormContext<Record<string, unknown>>()
+const errors = computed(() => errorBag.value[props.prop] || [])
+const required = computed(() => props.required ?? getFormRules(context.rules.value[props.prop]).some((rule) => rule.required))
 const generatedId = useId()
 const inputId = computed(() => props.for || `sv-field-${generatedId}`)
 const invalid = computed(() => errors.value.length > 0)
@@ -51,12 +56,17 @@ provide(svFormFieldKey, {
   errorId,
   disabled: context.disabled,
 })
-const { errors, validate, setTouched } = useField(() => props.prop, undefined, {
-  keepValueOnUnmount: true,
-  validateOnValueUpdate: false,
-})
+// 观察实际绑定值，兼容 Select 等不冒泡原生 change 事件的控件；重置同轮跳过校验。
+watch(
+  () => [cloneDeep(get(context.model.value, props.prop)), validationVersion.value] as const,
+  ([, version], [, previousVersion]) => {
+    if (!disabled.value && version === previousVersion) {
+      void validateOn(props.prop, 'change')
+    }
+  },
+)
 
-/** 在整个表单项失去焦点后标记已访问并校验，避免在项内按钮之间移动时重复触发。 */
+/** 在整个表单项失去焦点后校验，避免在项内按钮之间移动时重复触发。 */
 async function validateOnBlur(event: FocusEvent) {
   if ((event.currentTarget as HTMLElement).contains(event.relatedTarget as Node | null)) {
     return
@@ -64,18 +74,11 @@ async function validateOnBlur(event: FocusEvent) {
   if (disabled.value) {
     return
   }
-  setTouched(true)
+  const version = validationVersion.value
   await nextTick()
-  await validate()
-}
-
-/** 等待控件 v-model 同步后校验选择或清空产生的 change。 */
-async function validateOnChange() {
-  if (disabled.value) {
-    return
+  if (version === validationVersion.value) {
+    await validateOn(props.prop, 'blur')
   }
-  await nextTick()
-  await validate()
 }
 </script>
 

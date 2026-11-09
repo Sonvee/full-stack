@@ -9,7 +9,7 @@
           <span
             class="flex size-6 items-center justify-center rounded-md bg-primary text-primary-foreground"
           >
-            <i class="sv-icon-logo text-base leading-none" aria-hidden="true" />
+            <i class="sv-icon-logo text-base leading-none" />
           </span>
           Full Stack
         </RouterLink>
@@ -18,12 +18,11 @@
       <div class="flex flex-1 items-center justify-center py-12">
         <form
           class="w-full max-w-xs"
-          aria-labelledby="login-title"
           @submit.prevent="showLoginNotice = true"
         >
           <FieldGroup>
             <div class="flex flex-col items-center gap-2 text-center">
-              <h1 id="login-title" class="text-2xl font-bold">登录你的账号</h1>
+              <h1 class="text-2xl font-bold">登录你的账号</h1>
               <p class="text-sm text-balance text-muted-foreground">欢迎回来，请输入邮箱和密码</p>
             </div>
 
@@ -55,7 +54,7 @@
 
             <Field>
               <Button type="submit">登录</Button>
-              <FieldDescription role="status" aria-live="polite" aria-atomic="true">
+              <FieldDescription role="status">
                 {{ showLoginNotice ? '登录服务尚未接入，暂时无法登录。你可以先预览管理端。' : '' }}
               </FieldDescription>
             </Field>
@@ -73,7 +72,7 @@
       </div>
     </div>
 
-    <div class="relative hidden w-1/2 bg-muted lg:block" aria-hidden="true">
+    <div class="relative hidden w-1/2 bg-muted lg:block">
       <img
         src="https://devtool.tech/api/placeholder/1440/1920"
         alt=""

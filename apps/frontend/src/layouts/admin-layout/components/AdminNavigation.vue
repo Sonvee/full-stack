@@ -11,7 +11,7 @@
       <SidebarMenuItem>
         <SidebarMenuButton as-child>
           <a href="https://shadcn-vue.com/blocks/sidebar" target="_blank" rel="noopener noreferrer">
-            <i class="sv-icon-menu-management" aria-hidden="true" />
+            <i class="sv-icon-menu-management" />
             <span>shadcn-vue 布局</span>
             <span class="sr-only">（新窗口打开）</span>
           </a>
@@ -24,7 +24,7 @@
             target="_blank"
             rel="noopener noreferrer"
           >
-            <i class="sv-icon-bookopen" aria-hidden="true" />
+            <i class="sv-icon-bookopen" />
             <span>Vue 文档</span>
             <span class="sr-only">（新窗口打开）</span>
           </a>

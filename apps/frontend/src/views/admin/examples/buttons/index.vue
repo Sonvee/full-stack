@@ -1,7 +1,7 @@
 <template>
-  <section class="flex max-w-3xl flex-col gap-6 py-2" aria-labelledby="buttons-title">
+  <section class="flex max-w-3xl flex-col gap-6 py-2">
     <div class="flex flex-col gap-2">
-      <h1 id="buttons-title" class="text-2xl font-semibold tracking-tight">按钮交互</h1>
+      <h1 class="text-2xl font-semibold tracking-tight">按钮交互</h1>
       <p class="text-sm text-muted-foreground">二级页面示例 · 页面示例 / 按钮交互</p>
     </div>
     <div class="flex flex-col gap-4 rounded-xl border p-6">

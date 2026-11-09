@@ -1,5 +1,5 @@
 <template>
-  <form v-bind="$attrs" novalidate @submit="submit">
+  <form v-bind="$attrs" novalidate @submit.prevent="submit">
     <FieldGroup :class="props.contentClass">
       <slot :is-submitting="isSubmitting" />
     </FieldGroup>
@@ -14,6 +14,7 @@ import { useForm } from 'vee-validate'
 import { FieldGroup } from '@/components/ui/field'
 import { svFormKey } from './context'
 import type { SvFormInstance, SvFormRules } from './types'
+import { useFormValidation } from './use-form-validation'
 
 defineOptions({ inheritAttrs: false })
 
@@ -25,7 +26,7 @@ defineOptions({ inheritAttrs: false })
  * contentClass 控制字段布局，其他属性透传 form。
  */
 interface SvFormProps {
-  rules?: SvFormRules
+  rules?: SvFormRules<T>
   disabled?: boolean
   contentClass?: HTMLAttributes['class']
 }
@@ -39,48 +40,33 @@ const emit = defineEmits<{
 const initialValues = cloneDeep(model.value)
 const form = useForm<Record<string, unknown>>({
   initialValues: cloneDeep(initialValues),
-  validationSchema: computed(() => props.rules || {}),
   keepValuesOnUnmount: true,
 })
-const { isSubmitting } = form
-provide(svFormKey, { disabled: computed(() => props.disabled) })
+const rules = computed<SvFormRules>(() => props.rules || {})
+const { validate, validateField, validateOn, clearValidate, validationVersion, isValidating: isSubmitting } =
+  useFormValidation(model, rules, form)
+provide(svFormKey, { disabled: computed(() => props.disabled), model, rules, validationVersion, validateOn })
 
 // 控件通过 v-model 修改外部 model 后，同步到校验状态；不修改调用方的字段对象。
 watch(model, (value) => form.setValues(cloneDeep(value), false), { deep: true, flush: 'sync' })
 
-/** 校验整个表单；即使字段被折叠卸载，其 schema 规则仍会执行。 */
-const submit = form.handleSubmit(
-  (values) => {
-    if (!props.disabled) {
-      emit('submit', values as T)
-    }
-  },
-  ({ errors }) => emit('invalid', errors),
-)
-
-/** 执行全部规则并返回是否通过，不触发 submit 事件。 */
-async function validate(): Promise<boolean> {
-  return (await form.validate()).valid
-}
-
-/**
- * 校验单个字段。
- * @param prop - 与 SvFormItem.prop 一致的字段路径。
- * @returns 字段是否通过校验。
- */
-async function validateField(prop: string): Promise<boolean> {
-  return (await form.validateField(prop)).valid
+/** 保留原生提交契约，供筛选表单与回车提交使用。 */
+async function submit() {
+  if (props.disabled || isSubmitting.value) {
+    return
+  }
+  if (await validate()) {
+    emit('submit', cloneDeep(model.value))
+  } else {
+    emit('invalid', form.errors.value)
+  }
 }
 
 /** 恢复组件创建时的初始快照，并清除校验与 touched 状态。 */
 function resetFields() {
+  clearValidate()
   model.value = cloneDeep(initialValues)
-  form.resetForm({ values: cloneDeep(initialValues) })
-}
-
-/** 清除当前错误信息，保留字段值。 */
-function clearValidate() {
-  for (const prop of Object.keys(form.errors.value)) form.setFieldError(prop, undefined)
+  form.resetForm({ values: cloneDeep(initialValues) }, { force: true })
 }
 
 defineExpose<SvFormInstance>({ validate, validateField, resetFields, clearValidate })

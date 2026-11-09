@@ -3,7 +3,7 @@
     <SidebarMenuItem>
       <DropdownMenu>
         <DropdownMenuTrigger as-child>
-          <SidebarMenuButton size="lg" aria-label="打开管理端菜单">
+          <SidebarMenuButton size="lg">
             <Avatar class="size-8 rounded-lg">
               <AvatarFallback class="rounded-lg">超</AvatarFallback>
             </Avatar>
@@ -11,7 +11,7 @@
               <span class="truncate font-medium">超级管理员</span>
               <span class="truncate text-xs">admin</span>
             </div>
-            <i class="sv-icon-unfoldmore" aria-hidden="true" />
+            <i class="sv-icon-unfoldmore" />
           </SidebarMenuButton>
         </DropdownMenuTrigger>
         <DropdownMenuContent
@@ -33,13 +33,13 @@
           <DropdownMenuGroup>
             <DropdownMenuItem as-child>
               <RouterLink :to="{ name: 'admin-guide' }" @click="setOpenMobile(false)">
-                <i class="sv-icon-informationoutline" aria-hidden="true" />
+                <i class="sv-icon-informationoutline" />
                 布局说明
               </RouterLink>
             </DropdownMenuItem>
             <DropdownMenuItem as-child>
               <RouterLink :to="{ name: 'home' }">
-                <i class="sv-icon-home" aria-hidden="true" />
+                <i class="sv-icon-home" />
                 返回首页
               </RouterLink>
             </DropdownMenuItem>
@@ -47,7 +47,7 @@
           <DropdownMenuSeparator />
           <DropdownMenuItem as-child variant="destructive">
             <RouterLink :to="{ name: 'login' }" @click="setOpenMobile(false)">
-              <i class="sv-icon-logout" aria-hidden="true" />
+              <i class="sv-icon-logout" />
               退出登录
             </RouterLink>
           </DropdownMenuItem>

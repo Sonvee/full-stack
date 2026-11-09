@@ -3,9 +3,8 @@
     id="record-filters"
     class="filter-form flex min-h-0 max-h-[45%] shrink flex-col gap-3 rounded-lg border p-4"
     :class="{ 'is-expanded': expanded }"
-    aria-labelledby="record-filters-title"
   >
-    <h2 id="record-filters-title" class="shrink-0 text-sm font-medium">条件筛选</h2>
+    <h2 class="shrink-0 text-sm font-medium">条件筛选</h2>
     <SvForm
       ref="filterForm"
       v-model:model="formData"
@@ -42,11 +41,11 @@
       </SvFormItem>
       <template #footer>
         <div class="flex shrink-0 flex-wrap items-center justify-end gap-2">
-          <Button type="submit" size="sm"><i class="sv-icon-magnify" aria-hidden="true" data-icon="inline-start" />查询</Button>
+          <Button type="submit" size="sm"><i class="sv-icon-magnify" data-icon="inline-start" />查询</Button>
           <Button type="button" variant="outline" size="sm" @click="reset">重置</Button>
           <Button type="button" variant="ghost" size="sm" :aria-expanded="expanded" @click="toggleExpanded"
             >{{ expanded ? '收起条件' : '展开条件'
-            }}<i :class="expanded ? 'sv-icon-chevronup' : 'sv-icon-chevrondown'" aria-hidden="true" data-icon="inline-end"
+            }}<i :class="expanded ? 'sv-icon-chevronup' : 'sv-icon-chevrondown'" data-icon="inline-end"
           /></Button>
         </div>
       </template>

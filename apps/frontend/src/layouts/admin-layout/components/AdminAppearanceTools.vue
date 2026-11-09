@@ -1,5 +1,5 @@
 <template>
-  <div class="ml-auto flex shrink-0 items-center gap-2" role="group" aria-label="管理工具栏">
+  <div class="ml-auto flex shrink-0 items-center gap-2">
     <AdminPageSearch />
 
     <Separator orientation="vertical" class="mx-1 data-[orientation=vertical]:h-4" />
@@ -13,14 +13,14 @@
           :aria-label="`主题色：${selectedColor.label}`"
           :title="`主题色：${selectedColor.label}`"
         >
-          <i class="sv-icon-palette" aria-hidden="true" />
+          <i class="sv-icon-palette" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" class="min-w-36">
         <DropdownMenuGroup>
           <DropdownMenuLabel>主题色</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuRadioGroup v-model="themeColor" aria-label="主题色">
+          <DropdownMenuRadioGroup v-model="themeColor">
             <DropdownMenuRadioItem
               v-for="color in themeColors"
               :key="color.value"
@@ -29,7 +29,6 @@
               <span
                 class="size-3 shrink-0 rounded-full"
                 :style="{ backgroundColor: color.swatch }"
-                aria-hidden="true"
               />
               {{ color.label }}
             </DropdownMenuRadioItem>
@@ -49,20 +48,20 @@
           :aria-label="`显示模式：${selectedMode.label}`"
           :title="`显示模式：${selectedMode.label}`"
         >
-          <i :class="selectedMode.icon" aria-hidden="true" />
+          <i :class="selectedMode.icon" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" class="min-w-36">
         <DropdownMenuGroup>
           <DropdownMenuLabel>显示模式</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuRadioGroup v-model="mode" aria-label="显示模式">
+          <DropdownMenuRadioGroup v-model="mode">
             <DropdownMenuRadioItem
               v-for="option in appearanceModes"
               :key="option.value"
               :value="option.value"
             >
-              <i :class="option.icon" aria-hidden="true" />
+              <i :class="option.icon" />
               {{ option.label }}
             </DropdownMenuRadioItem>
           </DropdownMenuRadioGroup>

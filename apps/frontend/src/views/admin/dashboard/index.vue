@@ -1,10 +1,10 @@
 <template>
-  <section class="flex flex-1 flex-col gap-4" aria-labelledby="dashboard-title">
+  <section class="flex flex-1 flex-col gap-4">
     <div class="flex flex-col gap-1 py-2">
-      <h1 id="dashboard-title" class="text-2xl font-semibold tracking-tight">工作台</h1>
+      <h1 class="text-2xl font-semibold tracking-tight">工作台</h1>
       <p class="text-sm text-muted-foreground">欢迎使用 Full Stack 管理控制台。</p>
     </div>
-    <div class="flex flex-col gap-4 md:flex-row" aria-hidden="true">
+    <div class="flex flex-col gap-4 md:flex-row">
       <div v-for="index in 3" :key="index" class="aspect-video flex-1 rounded-xl bg-muted/50" />
     </div>
     <div

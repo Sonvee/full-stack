@@ -1,7 +1,7 @@
 <template>
-  <section class="flex max-w-4xl flex-col gap-6 py-2" aria-labelledby="roles-title">
+  <section class="flex max-w-4xl flex-col gap-6 py-2">
     <div class="flex flex-col gap-2">
-      <h1 id="roles-title" class="text-2xl font-semibold tracking-tight">角色列表</h1>
+      <h1 class="text-2xl font-semibold tracking-tight">角色列表</h1>
       <p class="text-sm text-muted-foreground">三级页面示例 · 系统演示 / 权限管理 / 角色列表</p>
     </div>
     <p class="text-sm leading-6 text-muted-foreground">

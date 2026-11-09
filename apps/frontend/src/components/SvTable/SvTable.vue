@@ -10,16 +10,11 @@
         : undefined
     "
   >
-    <div hidden aria-hidden="true"><slot /></div>
+    <div hidden><slot /></div>
     <div
       class="min-h-0 flex-1 overflow-hidden rounded-lg border [&>[data-slot=table-container]]:h-full"
     >
-      <Table
-        :class="props.tableClass"
-        tabindex="0"
-        role="region"
-        :aria-label="props.caption"
-      >
+      <Table :class="props.tableClass" tabindex="0">
         <TableCaption class="sr-only">{{ props.caption }}</TableCaption>
         <TableHeader class="sticky top-0 z-10 bg-background">
           <TableRow v-for="group in table.getHeaderGroups()" :key="group.id">

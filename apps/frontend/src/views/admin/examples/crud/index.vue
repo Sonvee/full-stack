@@ -1,30 +1,30 @@
 <template>
-  <section class="flex min-h-0 flex-1 flex-col gap-4" aria-labelledby="crud-title">
+  <section class="flex min-h-0 flex-1 flex-col gap-4">
     <header class="flex shrink-0 items-center justify-between gap-2">
-      <h1 id="crud-title" class="text-xl font-semibold">CRUD 模板</h1>
+      <h1 class="text-xl font-semibold">CRUD 模板</h1>
     </header>
 
     <!-- 条件筛选栏 -->
     <FilterForm v-show="showFilters" @search="toSearch" />
 
     <!-- 表格工具栏 -->
-    <div class="flex shrink-0 flex-wrap items-center gap-2" role="toolbar" aria-label="表格工具栏">
-      <Button size="sm" @click="toAdd"> <i class="sv-icon-plus" aria-hidden="true" data-icon="inline-start" />新增 </Button>
+    <div class="flex shrink-0 flex-wrap items-center gap-2">
+      <Button size="sm" @click="toAdd"> <i class="sv-icon-plus" data-icon="inline-start" />新增 </Button>
       <Button variant="outline" size="sm" :disabled="selectedList.length !== 1" @click="toUpdate()">
-        <i class="sv-icon-edit" aria-hidden="true" data-icon="inline-start" />修改
+        <i class="sv-icon-edit" data-icon="inline-start" />修改
       </Button>
       <Button variant="outline" size="sm" :disabled="selectedList.length === 0" @click="toDelete()">
-        <i class="sv-icon-delete" aria-hidden="true" data-icon="inline-start" />删除
+        <i class="sv-icon-delete" data-icon="inline-start" />删除
       </Button>
       <Button variant="outline" size="sm" @click="importList">
-        <i class="sv-icon-import" aria-hidden="true" data-icon="inline-start" />导入
+        <i class="sv-icon-import" data-icon="inline-start" />导入
       </Button>
       <Button variant="outline" size="sm" @click="exportList">
-        <i class="sv-icon-export" aria-hidden="true" data-icon="inline-start" />导出
+        <i class="sv-icon-export" data-icon="inline-start" />导出
       </Button>
       <span class="min-w-0 flex-1" />
       <Button variant="outline" size="icon-sm" aria-label="刷新" title="刷新" @click="toRefresh">
-        <i class="sv-icon-refresh" aria-hidden="true" />
+        <i class="sv-icon-refresh" />
       </Button>
       <Button
         variant="outline"
@@ -33,7 +33,7 @@
         :title="showFilters ? '隐藏筛选' : '显示筛选'"
         @click="toToggleFilter"
       >
-        <i :class="showFilters ? 'sv-icon-eyeoff' : 'sv-icon-filter'" aria-hidden="true" />
+        <i :class="showFilters ? 'sv-icon-eyeoff' : 'sv-icon-filter'" />
       </Button>
     </div>
 

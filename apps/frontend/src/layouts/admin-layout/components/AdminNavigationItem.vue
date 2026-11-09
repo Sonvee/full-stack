@@ -9,11 +9,10 @@
           :is-active="isActive"
           class="group/menu-toggle w-full translate-x-0"
         >
-          <i :class="item.meta?.icon" aria-hidden="true" />
+          <i :class="item.meta?.icon" />
           <span>{{ item.meta?.title }}</span>
           <i
             class="sv-icon-chevronright ml-auto transition-transform group-data-[state=open]/menu-toggle:rotate-90 motion-reduce:transition-none"
-            aria-hidden="true"
           />
         </component>
       </CollapsibleTrigger>
@@ -32,7 +31,7 @@
   <component :is="containerComponent" v-else>
     <component :is="buttonComponent" as-child :is-active="isActive" class="w-full translate-x-0">
       <RouterLink :to="{ name: item.name }" @click="setOpenMobile(false)">
-        <i :class="item.meta?.icon" aria-hidden="true" />
+        <i :class="item.meta?.icon" />
         <span>{{ item.meta?.title }}</span>
       </RouterLink>
     </component>

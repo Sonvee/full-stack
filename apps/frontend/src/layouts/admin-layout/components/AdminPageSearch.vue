@@ -8,7 +8,7 @@
       @click="openSearch"
     >
       <span class="flex min-w-0 items-center gap-2">
-        <i class="sv-icon-magnify shrink-0" aria-hidden="true" />
+        <i class="sv-icon-magnify shrink-0" />
         <span class="truncate">搜索页面</span>
       </span>
       <Kbd class="shrink-0">Ctrl + K</Kbd>
@@ -21,7 +21,7 @@
       title="搜索页面"
       @click="openSearch"
     >
-      <i class="sv-icon-magnify" aria-hidden="true" />
+      <i class="sv-icon-magnify" />
     </Button>
 
     <DialogPortal>
@@ -51,7 +51,7 @@
             @keydown="handleSearchKeydown"
           />
           <InputGroupAddon class="pl-4">
-            <span class="sv-icon-magnify" aria-hidden="true" />
+            <span class="sv-icon-magnify" />
           </InputGroupAddon>
         </InputGroup>
 
@@ -75,7 +75,7 @@
               @mouseenter="activeIndex = index"
               @click="navigateTo(page.name)"
             >
-              <i :class="[page.icon, 'shrink-0 text-muted-foreground']" aria-hidden="true" />
+              <i :class="[page.icon, 'shrink-0 text-muted-foreground']" />
               <span class="min-w-0 flex-1 truncate">{{ page.title }}</span>
               <span class="hidden shrink-0 truncate text-xs text-muted-foreground sm:block">
                 {{ page.path }}
