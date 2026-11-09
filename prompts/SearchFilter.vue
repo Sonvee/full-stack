@@ -143,7 +143,7 @@
 
 <script lang="ts" setup>
 import { Search, RefreshLeft, ArrowUp, ArrowDown, Check, Close } from '@element-plus/icons-vue'
-import type { FormInstance, FormRules } from 'element-plus'
+import type { FormRules } from 'element-plus'
 import type { DictContext } from '@/composables/useDict'
 import type { DemoSearchForm, SearchFilterEmits } from '@/types/demo'
 
@@ -171,7 +171,7 @@ const sfForm = ref<DemoSearchForm>({
   status: 'enabled'
 })
 
-const sfFormRef = useTemplateRef<FormInstance>('sfFormRef')
+const sfFormRef = useTemplateRef('sfFormRef')
 const rules: FormRules<DemoSearchForm> = {
   textRequired: [{ required: true, message: '请输入必填文本', trigger: ['blur', 'change'] }]
 }

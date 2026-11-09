@@ -61,7 +61,7 @@ const labelStyle = computed<CSSProperties>(() => {
     justifyContent: context.labelPosition.value === 'right' ? 'flex-end' : 'flex-start',
   }
 })
-const labelContentRef = useTemplateRef<HTMLSpanElement>('labelContentRef')
+const labelContentRef = useTemplateRef('labelContentRef')
 const { width: labelContentWidth } = useElementSize(labelContentRef)
 const labelKey = Symbol('label')
 watch([labelContentWidth, horizontal], ([width, isHorizontal]) => {

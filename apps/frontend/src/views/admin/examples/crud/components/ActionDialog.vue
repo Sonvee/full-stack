@@ -1,5 +1,5 @@
 <template>
-  <Dialog :open="open" @update:open="handleOpenChange">
+  <Dialog v-model:open="open" @update:open="handleOpenChange">
     <DialogContent class="flex max-h-[85svh] flex-col sm:max-w-xl">
       <DialogHeader class="shrink-0">
         <DialogTitle>{{ title }}</DialogTitle>
@@ -51,7 +51,7 @@ import { inject, ref, useTemplateRef } from 'vue'
 import { cloneDeep } from 'es-toolkit'
 import SvDictSelect from '@/components/SvDictSelect/SvDictSelect.vue'
 import SvForm from '@/components/SvForm/SvForm.vue'
-import type { SvFormInstance, SvFormRules } from '@/components/SvForm/types'
+import type { SvFormRules } from '@/components/SvForm/types'
 import SvFormItem from '@/components/SvForm/SvFormItem.vue'
 import SvInput from '@/components/SvInput/SvInput.vue'
 import { Button } from '@/components/ui/button'
@@ -75,7 +75,7 @@ const defaultFormData: DemoListItem = {
   createdAt: ''
 }
 const formData = ref<DemoListItem>(defaultFormData)
-const actionFormRef = useTemplateRef<SvFormInstance>('actionFormRef')
+const actionFormRef = useTemplateRef('actionFormRef')
 const rules: SvFormRules<DemoListItem> = {
   aInput: [{ required: true, message: '请输入数据项甲', trigger: ['blur', 'change'] }],
   bInput: [{ required: true, message: '请输入数据项乙', trigger: ['blur', 'change'] }],
@@ -86,12 +86,11 @@ const rules: SvFormRules<DemoListItem> = {
   gSelect: [{ required: true, message: '请选择数据项庚', trigger: 'change' }]
 }
 
-/** 统一处理弹窗状态，关闭时重置表单。 */
+/** 弹窗关闭时重置表单。 */
 function handleOpenChange(value: boolean) {
   if (!value) {
     actionFormRef.value?.resetFields()
   }
-  open.value = value
 }
 
 /** 为新增或编辑操作填入独立的表单数据。 */
@@ -102,7 +101,6 @@ function initForm(row?: DemoListItem) {
 /** 校验通过后将表单数据交给页面处理。 */
 function submit(values: DemoListItem) {
   emit('confirm', values)
-  handleOpenChange(false)
 }
 
 function toConfirm() {

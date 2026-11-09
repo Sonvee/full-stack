@@ -16,7 +16,7 @@ if (!context) {
   throw new Error('SvTableColumn 必须位于 SvTable 内')
 }
 const id = useId()
-const markerRef = useTemplateRef<HTMLElement>('markerRef')
+const markerRef = useTemplateRef('markerRef')
 context.register({
   id,
   props,

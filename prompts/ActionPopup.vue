@@ -122,7 +122,7 @@
 
 <script lang="ts" setup>
 import { Check, Close } from '@element-plus/icons-vue'
-import type { DialogInstance, FormInstance, FormRules } from 'element-plus'
+import type { FormRules } from 'element-plus'
 import type { ActionPopupEmits, ActionPopupProps, DemoFormModel, DemoFormPatch } from '@/types/demo'
 
 const props = withDefaults(defineProps<ActionPopupProps>(), {
@@ -139,8 +139,8 @@ const elColProps = { xs: 24, sm: 24, md: 12, lg: 12, xl: 12 }
 
 const apForm = ref<DemoFormModel>(createDefaultForm())
 
-const apDialogRef = useTemplateRef<DialogInstance>('apDialogRef')
-const apFormRef = useTemplateRef<FormInstance>('apFormRef')
+const apDialogRef = useTemplateRef('apDialogRef')
+const apFormRef = useTemplateRef('apFormRef')
 const rules: FormRules<DemoFormModel> = {
   textRequired: [{ required: true, message: '请输入必填文本', trigger: ['blur', 'change'] }]
 }

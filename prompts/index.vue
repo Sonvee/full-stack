@@ -105,7 +105,7 @@ const loading = ref(false)
 const selectionList = ref<DemoRecord[]>([])
 const showFilter = shallowRef(true)
 
-const apRef = useTemplateRef<InstanceType<typeof ActionPopup>>('apRef')
+const apRef = useTemplateRef('apRef')
 const apOpen = ref(false)
 const apTitle = ref('新增')
 const apMode = ref<DemoActionMode>('add')

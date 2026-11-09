@@ -11,18 +11,18 @@ export interface DemoListItem {
   createdAt: string
 }
 
-/** CRUD 示例列表查询参数，筛选条件与分页参数一起提交。 */
+/** CRUD 示例列表查询参数，筛选条件均可省略。 */
 export interface DemoQueryParams {
-  id: string
-  aInput: string
-  bInput: string
-  cInput: string
-  dSelect: string
-  eSelect: string
-  fSelect: string
-  gSelect: string
+  id?: string
+  aInput?: string
+  bInput?: string
+  cInput?: string
+  dSelect?: string
+  eSelect?: string
+  fSelect?: string
+  gSelect?: string
   /** 按开始、结束顺序提交，格式为 YYYY-MM-DD。 */
-  createdRange: [string, string] | null
+  createdRange?: [string, string] | null
   pageNum: number
   pageSize: number
 }

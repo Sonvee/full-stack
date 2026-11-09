@@ -1,7 +1,10 @@
+import { delay } from 'es-toolkit'
 import type { DemoListItem, DemoQueryParams, DemoApiResponse } from '@/types/demo'
 
 /** 查询 CRUD 示例列表。 */
-export async function apiDemoList(_params: DemoQueryParams): Promise<DemoApiResponse> {
+export async function apiDemoList(params: DemoQueryParams): Promise<DemoApiResponse> {
+  await delay(1000)
+  console.log('查询数据', params)
   return {
     code: 200,
     data: [
@@ -100,26 +103,31 @@ export async function apiDemoList(_params: DemoQueryParams): Promise<DemoApiResp
 }
 
 /** 提交 CRUD 示例新增请求的占位 API。 */
-export function apiDemoAdd(values: DemoListItem): void {
-  console.log('新增数据', values)
+export async function apiDemoAdd(data: DemoListItem): Promise<void> {
+  await delay(1000)
+  console.log('新增数据', data)
 }
 
 /** 提交 CRUD 示例修改请求的占位 API。 */
-export function apiDemoUpdate(values: DemoListItem): void {
-  console.log('修改数据', values)
+export async function apiDemoUpdate(data: DemoListItem): Promise<void> {
+  await delay(1000)
+  console.log('修改数据', data)
 }
 
 /** 提交 CRUD 示例删除请求的占位 API。 */
-export function apiDemoDelete(): void {
+export async function apiDemoDelete(): Promise<void> {
+  await delay(1000)
   console.log('删除数据')
 }
 
 /** 提交 CRUD 示例导入请求的占位 API。 */
-export function apiDemoImport(): void {
+export async function apiDemoImport(): Promise<void> {
+  await delay(1000)
   console.log('导入数据')
 }
 
 /** 提交 CRUD 示例导出请求的占位 API。 */
-export function apiDemoExport(): void {
+export async function apiDemoExport(): Promise<void> {
+  await delay(1000)
   console.log('导出数据')
 }

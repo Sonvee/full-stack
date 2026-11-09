@@ -84,7 +84,7 @@ const value = useVModel(props, 'modelValue', emit, {
   passive: true,
   defaultValue: props.defaultValue,
 })
-const inputRef = useTemplateRef<InstanceType<typeof Input>>('inputRef')
+const inputRef = useTemplateRef('inputRef')
 const inputElement = computed<HTMLInputElement | undefined>(() => inputRef.value?.$el)
 const { focused } = useFocus(inputElement, { preventScroll: true })
 const canClear = computed(

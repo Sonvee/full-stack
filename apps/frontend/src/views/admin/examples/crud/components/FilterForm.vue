@@ -56,7 +56,6 @@ import { inject, ref, shallowRef, useTemplateRef } from 'vue'
 import SvDatePicker from '@/components/SvDatePicker/SvDatePicker.vue'
 import type { SvDatePickerValue } from '@/components/SvDatePicker/types'
 import SvForm from '@/components/SvForm/SvForm.vue'
-import type { SvFormInstance } from '@/components/SvForm/types'
 import SvFormItem from '@/components/SvForm/SvFormItem.vue'
 import SvInput from '@/components/SvInput/SvInput.vue'
 import SvDictSelect from '@/components/SvDictSelect/SvDictSelect.vue'
@@ -67,7 +66,7 @@ const emit = defineEmits<{ search: [filters: Omit<DemoQueryParams, 'pageNum' | '
 const { dict_d_select, dict_e_select, dict_f_select, dict_g_select } = inject<any>('__DICT__')
 /** 适配日期组件的通用值类型，查询时仅提交完整范围或 null。 */
 type FilterFormValues = Omit<DemoQueryParams, 'createdRange' | 'pageNum' | 'pageSize'> & {
-  createdRange: SvDatePickerValue
+  createdRange?: SvDatePickerValue
 }
 const defaultQueryParams: Omit<DemoQueryParams, 'pageNum' | 'pageSize'> = {
   aInput: '',
@@ -82,10 +81,10 @@ const defaultQueryParams: Omit<DemoQueryParams, 'pageNum' | 'pageSize'> = {
 }
 const formData = ref<FilterFormValues>({ ...defaultQueryParams })
 const expanded = shallowRef(false)
-const filterFormRef = useTemplateRef<SvFormInstance>('filterFormRef')
+const filterFormRef = useTemplateRef('filterFormRef')
 /** 标准化筛选文本，日期范围以双元素数组提交。 */
 function submit({ createdRange, ...filters }: FilterFormValues) {
-  const normalized = Object.fromEntries(Object.entries(filters).map(([key, value]) => [key, value.trim()])) as Omit<
+  const normalized = Object.fromEntries(Object.entries(filters).map(([key, value]) => [key, value?.trim()])) as Omit<
     DemoQueryParams,
     'createdRange' | 'pageNum' | 'pageSize'
   >

@@ -97,7 +97,7 @@
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>取消</AlertDialogCancel>
-          <AlertDialogAction @click="confirmDelete">确认删除</AlertDialogAction>
+          <Button @click="confirmDelete">确认删除</Button>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
@@ -115,7 +115,6 @@ import SvTableColumn from '@/components/SvTable/SvTableColumn.vue'
 import SvTablePagination from '@/components/SvTable/SvTablePagination.vue'
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -147,7 +146,6 @@ const queryParams = shallowRef<DemoQueryParams>({
   eSelect: '',
   fSelect: '',
   gSelect: '',
-  id: '',
   createdRange: null,
   pageNum: 1,
   pageSize: 10
@@ -157,7 +155,7 @@ const actionDialogOpen = shallowRef(false)
 const actionTitle = shallowRef('新增数据')
 const actionMode = shallowRef<'add' | 'update'>('add')
 const pendingDeleteList = shallowRef<DemoListItem[]>([])
-const actionDialogRef = useTemplateRef<InstanceType<typeof ActionDialog>>('actionDialogRef')
+const actionDialogRef = useTemplateRef('actionDialogRef')
 
 onMounted(toQuery)
 
@@ -205,15 +203,16 @@ function toUpdate(row: DemoListItem) {
   actionDialogOpen.value = true
 }
 
-/** 提交新增或修改请求。 */
-function toConfirm(values: DemoListItem) {
+/** 等待新增或修改请求完成后关闭弹窗。 */
+async function toConfirm(values: DemoListItem) {
   if (actionMode.value === 'update') {
-    apiDemoUpdate(values)
+    await apiDemoUpdate(values)
     toast('修改请求已提交')
   } else {
-    apiDemoAdd(values)
+    await apiDemoAdd(values)
     toast('新增请求已提交')
   }
+  actionDialogOpen.value = false
 }
 
 /** 打开删除确认弹窗，支持单行和已选数据。 */
@@ -222,9 +221,10 @@ function toDelete(row?: DemoListItem) {
 }
 
 /** 提交删除请求并关闭确认弹窗。 */
-function confirmDelete() {
-  apiDemoDelete()
-  toast(`删除请求已提交，共 ${pendingDeleteList.value.length} 条数据`)
+async function confirmDelete() {
+  const count = pendingDeleteList.value.length
+  await apiDemoDelete()
+  toast(`删除请求已提交，共 ${count} 条数据`)
   pendingDeleteList.value = []
 }
 
@@ -236,13 +236,13 @@ function handleDeleteOpenChange(open: boolean) {
 }
 
 /** 导入操作占位，接入业务后在此调用导入 API。 */
-function importList() {
-  apiDemoImport()
+async function importList() {
+  await apiDemoImport()
 }
 
 /** 导出操作占位，接入业务后在此调用导出 API。 */
-function exportList() {
-  apiDemoExport()
+async function exportList() {
+  await apiDemoExport()
 }
 </script>
 
