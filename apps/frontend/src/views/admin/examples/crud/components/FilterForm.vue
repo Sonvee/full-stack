@@ -6,7 +6,7 @@
   >
     <h2 class="shrink-0 text-sm font-medium">条件筛选</h2>
     <SvForm
-      ref="filterForm"
+      ref="filterFormRef"
       v-model:model="formData"
       class="flex min-h-0 flex-col gap-3"
       content-class="filter-form-grid grid min-h-0 overflow-y-auto gap-4 p-1"
@@ -84,7 +84,7 @@ const defaultDemoFilterValues: DemoFilterValues = {
 }
 const formData = ref<FilterFormValues>({ ...defaultDemoFilterValues })
 const expanded = shallowRef(false)
-const filterForm = useTemplateRef<SvFormInstance>('filterForm')
+const filterFormRef = useTemplateRef<SvFormInstance>('filterFormRef')
 /** 标准化筛选文本，日期范围以双元素数组提交。 */
 function submit({ createdRange, ...filters }: FilterFormValues) {
   const normalized = Object.fromEntries(Object.entries(filters).map(([key, value]) => [key, value.trim()])) as Omit<
@@ -99,7 +99,7 @@ function submit({ createdRange, ...filters }: FilterFormValues) {
 
 /** 同时清除草稿与已经提交的筛选条件。 */
 function reset() {
-  filterForm.value?.resetFields()
+  filterFormRef.value?.resetFields()
   emit('search', { ...defaultDemoFilterValues })
 }
 

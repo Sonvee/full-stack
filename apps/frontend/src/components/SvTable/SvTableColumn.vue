@@ -1,4 +1,4 @@
-<template><span ref="marker" /></template>
+<template><span ref="markerRef" /></template>
 
 <script lang="ts" setup generic="T extends object = Record<string, unknown>">
 import { inject, onBeforeUnmount, useId, useTemplateRef, type VNode } from 'vue'
@@ -16,11 +16,11 @@ if (!context) {
   throw new Error('SvTableColumn 必须位于 SvTable 内')
 }
 const id = useId()
-const marker = useTemplateRef<HTMLElement>('marker')
+const markerRef = useTemplateRef<HTMLElement>('markerRef')
 context.register({
   id,
   props,
-  getElement: () => marker.value,
+  getElement: () => markerRef.value,
   // provide/inject 无法保留父表格的泛型；调用方通过列泛型声明插槽行类型。
   cell: slots.default ? (scope) => slots.default!({ ...scope, row: scope.row as T }) : undefined,
   header: slots.header ? () => slots.header!() : undefined,

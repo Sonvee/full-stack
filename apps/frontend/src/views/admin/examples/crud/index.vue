@@ -98,7 +98,7 @@
     />
 
     <!-- 新增 / 编辑弹窗 -->
-    <ActionDialog ref="actionDialog" v-model:open="actionDialogOpen" :title="actionTitle" :mode="actionMode" @confirm="toConfirm" />
+    <ActionDialog ref="actionDialogRef" v-model:open="actionDialogOpen" :title="actionTitle" :mode="actionMode" @confirm="toConfirm" />
 
     <!-- 删除确认弹窗 -->
     <AlertDialog :open="pendingDeleteList.length > 0" @update:open="handleDeleteOpenChange">
@@ -177,7 +177,7 @@ const actionTitle = shallowRef('新增数据')
 const actionMode = shallowRef<'add' | 'update'>('add')
 const editingItem = shallowRef<DemoListItem | null>(null)
 const pendingDeleteList = shallowRef<DemoListItem[]>([])
-const actionDialog = useTemplateRef<InstanceType<typeof ActionDialog>>('actionDialog')
+const actionDialogRef = useTemplateRef<InstanceType<typeof ActionDialog>>('actionDialogRef')
 
 onMounted(toQuery)
 
@@ -214,7 +214,7 @@ function toAdd() {
   actionTitle.value = '新增数据'
   actionMode.value = 'add'
   editingItem.value = null
-  actionDialog.value?.initForm()
+  actionDialogRef.value?.initForm()
   actionDialogOpen.value = true
 }
 
@@ -228,7 +228,7 @@ function toUpdate(item?: DemoListItem) {
   actionTitle.value = '修改数据'
   actionMode.value = 'update'
   editingItem.value = target
-  actionDialog.value?.initForm(target)
+  actionDialogRef.value?.initForm(target)
   actionDialogOpen.value = true
 }
 

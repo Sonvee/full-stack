@@ -6,7 +6,7 @@
         <DialogDescription>请填写各数据项。</DialogDescription>
       </DialogHeader>
       <SvForm
-        ref="actionForm"
+        ref="actionFormRef"
         v-model:model="formData"
         :rules="rules"
         class="flex min-h-0 min-w-0 flex-col gap-4"
@@ -75,7 +75,7 @@ const defaultFormValues: DemoFormValues = {
   gSelect: '选项甲'
 }
 const formData = ref<DemoFormValues>({ ...defaultFormValues })
-const actionForm = useTemplateRef<SvFormInstance>('actionForm')
+const actionFormRef = useTemplateRef<SvFormInstance>('actionFormRef')
 const rules: SvFormRules<DemoFormValues> = {
   aInput: [{ required: true, message: '请输入数据项甲', trigger: ['blur', 'change'] }],
   bInput: [{ required: true, message: '请输入数据项乙', trigger: ['blur', 'change'] }],
@@ -88,7 +88,7 @@ const rules: SvFormRules<DemoFormValues> = {
 
 watch(open, (value) => {
   if (!value) {
-    actionForm.value?.resetFields()
+    actionFormRef.value?.resetFields()
   }
 }, { flush: 'sync' })
 
@@ -113,7 +113,7 @@ function submit(values: DemoFormValues) {
 }
 
 function toConfirm() {
-  void actionForm.value?.validate((valid) => {
+  void actionFormRef.value?.validate((valid) => {
     if (valid) {
       submit({ ...formData.value })
     }

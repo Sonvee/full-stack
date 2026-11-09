@@ -1,7 +1,7 @@
 <template>
   <Input
     v-if="!props.clearable"
-    ref="input"
+    ref="inputRef"
     v-bind="$attrs"
     v-model="value"
     :class="props.class"
@@ -13,7 +13,7 @@
   />
   <InputGroup v-else :class="props.class" :data-disabled="inputDisabled || undefined">
     <InputGroupInput
-      ref="input"
+      ref="inputRef"
       v-bind="$attrs"
       v-model="value"
       :id="inputId"
@@ -84,8 +84,8 @@ const value = useVModel(props, 'modelValue', emit, {
   passive: true,
   defaultValue: props.defaultValue,
 })
-const input = useTemplateRef<InstanceType<typeof Input>>('input')
-const inputElement = computed<HTMLInputElement | undefined>(() => input.value?.$el)
+const inputRef = useTemplateRef<InstanceType<typeof Input>>('inputRef')
+const inputElement = computed<HTMLInputElement | undefined>(() => inputRef.value?.$el)
 const { focused } = useFocus(inputElement, { preventScroll: true })
 const canClear = computed(
   () =>

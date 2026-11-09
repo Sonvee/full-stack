@@ -3,7 +3,7 @@
     <PopoverAnchor as-child>
       <InputGroup :class="props.class" :data-disabled="controlDisabled || undefined">
         <InputGroupInput
-          ref="input"
+          ref="inputRef"
           v-bind="$attrs"
           :model-value="displayValue"
           :placeholder="props.placeholder || (isRange ? '请选择日期范围' : '请选择日期')"
@@ -178,8 +178,8 @@ const open = shallowRef(false)
 const range = shallowRef<DateRange>({ start: undefined, end: undefined })
 const startTime = shallowRef('00:00:00')
 const endTime = shallowRef('00:00:00')
-const input = useTemplateRef<InstanceType<typeof InputGroupInput>>('input')
-const { focused } = useFocus(input, { preventScroll: true })
+const inputRef = useTemplateRef<InstanceType<typeof InputGroupInput>>('inputRef')
+const { focused } = useFocus(inputRef, { preventScroll: true })
 const controlId = useId()
 const wideScreen = useMediaQuery('(min-width: 640px)')
 const defaultPlaceholder = today(getLocalTimeZone())
