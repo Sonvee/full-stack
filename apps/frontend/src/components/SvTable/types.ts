@@ -1,8 +1,8 @@
 import type { VNode } from 'vue'
 
 /** 单元格插槽参数；$index 是原始数据数组中的索引，从零开始。 */
-export interface SvTableCellScope<T extends object = Record<string, unknown>> {
-  row: T
+export interface SvTableCellScope {
+  row: any
   $index: number
 }
 
@@ -17,18 +17,18 @@ export interface SvTableColumnProps {
   filterType?: 'includesString' | 'equalsString' | 'inDateRange'
 }
 
-/** 声明列的内部注册数据；行类型仅在列插槽边界恢复，不向外暴露表格引擎。 */
+/** 声明列的内部注册数据，包含单元格和表头插槽，不向外暴露表格引擎。 */
 export interface SvTableColumnDefinition {
   id: string
   props: Readonly<SvTableColumnProps>
   getElement: () => HTMLElement | null
-  cell?: (scope: SvTableCellScope<object>) => VNode[]
+  cell?: (scope: SvTableCellScope) => VNode[]
   header?: () => VNode[]
 }
 
 /** 表格对外提供的选择操作；rowKey 必须在整份数据内唯一且稳定。 */
-export interface SvTableInstance<T extends object> {
+export interface SvTableInstance {
   clearSelection: () => void
-  getSelectionRows: () => T[]
-  toggleRowSelection: (row: T, selected?: boolean) => void
+  getSelectionRows: () => any[]
+  toggleRowSelection: (row: any, selected?: boolean) => void
 }

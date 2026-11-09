@@ -9,26 +9,19 @@
 
     <!-- 表格工具栏 -->
     <div class="flex shrink-0 flex-wrap items-center gap-2">
-      <Button size="sm" @click="toAdd"> <i class="sv-icon-plus" data-icon="inline-start" />新增 </Button>
-      <Button variant="outline" size="sm" :disabled="selectedList.length !== 1" @click="toUpdate()">
-        <i class="sv-icon-edit" data-icon="inline-start" />修改
-      </Button>
-      <Button variant="outline" size="sm" :disabled="selectedList.length === 0" @click="toDelete()">
+      <Button @click="toAdd"> <i class="sv-icon-plus" data-icon="inline-start" />新增 </Button>
+      <Button variant="outline" :disabled="selectedList.length === 0" @click="toDelete()">
         <i class="sv-icon-delete" data-icon="inline-start" />删除
       </Button>
-      <Button variant="outline" size="sm" @click="importList">
-        <i class="sv-icon-import" data-icon="inline-start" />导入
-      </Button>
-      <Button variant="outline" size="sm" @click="exportList">
-        <i class="sv-icon-export" data-icon="inline-start" />导出
-      </Button>
+      <Button variant="outline" @click="importList"> <i class="sv-icon-import" data-icon="inline-start" />导入 </Button>
+      <Button variant="outline" @click="exportList"> <i class="sv-icon-export" data-icon="inline-start" />导出 </Button>
       <span class="min-w-0 flex-1" />
-      <Button variant="outline" size="icon-sm" aria-label="刷新" title="刷新" @click="toRefresh">
+      <Button variant="outline" size="icon" aria-label="刷新" title="刷新" @click="toRefresh">
         <i class="sv-icon-refresh" />
       </Button>
       <Button
         variant="outline"
-        size="icon-sm"
+        size="icon"
         :aria-label="showFilters ? '隐藏筛选' : '显示筛选'"
         :title="showFilters ? '隐藏筛选' : '显示筛选'"
         @click="toToggleFilter"
@@ -53,32 +46,27 @@
       <SvTableColumn prop="aInput" label="数据项甲" sortable />
       <SvTableColumn prop="bInput" label="数据项乙" />
       <SvTableColumn prop="cInput" label="数据项丙" />
-      <!-- @vue-generic {DemoListItem} -->
       <SvTableColumn prop="dSelect" label="数据项丁">
         <template #default="{ row }">
           <SvDictTag :dict-list="dict_d_select" :data="row.dSelect" label-key="label" value-key="value" />
         </template>
       </SvTableColumn>
-      <!-- @vue-generic {DemoListItem} -->
       <SvTableColumn prop="eSelect" label="数据项戊">
         <template #default="{ row }">
           <SvDictTag :dict-list="dict_e_select" :data="row.eSelect" label-key="label" value-key="value" />
         </template>
       </SvTableColumn>
-      <!-- @vue-generic {DemoListItem} -->
       <SvTableColumn prop="fSelect" label="数据项己">
         <template #default="{ row }">
           <SvDictTag :dict-list="dict_f_select" :data="row.fSelect" label-key="label" value-key="value" />
         </template>
       </SvTableColumn>
-      <!-- @vue-generic {DemoListItem} -->
       <SvTableColumn prop="gSelect" label="数据项庚">
         <template #default="{ row }">
           <SvDictTag :dict-list="dict_g_select" :data="row.gSelect" label-key="label" value-key="value" />
         </template>
       </SvTableColumn>
       <SvTableColumn prop="createdAt" label="创建日期" sortable />
-      <!-- @vue-generic {DemoListItem} -->
       <SvTableColumn column-key="actions" label="操作" :width="132">
         <template #default="{ row }">
           <div class="flex items-center gap-1">
@@ -119,15 +107,8 @@
 <script lang="ts" setup>
 import { onMounted, provide, shallowRef, useTemplateRef } from 'vue'
 import { toast } from 'vue-sonner'
-import {
-  apiDemoAdd,
-  apiDemoDelete,
-  apiDemoExport,
-  apiDemoImport,
-  apiDemoList,
-  apiDemoUpdate
-} from '@/api/demo'
-import type { DemoFilterValues, DemoFormValues, DemoListItem, DemoListParams } from '@/types/demo'
+import { apiDemoAdd, apiDemoDelete, apiDemoExport, apiDemoImport, apiDemoList, apiDemoUpdate } from '@/api/demo'
+import type { DemoListItem, DemoQueryParams } from '@/types/demo'
 import SvDictTag from '@/components/SvDictTag/SvDictTag.vue'
 import SvTable from '@/components/SvTable/SvTable.vue'
 import SvTableColumn from '@/components/SvTable/SvTableColumn.vue'
@@ -152,13 +133,13 @@ provide('__DICT__', {
   dict_d_select,
   dict_e_select,
   dict_f_select,
-  dict_g_select,
+  dict_g_select
 })
 
 const dataList = shallowRef<DemoListItem[]>([])
 const total = shallowRef(0)
 const selectedList = shallowRef<DemoListItem[]>([])
-const queryParams = shallowRef<DemoListParams>({
+const queryParams = shallowRef<DemoQueryParams>({
   aInput: '',
   bInput: '',
   cInput: '',
@@ -175,14 +156,13 @@ const showFilters = shallowRef(true)
 const actionDialogOpen = shallowRef(false)
 const actionTitle = shallowRef('新增数据')
 const actionMode = shallowRef<'add' | 'update'>('add')
-const editingItem = shallowRef<DemoListItem | null>(null)
 const pendingDeleteList = shallowRef<DemoListItem[]>([])
 const actionDialogRef = useTemplateRef<InstanceType<typeof ActionDialog>>('actionDialogRef')
 
 onMounted(toQuery)
 
 /** 提交筛选条件并从第一页重新查询。 */
-function toSearch(values: DemoFilterValues) {
+function toSearch(values: Omit<DemoQueryParams, 'pageNum' | 'pageSize'>) {
   Object.assign(queryParams.value, values, { pageNum: 1 })
   toQuery()
 }
@@ -213,48 +193,38 @@ function handleSelectionChange(rows: DemoListItem[]) {
 function toAdd() {
   actionTitle.value = '新增数据'
   actionMode.value = 'add'
-  editingItem.value = null
   actionDialogRef.value?.initForm()
   actionDialogOpen.value = true
 }
 
-/** 初始化并打开修改弹窗；未传行时使用表格单选项。 */
-function toUpdate(item?: DemoListItem) {
-  const target = item ?? selectedList.value[0]
-  if (!target) {
-    return
-  }
-
+/** 根据操作栏传入的行数据初始化并打开修改弹窗。 */
+function toUpdate(row: DemoListItem) {
   actionTitle.value = '修改数据'
   actionMode.value = 'update'
-  editingItem.value = target
-  actionDialogRef.value?.initForm(target)
+  actionDialogRef.value?.initForm(row)
   actionDialogOpen.value = true
 }
 
 /** 提交新增或修改请求。 */
-function toConfirm(values: DemoFormValues) {
-  if (editingItem.value) {
-    apiDemoUpdate(editingItem.value.id, values)
+function toConfirm(values: DemoListItem) {
+  if (actionMode.value === 'update') {
+    apiDemoUpdate(values)
     toast('修改请求已提交')
   } else {
     apiDemoAdd(values)
     toast('新增请求已提交')
   }
-
-  actionDialogOpen.value = false
 }
 
 /** 打开删除确认弹窗，支持单行和已选数据。 */
-function toDelete(item?: DemoListItem) {
-  pendingDeleteList.value = item ? [item] : [...selectedList.value]
+function toDelete(row?: DemoListItem) {
+  pendingDeleteList.value = row ? [row] : [...selectedList.value]
 }
 
 /** 提交删除请求并关闭确认弹窗。 */
 function confirmDelete() {
-  const idList = pendingDeleteList.value.map((item) => item.id)
-  apiDemoDelete(idList)
-  toast(`删除请求已提交，共 ${idList.length} 条数据`)
+  apiDemoDelete()
+  toast(`删除请求已提交，共 ${pendingDeleteList.value.length} 条数据`)
   pendingDeleteList.value = []
 }
 

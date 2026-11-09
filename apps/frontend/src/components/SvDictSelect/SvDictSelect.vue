@@ -24,7 +24,7 @@
   </Select>
 </template>
 
-<script lang="ts" setup generic="T extends object, LabelKey extends keyof T, ValueKey extends keyof T">
+<script lang="ts" setup>
 import { computed, inject, useAttrs, type HTMLAttributes } from 'vue'
 import {
   Select,
@@ -41,9 +41,9 @@ defineOptions({ inheritAttrs: false })
 
 /** 字典下拉项；labelKey 指向展示文本，valueKey 指向保留类型的 v-model 值。 */
 interface SvDictSelectProps {
-  dictList: readonly T[]
-  labelKey: LabelKey
-  valueKey: ValueKey
+  dictList: readonly Record<string, any>[]
+  labelKey: string
+  valueKey: string
   placeholder?: string
   disabled?: boolean
   class?: HTMLAttributes['class']
@@ -60,7 +60,7 @@ const ariaDescribedby = computed(
   () => attrs['aria-describedby'] ?? formField?.errorId.value,
 )
 const selectDisabled = computed(() => props.disabled ?? formField?.disabled.value ?? false)
-const model = defineModel<T[ValueKey]>()
+const model = defineModel<any>()
 const selectedValue = computed(() =>
   model.value == null ? undefined : String(model.value),
 )

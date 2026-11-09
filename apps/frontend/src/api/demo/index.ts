@@ -1,7 +1,7 @@
-import type { DemoFormValues, DemoListParams, DemoListResponse } from '@/types/demo'
+import type { DemoListItem, DemoQueryParams, DemoApiResponse } from '@/types/demo'
 
 /** 查询 CRUD 示例列表。 */
-export async function apiDemoList(_params: DemoListParams): Promise<DemoListResponse> {
+export async function apiDemoList(_params: DemoQueryParams): Promise<DemoApiResponse> {
   return {
     code: 200,
     data: [
@@ -100,18 +100,18 @@ export async function apiDemoList(_params: DemoListParams): Promise<DemoListResp
 }
 
 /** 提交 CRUD 示例新增请求的占位 API。 */
-export function apiDemoAdd(values: DemoFormValues): void {
+export function apiDemoAdd(values: DemoListItem): void {
   console.log('新增数据', values)
 }
 
 /** 提交 CRUD 示例修改请求的占位 API。 */
-export function apiDemoUpdate(id: string, values: DemoFormValues): void {
-  console.log('修改数据', id, values)
+export function apiDemoUpdate(values: DemoListItem): void {
+  console.log('修改数据', values)
 }
 
 /** 提交 CRUD 示例删除请求的占位 API。 */
-export function apiDemoDelete(ids: string[]): void {
-  console.log('删除数据', ids)
+export function apiDemoDelete(): void {
+  console.log('删除数据')
 }
 
 /** 提交 CRUD 示例导入请求的占位 API。 */

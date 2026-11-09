@@ -1,26 +1,32 @@
 <template>
   <Field
+    :orientation="horizontal ? 'horizontal' : 'vertical'"
     :data-invalid="!!errors.length"
     :data-disabled="context.disabled.value || undefined"
     class="min-w-0 gap-2"
     @focusout="validateOnBlur"
   >
-    <FieldLabel v-if="props.label" :for="inputId">
-      <span v-if="required" class="text-destructive" aria-hidden="true">*</span
-      >{{ props.label }}
+    <FieldLabel v-if="props.label" :for="inputId" :style="labelStyle">
+      <span ref="labelContentRef" :class="{ 'shrink-0 whitespace-nowrap': horizontal }">
+        <span v-if="required" class="text-destructive" aria-hidden="true">*</span
+        >{{ props.label }}
+      </span>
     </FieldLabel>
-    <slot />
-    <FieldDescription v-if="$slots.description"><slot name="description" /></FieldDescription>
-    <FieldError v-if="errors.length" :id="errorId" :errors="errors" />
+    <FieldContent class="min-w-0 gap-2" :class="{ 'w-0': horizontal }">
+      <slot />
+      <FieldDescription v-if="$slots.description"><slot name="description" /></FieldDescription>
+      <FieldError v-if="errors.length" :id="errorId" :errors="errors" />
+    </FieldContent>
   </Field>
 </template>
 
 <script lang="ts" setup>
-import { computed, inject, nextTick, provide, useId, watch } from 'vue'
+import { computed, inject, nextTick, onScopeDispose, provide, useId, useTemplateRef, watch, type CSSProperties } from 'vue'
+import { useElementSize } from '@vueuse/core'
 import { cloneDeep } from 'es-toolkit'
 import { get } from 'es-toolkit/compat'
 import { useFormContext } from 'vee-validate'
-import { Field, FieldDescription, FieldError, FieldLabel } from '@/components/ui/field'
+import { Field, FieldContent, FieldDescription, FieldError, FieldLabel } from '@/components/ui/field'
 import { svFormFieldKey, svFormKey } from './context'
 import { getFormRules } from './validation'
 
@@ -43,6 +49,27 @@ if (!context) {
   throw new Error('SvFormItem 必须位于 SvForm 内')
 }
 const { disabled, validationVersion, validateOn } = context
+const horizontal = computed(() => context.labelPosition.value !== 'top')
+const labelStyle = computed<CSSProperties>(() => {
+  if (!horizontal.value) {
+    return {}
+  }
+  return {
+    width: context.labelWidth.value,
+    flex: '0 0 auto',
+    minHeight: '2.25rem',
+    justifyContent: context.labelPosition.value === 'right' ? 'flex-end' : 'flex-start',
+  }
+})
+const labelContentRef = useTemplateRef<HTMLSpanElement>('labelContentRef')
+const { width: labelContentWidth } = useElementSize(labelContentRef)
+const labelKey = Symbol('label')
+watch([labelContentWidth, horizontal], ([width, isHorizontal]) => {
+  context.updateLabelWidth(labelKey, isHorizontal ? width : 0)
+}, { immediate: true })
+onScopeDispose(() => {
+  context.removeLabelWidth(labelKey)
+})
 const { errorBag } = useFormContext<Record<string, unknown>>()
 const errors = computed(() => errorBag.value[props.prop] || [])
 const required = computed(() => props.required ?? getFormRules(context.rules.value[props.prop]).some((rule) => rule.required))

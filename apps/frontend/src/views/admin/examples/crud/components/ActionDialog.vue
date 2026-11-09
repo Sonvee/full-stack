@@ -1,5 +1,5 @@
 <template>
-  <Dialog v-model:open="open">
+  <Dialog :open="open" @update:open="handleOpenChange">
     <DialogContent class="flex max-h-[85svh] flex-col sm:max-w-xl">
       <DialogHeader class="shrink-0">
         <DialogTitle>{{ title }}</DialogTitle>
@@ -47,7 +47,8 @@
 </template>
 
 <script lang="ts" setup>
-import { inject, ref, useTemplateRef, watch } from 'vue'
+import { inject, ref, useTemplateRef } from 'vue'
+import { cloneDeep } from 'es-toolkit'
 import SvDictSelect from '@/components/SvDictSelect/SvDictSelect.vue'
 import SvForm from '@/components/SvForm/SvForm.vue'
 import type { SvFormInstance, SvFormRules } from '@/components/SvForm/types'
@@ -55,25 +56,27 @@ import SvFormItem from '@/components/SvForm/SvFormItem.vue'
 import SvInput from '@/components/SvInput/SvInput.vue'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import type { DemoDictData, DemoFormValues, DemoListItem } from '@/types/demo'
+import type { DemoListItem } from '@/types/demo'
 
 defineProps<{ title: string; mode: 'add' | 'update' }>()
 const open = defineModel<boolean>('open', { default: false })
-const emit = defineEmits<{ confirm: [values: DemoFormValues] }>()
-const { dict_d_select, dict_e_select, dict_f_select, dict_g_select } = inject<DemoDictData>('__DICT__')!
+const emit = defineEmits<{ confirm: [values: DemoListItem] }>()
+const { dict_d_select, dict_e_select, dict_f_select, dict_g_select } = inject<any>('__DICT__')
 
-const defaultFormValues: DemoFormValues = {
+const defaultFormData: DemoListItem = {
+  id: '',
   aInput: '',
   bInput: '',
   cInput: '',
   dSelect: '选项甲',
   eSelect: '选项甲',
   fSelect: '选项甲',
-  gSelect: '选项甲'
+  gSelect: '选项甲',
+  createdAt: ''
 }
-const formData = ref<DemoFormValues>({ ...defaultFormValues })
+const formData = ref<DemoListItem>(defaultFormData)
 const actionFormRef = useTemplateRef<SvFormInstance>('actionFormRef')
-const rules: SvFormRules<DemoFormValues> = {
+const rules: SvFormRules<DemoListItem> = {
   aInput: [{ required: true, message: '请输入数据项甲', trigger: ['blur', 'change'] }],
   bInput: [{ required: true, message: '请输入数据项乙', trigger: ['blur', 'change'] }],
   cInput: [{ required: true, message: '请输入数据项丙', trigger: ['blur', 'change'] }],
@@ -83,36 +86,29 @@ const rules: SvFormRules<DemoFormValues> = {
   gSelect: [{ required: true, message: '请选择数据项庚', trigger: 'change' }]
 }
 
-watch(open, (value) => {
+/** 统一处理弹窗状态，关闭时重置表单。 */
+function handleOpenChange(value: boolean) {
   if (!value) {
     actionFormRef.value?.resetFields()
   }
-}, { flush: 'sync' })
+  open.value = value
+}
 
 /** 为新增或编辑操作填入独立的表单数据。 */
-function initForm(item?: DemoListItem) {
-  formData.value = item
-    ? {
-        aInput: item.aInput,
-        bInput: item.bInput,
-        cInput: item.cInput,
-        dSelect: item.dSelect,
-        eSelect: item.eSelect,
-        fSelect: item.fSelect,
-        gSelect: item.gSelect
-      }
-    : { ...defaultFormValues }
+function initForm(row?: DemoListItem) {
+  formData.value = cloneDeep(row ?? defaultFormData)
 }
 
 /** 校验通过后将表单数据交给页面处理。 */
-function submit(values: DemoFormValues) {
+function submit(values: DemoListItem) {
   emit('confirm', values)
+  handleOpenChange(false)
 }
 
 function toConfirm() {
   void actionFormRef.value?.validate((valid) => {
     if (valid) {
-      submit({ ...formData.value })
+      submit(cloneDeep(formData.value))
     }
   })
 }

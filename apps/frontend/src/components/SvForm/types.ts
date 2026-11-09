@@ -2,6 +2,9 @@ import type { GenericValidateFunction, Path } from 'vee-validate'
 
 export type SvFormTrigger = 'blur' | 'change'
 
+/** top 为上下布局，left/right 为水平布局并指定标签对齐方向。 */
+export type SvFormLabelPosition = 'left' | 'right' | 'top'
+
 /** 对象式规则；提交时执行全部规则，交互时按 trigger 筛选，未指定则两种交互均校验。 */
 export interface SvFormRule {
   required?: boolean

@@ -1,9 +1,14 @@
 import type { ComputedRef, InjectionKey, Ref } from 'vue'
-import type { SvFormRules, SvFormTrigger } from './types'
+import type { SvFormLabelPosition, SvFormRules, SvFormTrigger } from './types'
 
 /** 同一表单内字段共享的交互配置；校验状态由 VeeValidate 自身上下文提供。 */
 export interface SvFormContext {
   disabled: ComputedRef<boolean>
+  labelPosition: ComputedRef<SvFormLabelPosition>
+  labelWidth: ComputedRef<string>
+  /** 记录标签自然宽度，auto 模式以当前可见标签的最大宽度统一对齐。 */
+  updateLabelWidth: (key: symbol, width: number) => void
+  removeLabelWidth: (key: symbol) => void
   model: Readonly<Ref<Record<string, unknown>>>
   rules: ComputedRef<SvFormRules>
   validationVersion: Readonly<Ref<number>>

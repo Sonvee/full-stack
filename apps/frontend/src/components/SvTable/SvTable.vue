@@ -96,7 +96,7 @@
   </section>
 </template>
 
-<script lang="ts" setup generic="T extends object">
+<script lang="ts" setup>
 import { computed, Fragment, h, onUpdated, provide, shallowRef, watch, type HTMLAttributes } from 'vue'
 import {
   createColumnHelper,
@@ -132,8 +132,8 @@ import type { SvTableColumnDefinition, SvTableInstance } from './types'
  * filters 采用 TanStack ColumnFiltersState，修改筛选或每页条数会回到首页。
  */
 interface SvTableProps {
-  data: T[]
-  rowKey: string | ((row: T) => string)
+  data: any[]
+  rowKey: string | ((row: any) => string)
   filters?: ColumnFiltersState
   pagination?: boolean
   height?: number | string
@@ -146,9 +146,9 @@ const props = withDefaults(defineProps<SvTableProps>(), {
   caption: '数据表格，可滚动查看',
 })
 const emit = defineEmits<{
-  selectionChange: [rows: T[]]
+  selectionChange: [rows: any[]]
   /** 分页前的筛选、排序结果，初始化及结果变化时通知外部工具栏等消费者。 */
-  filteredChange: [rows: T[]]
+  filteredChange: [rows: any[]]
 }>()
 /** 当前页码，须为正整数；通过 v-model:page-num 同步，默认第 1 页。 */
 const pageNum = defineModel<number>('pageNum', { default: 1 })
@@ -186,7 +186,7 @@ function columnId(column: SvTableColumnDefinition) {
 const columnById = computed(
   () => new Map(definitions.value.map((column) => [columnId(column), column])),
 )
-const helper = createColumnHelper<typeof svTableFeatures, T>()
+const helper = createColumnHelper<typeof svTableFeatures, any>()
 /** 插槽返回的节点数组需包装为 Fragment，避免 FlexRender 将数组识别为组件定义。 */
 const columns = computed(() =>
   helper.columns(
@@ -201,7 +201,7 @@ const columns = computed(() =>
         },
         enableSorting: !!column.props.prop && column.props.sortable,
         filterFn: column.props.filterType || ('includesString' as const),
-        cell: (context: { row: { original: T; index: number }; getValue: () => unknown }) => {
+        cell: (context: { row: { original: any; index: number }; getValue: () => unknown }) => {
           const index = context.row.index
           if (column.cell) {
             return h(Fragment, null, column.cell({ row: context.row.original, $index: index }))
@@ -220,7 +220,7 @@ const columns = computed(() =>
 )
 
 /** 从声明的字段或回调读取稳定行键；不依赖分页位置。 */
-function getRowId(row: T) {
+function getRowId(row: any) {
   return typeof props.rowKey === 'function' ? props.rowKey(row) : String(get(row, props.rowKey))
 }
 const table = useTable({
@@ -301,10 +301,10 @@ function getSelectionRows() {
   return [...selectedRows.value]
 }
 /** 按稳定行键切换选择；selected 未传时反转。 */
-function toggleRowSelection(row: T, selected?: boolean) {
+function toggleRowSelection(row: any, selected?: boolean) {
   table.getRow(getRowId(row))?.toggleSelected(selected)
 }
-defineExpose<SvTableInstance<T>>({ clearSelection, getSelectionRows, toggleRowSelection })
+defineExpose<SvTableInstance>({ clearSelection, getSelectionRows, toggleRowSelection })
 </script>
 
 <style lang="scss" scoped></style>

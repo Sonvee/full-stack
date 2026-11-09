@@ -3,16 +3,16 @@
   <template v-else>{{ label }}</template>
 </template>
 
-<script lang="ts" setup generic="T extends object, LabelKey extends keyof T, ValueKey extends keyof T">
+<script lang="ts" setup>
 import { computed } from 'vue'
 import { Badge } from '@/components/ui/badge'
 
 /** 字典值按字符串匹配，未找到时显示原始值；text 或 text="true" 时输出纯文本。 */
 interface SvDictTagProps {
-  dictList: readonly T[]
-  data: T[ValueKey] | null | undefined
-  labelKey: LabelKey
-  valueKey: ValueKey
+  dictList: readonly Record<string, any>[]
+  data: unknown
+  labelKey: string
+  valueKey: string
   text?: boolean | string
 }
 
