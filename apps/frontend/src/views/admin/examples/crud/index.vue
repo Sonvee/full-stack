@@ -56,25 +56,25 @@
       <!-- @vue-generic {DemoListItem} -->
       <SvTableColumn prop="dSelect" label="数据项丁">
         <template #default="{ row }">
-          <SvDictTag :dict-list="demoDictData.dSelect" :data="row.dSelect" label-key="label" value-key="value" />
+          <SvDictTag :dict-list="dict_d_select" :data="row.dSelect" label-key="label" value-key="value" />
         </template>
       </SvTableColumn>
       <!-- @vue-generic {DemoListItem} -->
       <SvTableColumn prop="eSelect" label="数据项戊">
         <template #default="{ row }">
-          <SvDictTag :dict-list="demoDictData.eSelect" :data="row.eSelect" label-key="label" value-key="value" />
+          <SvDictTag :dict-list="dict_e_select" :data="row.eSelect" label-key="label" value-key="value" />
         </template>
       </SvTableColumn>
       <!-- @vue-generic {DemoListItem} -->
       <SvTableColumn prop="fSelect" label="数据项己">
         <template #default="{ row }">
-          <SvDictTag :dict-list="demoDictData.fSelect" :data="row.fSelect" label-key="label" value-key="value" />
+          <SvDictTag :dict-list="dict_f_select" :data="row.fSelect" label-key="label" value-key="value" />
         </template>
       </SvTableColumn>
       <!-- @vue-generic {DemoListItem} -->
       <SvTableColumn prop="gSelect" label="数据项庚">
         <template #default="{ row }">
-          <SvDictTag :dict-list="demoDictData.gSelect" :data="row.gSelect" label-key="label" value-key="value" />
+          <SvDictTag :dict-list="dict_g_select" :data="row.gSelect" label-key="label" value-key="value" />
         </template>
       </SvTableColumn>
       <SvTableColumn prop="createdAt" label="创建日期" sortable />
@@ -125,11 +125,9 @@ import {
   apiDemoExport,
   apiDemoImport,
   apiDemoList,
-  apiDemoUpdate,
-  type DemoFormValues,
-  type DemoListItem,
-  type DemoListParams
+  apiDemoUpdate
 } from '@/api/demo'
+import type { DemoFilterValues, DemoFormValues, DemoListItem, DemoListParams } from '@/types/demo'
 import SvDictTag from '@/components/SvDictTag/SvDictTag.vue'
 import SvTable from '@/components/SvTable/SvTable.vue'
 import SvTableColumn from '@/components/SvTable/SvTableColumn.vue'
@@ -147,9 +145,15 @@ import {
 import { Button } from '@/components/ui/button'
 import ActionDialog from './components/ActionDialog.vue'
 import FilterForm from './components/FilterForm.vue'
-import { demoDictData, demoDictKey, type DemoFilterValues } from './dict-data'
+import { dict_d_select, dict_e_select, dict_f_select, dict_g_select } from './dict-data'
 
-provide(demoDictKey, demoDictData)
+/** 页面统一向子组件提供字典。 */
+provide('__DICT__', {
+  dict_d_select,
+  dict_e_select,
+  dict_f_select,
+  dict_g_select,
+})
 
 const dataList = shallowRef<DemoListItem[]>([])
 const total = shallowRef(0)
@@ -163,8 +167,7 @@ const queryParams = shallowRef<DemoListParams>({
   fSelect: '',
   gSelect: '',
   id: '',
-  createdFrom: '',
-  createdTo: '',
+  createdRange: null,
   pageNum: 1,
   pageSize: 10
 })

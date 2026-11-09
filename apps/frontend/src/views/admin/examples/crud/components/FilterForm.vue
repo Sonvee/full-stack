@@ -23,16 +23,16 @@
         <SvInput v-model="formData.cInput" clearable placeholder="请输入数据项丙" />
       </SvFormItem>
       <SvFormItem prop="dSelect" label="数据项丁">
-        <SvDictSelect v-model="formData.dSelect" :dict-list="dictData.dSelect" label-key="label" value-key="value" placeholder="全部" />
+        <SvDictSelect v-model="formData.dSelect" :dict-list="dict_d_select" label-key="label" value-key="value" placeholder="全部" />
       </SvFormItem>
       <SvFormItem prop="eSelect" label="数据项戊">
-        <SvDictSelect v-model="formData.eSelect" :dict-list="dictData.eSelect" label-key="label" value-key="value" placeholder="全部" />
+        <SvDictSelect v-model="formData.eSelect" :dict-list="dict_e_select" label-key="label" value-key="value" placeholder="全部" />
       </SvFormItem>
       <SvFormItem prop="fSelect" label="数据项己">
-        <SvDictSelect v-model="formData.fSelect" :dict-list="dictData.fSelect" label-key="label" value-key="value" placeholder="全部" />
+        <SvDictSelect v-model="formData.fSelect" :dict-list="dict_f_select" label-key="label" value-key="value" placeholder="全部" />
       </SvFormItem>
       <SvFormItem prop="gSelect" label="数据项庚">
-        <SvDictSelect v-model="formData.gSelect" :dict-list="dictData.gSelect" label-key="label" value-key="value" placeholder="全部" />
+        <SvDictSelect v-model="formData.gSelect" :dict-list="dict_g_select" label-key="label" value-key="value" placeholder="全部" />
       </SvFormItem>
       <SvFormItem prop="id" label="数据编号">
         <SvInput v-model="formData.id" clearable placeholder="请输入数据编号" />
@@ -64,16 +64,12 @@ import SvFormItem from '@/components/SvForm/SvFormItem.vue'
 import SvInput from '@/components/SvInput/SvInput.vue'
 import SvDictSelect from '@/components/SvDictSelect/SvDictSelect.vue'
 import { Button } from '@/components/ui/button'
-import type { DemoFilterValues } from '../dict-data'
-import { demoDictKey } from '../dict-data'
+import type { DemoDictData, DemoFilterValues } from '@/types/demo'
 
 const emit = defineEmits<{ search: [filters: DemoFilterValues] }>()
-const dictData = inject(demoDictKey)
-if (!dictData) {
-  throw new Error('CRUD 示例字典数据未提供')
-}
-/** 日期组件仅提交完整范围，空值在查询时映射为空字符串边界。 */
-type FilterFormValues = Omit<DemoFilterValues, 'createdFrom' | 'createdTo'> & {
+const { dict_d_select, dict_e_select, dict_f_select, dict_g_select } = inject<DemoDictData>('__DICT__')!
+/** 适配日期组件的通用值类型，查询时仅提交完整范围或 null。 */
+type FilterFormValues = Omit<DemoFilterValues, 'createdRange'> & {
   createdRange: SvDatePickerValue
 }
 const defaultDemoFilterValues: DemoFilterValues = {
@@ -85,26 +81,20 @@ const defaultDemoFilterValues: DemoFilterValues = {
   fSelect: '',
   gSelect: '',
   id: '',
-  createdFrom: '',
-  createdTo: ''
+  createdRange: null
 }
-const { createdFrom, createdTo, ...textDefaults } = defaultDemoFilterValues
-const formData = ref<FilterFormValues>({
-  ...textDefaults,
-  createdRange: createdFrom && createdTo ? [createdFrom, createdTo] : null
-})
+const formData = ref<FilterFormValues>({ ...defaultDemoFilterValues })
 const expanded = shallowRef(false)
 const filterForm = useTemplateRef<SvFormInstance>('filterForm')
-/** 标准化筛选文本，并展开日期范围供列表筛选。 */
+/** 标准化筛选文本，日期范围以双元素数组提交。 */
 function submit({ createdRange, ...filters }: FilterFormValues) {
   const normalized = Object.fromEntries(Object.entries(filters).map(([key, value]) => [key, value.trim()])) as Omit<
     DemoFilterValues,
-    'createdFrom' | 'createdTo'
+    'createdRange'
   >
   emit('search', {
     ...normalized,
-    createdFrom: Array.isArray(createdRange) ? createdRange[0] : '',
-    createdTo: Array.isArray(createdRange) ? createdRange[1] : ''
+    createdRange: Array.isArray(createdRange) ? createdRange : null
   })
 }
 

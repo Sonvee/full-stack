@@ -1,35 +1,4 @@
-/** CRUD 示例列表中的单条数据。 */
-export interface DemoListItem {
-  id: string
-  aInput: string
-  bInput: string
-  cInput: string
-  dSelect: string
-  eSelect: string
-  fSelect: string
-  gSelect: string
-  createdAt: string
-}
-
-/** CRUD 示例中新增和编辑表单的字段值。 */
-export type DemoFormValues = Omit<DemoListItem, 'id' | 'createdAt'>
-
-/** CRUD 示例列表查询参数，筛选条件与分页参数一起提交。 */
-export interface DemoListParams extends DemoFormValues {
-  id: string
-  createdFrom: string
-  createdTo: string
-  pageNum: number
-  pageSize: number
-}
-
-/** CRUD 示例列表接口响应。 */
-export interface DemoListResponse {
-  code: number
-  data: DemoListItem[]
-  message: string
-  total: number
-}
+import type { DemoFormValues, DemoListParams, DemoListResponse } from '@/types/demo'
 
 /** 查询 CRUD 示例列表。 */
 export async function apiDemoList(_params: DemoListParams): Promise<DemoListResponse> {

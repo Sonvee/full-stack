@@ -22,16 +22,16 @@
           <SvInput v-model="formData.cInput" clearable placeholder="请输入数据项丙" :maxlength="100" />
         </SvFormItem>
         <SvFormItem prop="dSelect" label="数据项丁" required>
-          <SvDictSelect v-model="formData.dSelect" :dict-list="dictData.dSelect" label-key="label" value-key="value" />
+          <SvDictSelect v-model="formData.dSelect" :dict-list="dict_d_select" label-key="label" value-key="value" />
         </SvFormItem>
         <SvFormItem prop="eSelect" label="数据项戊" required>
-          <SvDictSelect v-model="formData.eSelect" :dict-list="dictData.eSelect" label-key="label" value-key="value" />
+          <SvDictSelect v-model="formData.eSelect" :dict-list="dict_e_select" label-key="label" value-key="value" />
         </SvFormItem>
         <SvFormItem prop="fSelect" label="数据项己" required>
-          <SvDictSelect v-model="formData.fSelect" :dict-list="dictData.fSelect" label-key="label" value-key="value" />
+          <SvDictSelect v-model="formData.fSelect" :dict-list="dict_f_select" label-key="label" value-key="value" />
         </SvFormItem>
         <SvFormItem prop="gSelect" label="数据项庚" required>
-          <SvDictSelect v-model="formData.gSelect" :dict-list="dictData.gSelect" label-key="label" value-key="value" />
+          <SvDictSelect v-model="formData.gSelect" :dict-list="dict_g_select" label-key="label" value-key="value" />
         </SvFormItem>
         <template #footer="{ isSubmitting }">
           <DialogFooter class="shrink-0">
@@ -57,16 +57,12 @@ import SvFormItem from '@/components/SvForm/SvFormItem.vue'
 import SvInput from '@/components/SvInput/SvInput.vue'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import type { DemoFormValues, DemoListItem } from '@/api/demo'
-import { demoDictKey } from '../dict-data'
+import type { DemoDictData, DemoFormValues, DemoListItem } from '@/types/demo'
 
 defineProps<{ title: string; mode: 'add' | 'update' }>()
 const open = defineModel<boolean>('open', { default: false })
 const emit = defineEmits<{ confirm: [values: DemoFormValues] }>()
-const dictData = inject(demoDictKey)
-if (!dictData) {
-  throw new Error('CRUD 示例字典数据未提供')
-}
+const { dict_d_select, dict_e_select, dict_f_select, dict_g_select } = inject<DemoDictData>('__DICT__')!
 
 const defaultFormValues: DemoFormValues = {
   aInput: '',

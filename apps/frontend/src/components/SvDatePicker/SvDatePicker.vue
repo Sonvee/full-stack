@@ -116,13 +116,13 @@ import {
 } from 'vue'
 import {
   getLocalTimeZone,
-  parseDateTime,
   toCalendarDate,
   today,
   type DateValue,
 } from '@internationalized/date'
 import { useFocus, useMediaQuery } from '@vueuse/core'
 import type { DateRange } from 'reka-ui'
+import dayjs, { DATE_TIME_FORMAT } from '@/lib/dayjs'
 import SvInput from '@/components/SvInput/SvInput.vue'
 import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
@@ -209,7 +209,7 @@ const rangeError = computed(() => {
   const value = draftValue.value
   return withTime.value &&
     Array.isArray(value) &&
-    parseDateTime(value[1]).compare(parseDateTime(value[0])) < 0
+    dayjs(value[1], DATE_TIME_FORMAT, true).isBefore(dayjs(value[0], DATE_TIME_FORMAT, true))
     ? '结束时间不能早于开始时间'
     : ''
 })

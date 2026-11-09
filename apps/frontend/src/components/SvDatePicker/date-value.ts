@@ -1,18 +1,14 @@
-import {
-  parseDate,
-  parseDateTime,
-  toCalendarDate,
-  type CalendarDate,
-} from '@internationalized/date'
+import { parseDate, type CalendarDate } from '@internationalized/date'
+import dayjs, { DATE_FORMAT, DATE_TIME_FORMAT } from '@/lib/dayjs'
 import type { SvDatePickerValue } from './types'
 
 /**
- * 读取一个选择器边界，复用日期库校验并提取不含时区的日期与时间。
+ * 严格解析一个选择器边界，并转换为日历组件使用的日期与时间。
  *
  * @param value - 空值或符合当前模式的单个边界。
  * @param withTime - 是否按日期时间格式解析。
  * @returns 空边界返回未选日期及零点，否则返回解析后的公历日期和时间。
- * @throws 非空边界格式无效时由日期库抛出错误；调用方须遵守值契约。
+ * @throws 非空边界不符合固定格式或日期无效时抛出 RangeError。
  */
 export function parsePickerBoundary(
   value: string | undefined,
@@ -21,31 +17,37 @@ export function parsePickerBoundary(
   if (!value) {
     return { date: undefined, time: '00:00:00' }
   }
-  if (!withTime) {
-    return { date: parseDate(value), time: '00:00:00' }
+  const format = withTime ? DATE_TIME_FORMAT : DATE_FORMAT
+  const parsed = dayjs(value, format, true)
+  if (!parsed.isValid()) {
+    throw new RangeError(`日期值无效，须符合 ${format} 格式`)
   }
-  const parsed = parseDateTime(value)
-  return { date: toCalendarDate(parsed), time: parsed.toString().split('T')[1]! }
+  return { date: parseDate(parsed.format(DATE_FORMAT)), time: parsed.format('HH:mm:ss') }
 }
 
 /**
- * 合并日历日期与时间输入，使用日期库验证边界并统一保留秒。
+ * 合并日历日期与时间输入，通过 Day.js 严格校验并输出固定格式。
  *
  * @param date - 当前选中的公历日期。
  * @param time - 原生时间输入产生的 HH:mm 或 HH:mm:ss。
  * @param withTime - 为 false 时仅输出日期。
- * @returns 统一格式的本地日期或日期时间字符串。
- * @throws 日期时间组合无效时由日期库抛出错误。
+ * @returns YYYY-MM-DD 或 YYYY-MM-DD HH:mm:ss 格式的本地字符串。
+ * @throws 日期时间组合无效时抛出 RangeError。
  */
 export function serializePickerBoundary(
   date: CalendarDate,
   time: string,
   withTime: boolean,
 ): string {
-  if (!withTime) {
-    return date.toString()
+  const format = withTime ? DATE_TIME_FORMAT : DATE_FORMAT
+  const value = withTime
+    ? `${date} ${time.length === 5 ? `${time}:00` : time}`
+    : date.toString()
+  const parsed = dayjs(value, format, true)
+  if (!parsed.isValid()) {
+    throw new RangeError(`日期值无效，须符合 ${format} 格式`)
   }
-  return parseDateTime(`${date}T${time.length === 5 ? `${time}:00` : time}`).toString()
+  return parsed.format(format)
 }
 
 /**
@@ -53,13 +55,11 @@ export function serializePickerBoundary(
  *
  * @param value - 已提交的单值、完整范围或空值。
  * @param separator - 范围边界之间的展示分隔符。
- * @returns 空值显示为空，其余值将 ISO 日期时间中的 T 显示为空格。
+ * @returns 空值显示为空，范围使用指定分隔符连接。
  */
 export function formatPickerValue(value: SvDatePickerValue, separator: string): string {
   if (!value) {
     return ''
   }
-  return (Array.isArray(value) ? value : [value])
-    .map((part) => part.replace('T', ' '))
-    .join(` ${separator} `)
+  return (Array.isArray(value) ? value : [value]).join(` ${separator} `)
 }
