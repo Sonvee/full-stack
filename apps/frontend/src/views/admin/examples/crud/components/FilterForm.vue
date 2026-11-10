@@ -50,7 +50,6 @@
 <script lang="ts" setup>
 import { inject, ref, shallowRef, useTemplateRef } from 'vue'
 import SvDatePicker from '@/components/SvDatePicker/SvDatePicker.vue'
-import type { SvDatePickerValue } from '@/components/SvDatePicker/types'
 import SvForm from '@/components/SvForm/SvForm.vue'
 import SvFormItem from '@/components/SvForm/SvFormItem.vue'
 import SvInput from '@/components/SvInput/SvInput.vue'
@@ -58,18 +57,16 @@ import SvDictSelect from '@/components/SvDictSelect/SvDictSelect.vue'
 import { Button } from '@/components/ui/button'
 import type { DemoQueryParams } from '@/types/demo'
 
-const emit = defineEmits<{ search: [filters: Omit<DemoQueryParams, 'pageNum' | 'pageSize'>] }>()
+const emit = defineEmits<{
+  search: [filters: Omit<DemoQueryParams, 'pageNum' | 'pageSize'>]
+  reset: []
+}>()
 
 /** 注入字典数据。 */
 const { dict_d_select, dict_e_select, dict_f_select, dict_g_select } = inject<any>('__DICT__')
 
-/** 适配日期组件的通用值类型，查询时仅提交完整范围或 null。 */
-type FilterFormValues = Omit<DemoQueryParams, 'createdRange' | 'pageNum' | 'pageSize'> & {
-  createdRange?: SvDatePickerValue
-}
-
 /** 默认筛选条件，pageNum 与 pageSize 由父组件管理。 */
-const defaultQueryParams: Omit<DemoQueryParams, 'pageNum' | 'pageSize'> = {
+const defaultQueryParams = {
   aInput: '',
   bInput: '',
   cInput: '',
@@ -82,27 +79,15 @@ const defaultQueryParams: Omit<DemoQueryParams, 'pageNum' | 'pageSize'> = {
 }
 
 /** 筛选条件表单数据。 */
-const formData = ref<FilterFormValues>({ ...defaultQueryParams })
+const formData = ref({ ...defaultQueryParams })
 const filterFormRef = useTemplateRef('filterFormRef')
 const expanded = shallowRef(false)
-
-/** 标准化筛选文本，日期范围以双元素数组提交。 */
-function submit({ createdRange, ...filters }: FilterFormValues) {
-  const normalized = Object.fromEntries(Object.entries(filters).map(([key, value]) => [key, value?.trim()])) as Omit<
-    DemoQueryParams,
-    'createdRange' | 'pageNum' | 'pageSize'
-  >
-  emit('search', {
-    ...normalized,
-    createdRange: Array.isArray(createdRange) ? createdRange : null
-  })
-}
 
 /** 校验通过后提交当前筛选条件。 */
 function toConfirm() {
   void filterFormRef.value?.validate((valid) => {
     if (valid) {
-      submit({ ...formData.value })
+      emit('search', formData.value)
     }
   })
 }
@@ -110,7 +95,7 @@ function toConfirm() {
 /** 同时清除草稿与已经提交的筛选条件。 */
 function reset() {
   filterFormRef.value?.resetFields()
-  emit('search', { ...defaultQueryParams })
+  emit('reset')
 }
 
 /** 切换筛选条件的显示行数。 */

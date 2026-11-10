@@ -5,7 +5,7 @@
     </header>
 
     <!-- 条件筛选栏 -->
-    <FilterForm v-show="showFilters" @search="toSearch" />
+    <FilterForm v-show="showFilters" @search="toSearch" @reset="toReset" />
 
     <!-- 表格工具栏 -->
     <div class="flex shrink-0 flex-wrap items-center gap-2">
@@ -163,6 +163,12 @@ onMounted(async () => {
 /** 提交筛选条件并从第一页重新查询。 */
 function toSearch(values: Omit<DemoQueryParams, 'pageNum' | 'pageSize'>) {
   Object.assign(queryParams.value, values, { pageNum: 1 })
+  toQuery()
+}
+
+/** 清除筛选条件并从第一页重新查询。 */
+function toReset() {
+  queryParams.value = { pageNum: 1, pageSize: queryParams.value.pageSize }
   toQuery()
 }
 
