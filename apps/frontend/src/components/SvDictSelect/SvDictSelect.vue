@@ -1,38 +1,58 @@
 <template>
-  <Select :model-value="selectedValue" @update:model-value="updateValue">
-    <SelectTrigger
-      v-bind="$attrs"
-      :id="inputId"
-      :aria-invalid="ariaInvalid"
-      :class="cn('w-full', props.class)"
-      :disabled="selectDisabled"
-    >
-      <SelectValue :placeholder="props.placeholder" />
-    </SelectTrigger>
-    <SelectContent>
-      <SelectGroup>
-        <SelectItem
-          v-for="item in props.dictList"
-          :key="String(item[props.valueKey])"
-          :value="String(item[props.valueKey])"
+  <Combobox v-model="model" :disabled="selectDisabled">
+    <ComboboxAnchor as-child class="w-full">
+      <ComboboxTrigger as-child>
+        <Button
+          v-bind="$attrs"
+          :id="inputId"
+          :aria-invalid="ariaInvalid"
+          variant="outline"
+          :class="cn('w-full justify-between', props.class)"
         >
-          {{ String(item[props.labelKey]) }}
-        </SelectItem>
-      </SelectGroup>
-    </SelectContent>
-  </Select>
+          <span :class="cn('truncate', selectedLabel == null && 'text-muted-foreground')">
+            {{ selectedLabel ?? props.placeholder }}
+          </span>
+          <i class="sv-icon-chevrondown opacity-50" />
+        </Button>
+      </ComboboxTrigger>
+    </ComboboxAnchor>
+    <ComboboxList class="w-(--reka-combobox-trigger-width)">
+      <ComboboxInput placeholder="搜索选项" :display-value="() => ''" />
+      <ComboboxViewport>
+        <ComboboxEmpty>暂无匹配选项</ComboboxEmpty>
+        <ComboboxGroup>
+          <ComboboxItem
+            v-for="item in props.dictList"
+            :key="String(item[props.valueKey])"
+            :value="item[props.valueKey]"
+            :text-value="String(item[props.labelKey])"
+          >
+            {{ String(item[props.labelKey]) }}
+            <ComboboxItemIndicator>
+              <i class="sv-icon-check" />
+            </ComboboxItemIndicator>
+          </ComboboxItem>
+        </ComboboxGroup>
+      </ComboboxViewport>
+    </ComboboxList>
+  </Combobox>
 </template>
 
 <script lang="ts" setup>
 import { computed, inject, useAttrs, type HTMLAttributes } from 'vue'
+import { Button } from '@/components/ui/button'
 import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
+  Combobox,
+  ComboboxAnchor,
+  ComboboxEmpty,
+  ComboboxGroup,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxItemIndicator,
+  ComboboxList,
+  ComboboxTrigger,
+  ComboboxViewport,
+} from '@/components/ui/combobox'
 import { cn } from '@/lib/utils'
 import { svFormFieldKey } from '@/components/SvForm/context'
 
@@ -57,28 +77,9 @@ const inputId = computed(() => (attrs.id as string | undefined) ?? formField?.id
 const ariaInvalid = computed(() => attrs['aria-invalid'] ?? formField?.invalid.value)
 const selectDisabled = computed(() => props.disabled ?? formField?.disabled.value ?? false)
 const model = defineModel<any>()
-const selectedValue = computed(() =>
-  model.value == null ? undefined : String(model.value),
+const selectedLabel = computed(() =>
+  props.dictList.find((item) => item[props.valueKey] === model.value)?.[props.labelKey],
 )
-
-/**
- * 将 Select 的字符串选项还原为字典中的原始值。
- * @param value - 选中的值；null 或 undefined 表示清空选择。
- */
-function updateValue(value: unknown) {
-  if (value == null) {
-    model.value = undefined
-    return
-  }
-
-  const option = props.dictList.find(
-    (item) => String(item[props.valueKey]) === String(value),
-  )
-
-  if (option) {
-    model.value = option[props.valueKey]
-  }
-}
 </script>
 
 <style lang="scss" scoped></style>
