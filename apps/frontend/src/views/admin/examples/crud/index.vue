@@ -9,12 +9,12 @@
 
     <!-- 表格工具栏 -->
     <div class="flex shrink-0 flex-wrap items-center gap-2">
-      <Button @click="toAdd"> <i class="sv-icon-plus" data-icon="inline-start" />新增</Button>
+      <Button @click="toAdd"> <i class="sv-icon-plus" />新增</Button>
       <Button variant="outline" :disabled="selectedList.length === 0" @click="toDelete()">
-        <i class="sv-icon-delete" data-icon="inline-start" />删除
+        <i class="sv-icon-delete" />删除
       </Button>
-      <Button variant="outline" @click="importList"> <i class="sv-icon-import" data-icon="inline-start" />导入</Button>
-      <Button variant="outline" @click="exportList"> <i class="sv-icon-export" data-icon="inline-start" />导出</Button>
+      <Button variant="outline" @click="importList"> <i class="sv-icon-import" />导入</Button>
+      <Button variant="outline" @click="exportList"> <i class="sv-icon-export" />导出</Button>
       <span class="min-w-0 flex-1" />
       <Button variant="outline" size="icon" title="刷新" @click="toRefresh">
         <i class="sv-icon-refresh" />

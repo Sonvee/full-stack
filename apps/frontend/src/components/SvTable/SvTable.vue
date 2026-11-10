@@ -50,7 +50,6 @@
                           : 'sv-icon-sort',
                     )
                   "
-                  data-icon="inline-end"
                 />
               </Button>
               <FlexRender v-else :header="header" />
