@@ -39,7 +39,7 @@
           <Button type="button" variant="outline">取消</Button>
         </DialogClose>
         <Button type="button" @click="toConfirm">
-          {{ mode === 'add' ? '新增' : '保存修改' }}
+          {{ mode === 'add' ? '确认新增' : '保存修改' }}
         </Button>
       </DialogFooter>
     </DialogContent>
@@ -61,9 +61,12 @@ import type { DemoListItem } from '@/types/demo'
 defineProps<{ title: string; mode: 'add' | 'update' }>()
 const open = defineModel<boolean>('open', { default: false })
 const emit = defineEmits<{ confirm: [values: DemoListItem] }>()
+
+/** 注入字典数据。 */
 const { dict_d_select, dict_e_select, dict_f_select, dict_g_select } = inject<any>('__DICT__')
 
-const defaultFormData: DemoListItem = {
+/** 默认表单数据。 */
+const defaultFormData = {
   id: '',
   aInput: '',
   bInput: '',
@@ -74,8 +77,12 @@ const defaultFormData: DemoListItem = {
   gSelect: '选项甲',
   createdAt: ''
 }
-const formData = ref<DemoListItem>(defaultFormData)
+
+/** 表单数据。 */
+const formData = ref({ ...defaultFormData })
 const actionFormRef = useTemplateRef('actionFormRef')
+
+/** 表单校验规则。 */
 const rules: SvFormRules<DemoListItem> = {
   aInput: [{ required: true, message: '请输入数据项甲', trigger: ['blur', 'change'] }],
   bInput: [{ required: true, message: '请输入数据项乙', trigger: ['blur', 'change'] }],
@@ -99,14 +106,10 @@ function initForm(row?: DemoListItem) {
 }
 
 /** 校验通过后将表单数据交给页面处理。 */
-function submit(values: DemoListItem) {
-  emit('confirm', values)
-}
-
 function toConfirm() {
   void actionFormRef.value?.validate((valid) => {
     if (valid) {
-      submit(cloneDeep(formData.value))
+      emit('confirm', formData.value)
     }
   })
 }
