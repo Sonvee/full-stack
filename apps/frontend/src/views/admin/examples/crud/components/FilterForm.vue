@@ -1,6 +1,6 @@
 <template>
   <section class="filter-form flex min-h-0 min-w-0 max-h-[70%] flex-col rounded-lg border p-4" :class="{ 'is-expanded': expanded }">
-    <ElForm
+    <el-form
       ref="filterFormRef"
       :model="formData"
       label-width="auto"
@@ -9,32 +9,32 @@
       @submit.prevent="toConfirm"
     >
       <div class="filter-form-grid grid min-w-0 overflow-x-hidden overflow-y-auto gap-4 p-1">
-        <ElFormItem prop="aInput" label="数据项甲">
-          <ElInput v-model="formData.aInput" clearable placeholder="请输入数据项甲" />
-        </ElFormItem>
-        <ElFormItem prop="bInput" label="数据项乙">
-          <ElInput v-model="formData.bInput" clearable placeholder="请输入数据项乙" />
-        </ElFormItem>
-        <ElFormItem prop="cInput" label="数据项丙">
-          <ElInput v-model="formData.cInput" clearable placeholder="请输入数据项丙" />
-        </ElFormItem>
-        <ElFormItem prop="dSelect" label="数据项丁">
+        <el-form-item prop="aInput" label="数据项甲">
+          <el-input v-model="formData.aInput" clearable placeholder="请输入数据项甲" />
+        </el-form-item>
+        <el-form-item prop="bInput" label="数据项乙">
+          <el-input v-model="formData.bInput" clearable placeholder="请输入数据项乙" />
+        </el-form-item>
+        <el-form-item prop="cInput" label="数据项丙">
+          <el-input v-model="formData.cInput" clearable placeholder="请输入数据项丙" />
+        </el-form-item>
+        <el-form-item prop="dSelect" label="数据项丁">
           <SvDictSelect v-model="formData.dSelect" :dict-list="dict_d_select" label-key="label" value-key="value" placeholder="全部" />
-        </ElFormItem>
-        <ElFormItem prop="eSelect" label="数据项戊">
+        </el-form-item>
+        <el-form-item prop="eSelect" label="数据项戊">
           <SvDictSelect v-model="formData.eSelect" :dict-list="dict_e_select" label-key="label" value-key="value" placeholder="全部" />
-        </ElFormItem>
-        <ElFormItem prop="fSelect" label="数据项己">
+        </el-form-item>
+        <el-form-item prop="fSelect" label="数据项己">
           <SvDictSelect v-model="formData.fSelect" :dict-list="dict_f_select" label-key="label" value-key="value" placeholder="全部" />
-        </ElFormItem>
-        <ElFormItem prop="gSelect" label="数据项庚">
+        </el-form-item>
+        <el-form-item prop="gSelect" label="数据项庚">
           <SvDictSelect v-model="formData.gSelect" :dict-list="dict_g_select" label-key="label" value-key="value" placeholder="全部" />
-        </ElFormItem>
-        <ElFormItem prop="id" label="数据编号">
-          <ElInput v-model="formData.id" clearable placeholder="请输入数据编号" />
-        </ElFormItem>
-        <ElFormItem prop="createdRange" label="创建日期">
-          <ElDatePicker
+        </el-form-item>
+        <el-form-item prop="id" label="数据编号">
+          <el-input v-model="formData.id" clearable placeholder="请输入数据编号" />
+        </el-form-item>
+        <el-form-item prop="createdRange" label="创建日期">
+          <el-date-picker
             v-model="formData.createdRange"
             type="daterange"
             value-format="YYYY-MM-DD"
@@ -43,17 +43,17 @@
             range-separator="至"
             class="min-w-0 !w-full"
           />
-        </ElFormItem>
+        </el-form-item>
         <div class="filter-form-actions flex min-w-0 flex-wrap items-center justify-end gap-2 self-end [&>.el-button]:ml-0!">
-          <ElButton native-type="submit" type="primary"><i class="sv-icon-magnify mr-2" />查询</ElButton>
-          <ElButton @click="reset"><i class="sv-icon-reload mr-2" />重置</ElButton>
-          <ElButton class="filter-form-toggle" text @click="toggleExpanded">
+          <el-button native-type="submit" type="primary"><i class="sv-icon-magnify mr-2" />查询</el-button>
+          <el-button @click="reset"><i class="sv-icon-reload mr-2" />重置</el-button>
+          <el-button class="filter-form-toggle" text @click="toggleExpanded">
             {{ expanded ? '收起条件' : '展开条件' }}
             <i class="ml-2" :class="expanded ? 'sv-icon-chevronup' : 'sv-icon-chevrondown'" />
-          </ElButton>
+          </el-button>
         </div>
       </div>
-    </ElForm>
+    </el-form>
   </section>
 </template>
 

@@ -28,7 +28,7 @@
       </p>
     </div>
     <div>
-      <ElButton :tag="RouterLink" :to="{ name: 'admin-dashboard' }">返回工作台</ElButton>
+      <el-button :tag="RouterLink" :to="{ name: 'admin-dashboard' }">返回工作台</el-button>
     </div>
   </section>
 </template>

@@ -1,5 +1,5 @@
 <template>
-  <ElButton
+  <el-button
     size="small"
     class="hidden! w-42 sm:inline-flex! [&>span]:w-full [&>span]:justify-between [&>span]:gap-2"
     @click="openSearch"
@@ -9,8 +9,8 @@
       <span class="truncate">搜索页面</span>
     </span>
     <Kbd class="shrink-0">Ctrl + K</Kbd>
-  </ElButton>
-  <ElButton
+  </el-button>
+  <el-button
     text
     circle
     size="small"
@@ -19,13 +19,13 @@
     @click="openSearch"
   >
     <i class="sv-icon-magnify" />
-  </ElButton>
+  </el-button>
 
-  <ElDialog
+  <el-dialog
     v-model="isOpen"
     title="搜索页面"
     width="min(36rem, calc(100vw - 2rem))"
-    top="12vh"
+    align-center
     append-to-body
     destroy-on-close
   >
@@ -47,7 +47,7 @@
     <div class="max-h-[min(60vh,24rem)] overflow-y-auto p-2">
       <p class="px-2 py-1.5 text-xs font-medium text-muted-foreground">页面</p>
       <div v-if="filteredPages.length">
-        <ElButton
+        <el-button
           v-for="(page, index) in filteredPages"
           :key="page.name"
           text
@@ -61,7 +61,7 @@
           <span class="hidden shrink-0 truncate text-xs text-muted-foreground sm:block">
             {{ page.path }}
           </span>
-        </ElButton>
+        </el-button>
       </div>
       <p v-else class="px-2 py-8 text-center text-sm text-muted-foreground">
         没有找到匹配的页面
@@ -75,7 +75,7 @@
       <span><Kbd>↵</Kbd> 打开</span>
       <span><Kbd>Esc</Kbd> 关闭</span>
     </div>
-  </ElDialog>
+  </el-dialog>
 </template>
 
 <script lang="ts" setup>

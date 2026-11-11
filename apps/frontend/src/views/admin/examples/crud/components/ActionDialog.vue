@@ -1,15 +1,15 @@
 <template>
-  <ElDialog
+  <el-dialog
     v-model="open"
     :title="title"
     width="min(36rem, calc(100vw - 2rem))"
-    top="7vh"
+    align-center
     append-to-body
     destroy-on-close
     @closed="resetForm"
   >
     <p class="mb-4 text-sm text-muted-foreground">请填写各数据项。</p>
-    <ElForm
+    <el-form
       ref="actionFormRef"
       :model="formData"
       :rules="rules"
@@ -17,35 +17,35 @@
       class="grid max-h-[60svh] min-w-0 overflow-x-hidden overflow-y-auto gap-x-4 p-1 sm:grid-cols-2"
       @submit.prevent="toConfirm"
     >
-      <ElFormItem prop="aInput" label="数据项甲">
-        <ElInput v-model="formData.aInput" clearable placeholder="请输入数据项甲" :maxlength="100" />
-      </ElFormItem>
-      <ElFormItem prop="bInput" label="数据项乙">
-        <ElInput v-model="formData.bInput" clearable placeholder="请输入数据项乙" :maxlength="100" />
-      </ElFormItem>
-      <ElFormItem prop="cInput" label="数据项丙">
-        <ElInput v-model="formData.cInput" clearable placeholder="请输入数据项丙" :maxlength="100" />
-      </ElFormItem>
-      <ElFormItem prop="dSelect" label="数据项丁">
+      <el-form-item prop="aInput" label="数据项甲">
+        <el-input v-model="formData.aInput" clearable placeholder="请输入数据项甲" :maxlength="100" />
+      </el-form-item>
+      <el-form-item prop="bInput" label="数据项乙">
+        <el-input v-model="formData.bInput" clearable placeholder="请输入数据项乙" :maxlength="100" />
+      </el-form-item>
+      <el-form-item prop="cInput" label="数据项丙">
+        <el-input v-model="formData.cInput" clearable placeholder="请输入数据项丙" :maxlength="100" />
+      </el-form-item>
+      <el-form-item prop="dSelect" label="数据项丁">
         <SvDictSelect v-model="formData.dSelect" :dict-list="dict_d_select" label-key="label" value-key="value" />
-      </ElFormItem>
-      <ElFormItem prop="eSelect" label="数据项戊">
+      </el-form-item>
+      <el-form-item prop="eSelect" label="数据项戊">
         <SvDictSelect v-model="formData.eSelect" :dict-list="dict_e_select" label-key="label" value-key="value" />
-      </ElFormItem>
-      <ElFormItem prop="fSelect" label="数据项己">
+      </el-form-item>
+      <el-form-item prop="fSelect" label="数据项己">
         <SvDictSelect v-model="formData.fSelect" :dict-list="dict_f_select" label-key="label" value-key="value" />
-      </ElFormItem>
-      <ElFormItem prop="gSelect" label="数据项庚">
+      </el-form-item>
+      <el-form-item prop="gSelect" label="数据项庚">
         <SvDictSelect v-model="formData.gSelect" :dict-list="dict_g_select" label-key="label" value-key="value" />
-      </ElFormItem>
-    </ElForm>
+      </el-form-item>
+    </el-form>
     <template #footer>
-      <ElButton @click="open = false">取消</ElButton>
-      <ElButton type="primary" @click="toConfirm">
+      <el-button @click="open = false">取消</el-button>
+      <el-button type="primary" @click="toConfirm">
         {{ mode === 'add' ? '确认新增' : '保存修改' }}
-      </ElButton>
+      </el-button>
     </template>
-  </ElDialog>
+  </el-dialog>
 </template>
 
 <script lang="ts" setup>

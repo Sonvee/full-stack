@@ -24,7 +24,7 @@
       </li>
     </ul>
     <div>
-      <ElButton :tag="RouterLink" :to="{ name: 'admin-roles' }">查看角色列表</ElButton>
+      <el-button :tag="RouterLink" :to="{ name: 'admin-roles' }">查看角色列表</el-button>
     </div>
   </section>
 </template>

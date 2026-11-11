@@ -5,7 +5,7 @@
         <h1 class="text-2xl font-semibold tracking-tight">消息中心</h1>
         <p class="text-sm text-muted-foreground">一级页面示例 · 以下为本地演示消息。</p>
       </div>
-      <ElButton :disabled="allRead" @click="allRead = true">全部标为已读</ElButton>
+      <el-button :disabled="allRead" @click="allRead = true">全部标为已读</el-button>
     </div>
     <p class="text-sm text-muted-foreground">
       {{ allRead ? '所有消息已读' : '有 3 条未读消息' }}

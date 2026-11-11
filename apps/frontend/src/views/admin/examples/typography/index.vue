@@ -28,7 +28,7 @@
       </blockquote>
     </article>
     <div>
-      <ElButton :tag="RouterLink" :to="{ name: 'admin-buttons' }">返回按钮交互</ElButton>
+      <el-button :tag="RouterLink" :to="{ name: 'admin-buttons' }">返回按钮交互</el-button>
     </div>
   </section>
 </template>

@@ -28,7 +28,7 @@
 
             <Field>
               <FieldLabel for="login-email">邮箱</FieldLabel>
-              <ElInput
+              <el-input
                 v-model="email"
                 id="login-email"
                 name="email"
@@ -43,7 +43,7 @@
 
             <Field>
               <FieldLabel for="login-password">密码</FieldLabel>
-              <ElInput
+              <el-input
                 v-model="password"
                 id="login-password"
                 name="password"
@@ -55,7 +55,7 @@
             </Field>
 
             <Field>
-              <ElButton native-type="submit" type="primary">登录</ElButton>
+              <el-button native-type="submit" type="primary">登录</el-button>
               <FieldDescription>
                 {{ showLoginNotice ? '登录服务尚未接入，暂时无法登录。你可以先预览管理端。' : '' }}
               </FieldDescription>
@@ -64,7 +64,7 @@
             <FieldSeparator>或先体验</FieldSeparator>
 
             <Field>
-              <ElButton :tag="RouterLink" :to="{ name: 'admin-dashboard' }">预览管理端</ElButton>
+              <el-button :tag="RouterLink" :to="{ name: 'admin-dashboard' }">预览管理端</el-button>
               <FieldDescription class="text-center">无需登录即可查看演示页面</FieldDescription>
             </Field>
           </FieldGroup>

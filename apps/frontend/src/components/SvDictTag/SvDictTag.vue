@@ -1,11 +1,11 @@
 <template>
-  <Badge v-if="!showText">{{ label }}</Badge>
+  <el-tag v-if="!showText">{{ label }}</el-tag>
   <template v-else>{{ label }}</template>
 </template>
 
 <script lang="ts" setup>
 import { computed } from 'vue'
-import { Badge } from '@/components/ui/badge'
+import { ElTag } from 'element-plus'
 
 /** 字典值按字符串匹配，未找到时显示原始值；text 或 text="true" 时输出纯文本。 */
 interface SvDictTagProps {

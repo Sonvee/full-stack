@@ -1,18 +1,18 @@
 <template>
-  <ElSelect
+  <el-select
     v-model="model"
     :placeholder="props.placeholder"
     :disabled="props.disabled"
     filterable
     v-bind="$attrs"
   >
-    <ElOption
+    <el-option
       v-for="item in props.dictList"
       :key="String(item[props.valueKey])"
       :label="String(item[props.labelKey])"
       :value="item[props.valueKey]"
     />
-  </ElSelect>
+  </el-select>
 </template>
 
 <script lang="ts" setup>

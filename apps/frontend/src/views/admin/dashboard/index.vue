@@ -14,7 +14,7 @@
       <p class="max-w-md text-sm leading-6 text-muted-foreground">
         这里是页面内容区。你可以替换上方的布局占位，逐步添加业务页面。
       </p>
-      <ElButton :tag="RouterLink" :to="{ name: 'admin-guide' }" class="mt-2">查看布局说明</ElButton>
+      <el-button :tag="RouterLink" :to="{ name: 'admin-guide' }" class="mt-2">查看布局说明</el-button>
     </div>
   </section>
 </template>

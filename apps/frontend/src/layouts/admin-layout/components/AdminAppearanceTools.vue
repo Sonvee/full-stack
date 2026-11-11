@@ -6,14 +6,14 @@
 
     <DropdownMenu>
       <DropdownMenuTrigger as-child>
-        <ElButton
+        <el-button
           text
           circle
           size="small"
           :title="`主题色：${selectedColor.label}`"
         >
           <i class="sv-icon-palette" />
-        </ElButton>
+        </el-button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" class="min-w-36">
         <DropdownMenuGroup>
@@ -40,14 +40,14 @@
 
     <DropdownMenu>
       <DropdownMenuTrigger as-child>
-        <ElButton
+        <el-button
           text
           circle
           size="small"
           :title="`显示模式：${selectedMode.label}`"
         >
           <i :class="selectedMode.icon" />
-        </ElButton>
+        </el-button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" class="min-w-36">
         <DropdownMenuGroup>
