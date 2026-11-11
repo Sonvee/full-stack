@@ -51,7 +51,7 @@
 <script lang="ts" setup>
 import { inject, ref, useTemplateRef } from 'vue'
 import { cloneDeep } from 'es-toolkit'
-import { ElButton, ElDialog, ElForm, ElFormItem, ElInput, type FormRules } from 'element-plus'
+import type { FormRules } from 'element-plus'
 import SvDictSelect from '@/components/SvDictSelect/SvDictSelect.vue'
 import type { DemoListItem } from '@/types/demo'
 

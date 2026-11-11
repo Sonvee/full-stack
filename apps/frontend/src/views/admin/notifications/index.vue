@@ -30,7 +30,6 @@
 
 <script lang="ts" setup>
 import { shallowRef } from 'vue'
-import { ElButton } from 'element-plus'
 
 const allRead = shallowRef(false)
 const messages = [

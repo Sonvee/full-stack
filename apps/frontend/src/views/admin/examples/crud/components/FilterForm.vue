@@ -41,7 +41,7 @@
             start-placeholder="开始日期"
             end-placeholder="结束日期"
             range-separator="至"
-            class="min-w-0 !w-full"
+            class="min-w-0 w-full!"
           />
         </el-form-item>
         <div class="filter-form-actions flex min-w-0 flex-wrap items-center justify-end gap-2 self-end [&>.el-button]:ml-0!">
@@ -59,7 +59,6 @@
 
 <script lang="ts" setup>
 import { inject, ref, shallowRef, useTemplateRef } from 'vue'
-import { ElButton, ElDatePicker, ElForm, ElFormItem, ElInput } from 'element-plus'
 import SvDictSelect from '@/components/SvDictSelect/SvDictSelect.vue'
 import type { DemoQueryParams } from '@/types/demo'
 

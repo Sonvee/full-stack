@@ -37,7 +37,6 @@
 <script lang="ts" setup>
 import { shallowRef } from 'vue'
 import { RouterLink } from 'vue-router'
-import { ElButton, ElDivider } from 'element-plus'
 
 const count = shallowRef(0)
 </script>

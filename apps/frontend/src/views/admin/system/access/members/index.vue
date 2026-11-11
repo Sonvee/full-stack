@@ -32,7 +32,6 @@
 <script lang="ts" setup>
 import { RouterLink } from 'vue-router'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-import { ElButton } from 'element-plus'
 
 const members = [
   { name: '演示管理员', initials: 'AD', email: 'admin@example.com', role: '管理员' },

@@ -7,7 +7,6 @@
 
 <script lang="ts" setup>
 import { RouterLink } from 'vue-router'
-import { ElButton } from 'element-plus'
 </script>
 
 <style lang="scss" scoped></style>

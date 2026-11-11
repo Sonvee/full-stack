@@ -28,7 +28,6 @@
 
 <script lang="ts" setup>
 import { RouterLink } from 'vue-router'
-import { ElButton } from 'element-plus'
 
 const roles = [
   { name: '管理员', description: '负责系统配置与团队管理。', members: 1 },

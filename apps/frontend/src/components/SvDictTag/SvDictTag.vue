@@ -5,7 +5,6 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue'
-import { ElTag } from 'element-plus'
 
 /** 字典值按字符串匹配，未找到时显示原始值；text 或 text="true" 时输出纯文本。 */
 interface SvDictTagProps {

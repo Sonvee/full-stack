@@ -5,27 +5,19 @@
       <header class="flex h-16 shrink-0 items-center gap-2 px-4">
         <AdminSidebarTrigger class="-ml-1" />
         <el-divider direction="vertical" class="ml-0! h-4!" />
-        <Breadcrumb class="min-w-0 overflow-hidden">
-          <BreadcrumbList class="flex-nowrap">
-            <BreadcrumbItem class="hidden md:block">
-              <BreadcrumbLink as-child>
-                <RouterLink :to="{ name: 'admin-dashboard' }">管理端</RouterLink>
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator class="hidden md:block" />
-            <template v-for="(item, index) in breadcrumbs" :key="item.path">
-              <BreadcrumbSeparator v-if="index > 0" />
-              <BreadcrumbItem class="min-w-0 shrink-0 last:shrink">
-                <BreadcrumbPage v-if="index === breadcrumbs.length - 1" class="truncate">
-                  {{ item.meta.title }}
-                </BreadcrumbPage>
-                <BreadcrumbLink v-else as-child>
-                  <RouterLink :to="{ name: item.name }">{{ item.meta.title }}</RouterLink>
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-            </template>
-          </BreadcrumbList>
-        </Breadcrumb>
+        <el-breadcrumb class="flex min-w-0 overflow-hidden whitespace-nowrap">
+          <el-breadcrumb-item :to="{ name: 'admin-dashboard' }" class="hidden! shrink-0 md:inline-flex!">
+            管理端
+          </el-breadcrumb-item>
+          <el-breadcrumb-item
+            v-for="(item, index) in breadcrumbs"
+            :key="item.path"
+            :to="index === breadcrumbs.length - 1 ? undefined : { name: item.name }"
+            class="min-w-0 shrink-0 last:shrink [&_.el-breadcrumb__inner]:truncate"
+          >
+            {{ item.meta.title }}
+          </el-breadcrumb-item>
+        </el-breadcrumb>
         <AdminAppearanceTools />
       </header>
       <div
@@ -44,16 +36,7 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue'
-import { RouterLink, RouterView, useRoute } from 'vue-router'
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb'
-import { ElDivider } from 'element-plus'
+import { RouterView, useRoute } from 'vue-router'
 import { cn } from '@/lib/utils'
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
 import AdminSidebar from './components/AdminSidebar.vue'

@@ -85,7 +85,6 @@
 <script lang="ts" setup>
 import { shallowRef } from 'vue'
 import { RouterLink } from 'vue-router'
-import { ElButton, ElInput } from 'element-plus'
 import {
   Field,
   FieldDescription,

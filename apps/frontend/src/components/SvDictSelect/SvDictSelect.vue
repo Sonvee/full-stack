@@ -16,7 +16,6 @@
 </template>
 
 <script lang="ts" setup>
-import { ElOption, ElSelect } from 'element-plus'
 
 defineOptions({ inheritAttrs: false })
 

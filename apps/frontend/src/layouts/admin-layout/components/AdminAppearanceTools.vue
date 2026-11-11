@@ -51,7 +51,6 @@
 </template>
 
 <script lang="ts" setup>
-import { ElButton, ElDropdown, ElDropdownItem, ElDropdownMenu, ElDivider } from 'element-plus'
 import { appearanceModes, themeColors, useAppearance } from '@/composables/use-appearance'
 import AdminPageSearch from './AdminPageSearch.vue'
 

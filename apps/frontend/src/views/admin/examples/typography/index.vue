@@ -35,7 +35,6 @@
 
 <script lang="ts" setup>
 import { RouterLink } from 'vue-router'
-import { ElButton, ElDivider } from 'element-plus'
 </script>
 
 <style lang="scss" scoped></style>

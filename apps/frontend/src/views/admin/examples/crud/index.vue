@@ -10,37 +10,24 @@
     <!-- 表格工具栏 -->
     <div class="flex shrink-0 flex-wrap items-center gap-2 [&>.el-button]:ml-0!">
       <el-button type="primary" @click="toAdd"><i class="sv-icon-plus mr-2" />新增</el-button>
-      <el-button :disabled="selectedList.length === 0" @click="toDelete()">
-        <i class="sv-icon-delete mr-2" />删除
-      </el-button>
+      <el-button :disabled="selectedList.length === 0" @click="toDelete()"> <i class="sv-icon-delete mr-2" />删除 </el-button>
       <el-button @click="importList"><i class="sv-icon-import mr-2" />导入</el-button>
       <el-button @click="exportList"><i class="sv-icon-export mr-2" />导出</el-button>
       <span class="min-w-0 flex-1" />
       <el-button circle title="刷新" @click="toRefresh">
         <i class="sv-icon-refresh" />
       </el-button>
-      <el-button
-        circle
-        :title="showFilters ? '隐藏筛选' : '显示筛选'"
-        @click="toToggleFilter"
-      >
+      <el-button circle :title="showFilters ? '隐藏筛选' : '显示筛选'" @click="toToggleFilter">
         <i :class="showFilters ? 'sv-icon-eyeoff' : 'sv-icon-filter'" />
       </el-button>
     </div>
 
     <!-- 数据表格 -->
     <div class="min-h-0 flex-1 overflow-hidden rounded-lg border">
-      <el-table
-        ref="dataTableRef"
-        :data="pageData"
-        row-key="id"
-        height="100%"
-        @selection-change="handleSelectionChange"
-        @sort-change="sortProp = $event.prop; sortOrder = $event.order"
-      >
+      <el-table ref="dataTableRef" v-loading="loading" :data="dataList" row-key="id" height="100%" @selection-change="handleSelectionChange">
         <el-table-column type="selection" :width="48" align="center" fixed="left" reserve-selection />
         <el-table-column prop="id" label="数据编号" :min-width="120" show-overflow-tooltip />
-        <el-table-column prop="aInput" label="数据项甲" :min-width="120" sortable="custom" show-overflow-tooltip />
+        <el-table-column prop="aInput" label="数据项甲" :min-width="120" show-overflow-tooltip />
         <el-table-column prop="bInput" label="数据项乙" :min-width="120" show-overflow-tooltip />
         <el-table-column prop="cInput" label="数据项丙" :min-width="120" show-overflow-tooltip />
         <el-table-column prop="dSelect" label="数据项丁" :min-width="100" align="center">
@@ -72,7 +59,7 @@
             <SvDictTag :dict-list="dict_g_select" :data="row.gSelect" label-key="label" value-key="value" />
           </template>
         </el-table-column>
-        <el-table-column prop="createdAt" label="创建日期" :min-width="200" align="center" sortable="custom" show-overflow-tooltip />
+        <el-table-column prop="createdAt" label="创建日期" :min-width="200" align="center" show-overflow-tooltip />
         <el-table-column label="操作" :width="132" align="center" fixed="right">
           <template #default="{ row }">
             <el-button type="primary" link @click="toUpdate(row as DemoListItem)">修改</el-button>
@@ -86,14 +73,7 @@
     <footer class="flex shrink-0 flex-wrap items-center justify-between gap-3">
       <p class="text-sm text-muted-foreground">已选择 {{ selectedList.length }} 条</p>
       <div class="max-w-full overflow-x-auto">
-        <el-pagination
-          v-model:current-page="queryParams.pageNum"
-          v-model:page-size="queryParams.pageSize"
-          :total="total"
-          :page-sizes="[10, 20, 50, 100]"
-          layout="total, sizes, prev, pager, next, jumper"
-          @size-change="queryParams.pageNum = 1"
-        />
+        <SvPagination v-model:current-page="queryParams.pageNum" v-model:page-size="queryParams.pageSize" :total="total" />
       </div>
     </footer>
 
@@ -103,12 +83,12 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, provide, ref, shallowRef, useTemplateRef } from 'vue'
-import { ElButton, ElMessage, ElMessageBox, ElPagination, ElTable, ElTableColumn, type Sort } from 'element-plus'
-import { orderBy } from 'es-toolkit/compat'
+import { provide, ref, shallowRef, useTemplateRef, watch } from 'vue'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import { apiDemoAdd, apiDemoDelete, apiDemoExport, apiDemoImport, apiDemoList, apiDemoUpdate } from '@/api/demo'
 import type { DemoListItem, DemoQueryParams } from '@/types/demo'
 import SvDictTag from '@/components/SvDictTag/SvDictTag.vue'
+import SvPagination from '@/components/SvPagination/SvPagination.vue'
 import ActionDialog from './components/ActionDialog.vue'
 import FilterForm from './components/FilterForm.vue'
 import { dict_d_select, dict_e_select, dict_f_select, dict_g_select } from './dict-data'
@@ -122,6 +102,7 @@ provide('__DICT__', {
 })
 
 const dataList = shallowRef<DemoListItem[]>([])
+const loading = shallowRef(false)
 const total = shallowRef(0)
 const selectedList = shallowRef<DemoListItem[]>([])
 const queryParams = ref<DemoQueryParams>({
@@ -142,41 +123,29 @@ const actionTitle = shallowRef('新增数据')
 const actionMode = shallowRef<'add' | 'update'>('add')
 const actionDialogRef = useTemplateRef('actionDialogRef')
 const dataTableRef = useTemplateRef('dataTableRef')
-const sortProp = shallowRef<string | null>(null)
-const sortOrder = shallowRef<Sort['order'] | null>(null)
 
-/** 延续示例的前端分页，先排序全部结果，再取当前页。 */
-const pageData = computed(() => {
-  const rows = sortProp.value && sortOrder.value
-    ? orderBy(dataList.value, [sortProp.value], [sortOrder.value === 'ascending' ? 'asc' : 'desc'])
-    : dataList.value
-  const start = (queryParams.value.pageNum - 1) * queryParams.value.pageSize
-  return rows.slice(start, start + queryParams.value.pageSize)
-})
-
-onMounted(async () => {
-  toQuery()
-})
+watch(queryParams, toQuery, { deep: true, immediate: true })
 
 /** 提交筛选条件并从第一页重新查询。 */
-function toSearch(values: Omit<DemoQueryParams, 'pageNum' | 'pageSize'>) {
-  Object.assign(queryParams.value, values, { pageNum: 1 })
-  toQuery()
+function toSearch(data: Omit<DemoQueryParams, 'pageNum' | 'pageSize'>) {
+  queryParams.value = { ...queryParams.value, ...data, pageNum: 1 }
 }
 
 /** 清除筛选条件并从第一页重新查询。 */
 function toReset() {
   queryParams.value = { pageNum: 1, pageSize: queryParams.value.pageSize }
-  toQuery()
 }
 
 /** 查询列表并更新表格数据和总数。 */
 async function toQuery() {
-  const res = await apiDemoList(queryParams.value)
-  dataList.value = res.data || []
-  total.value = res.total || 0
-  dataTableRef.value?.clearSelection()
-  queryParams.value.pageNum = Math.max(1, Math.min(queryParams.value.pageNum, Math.ceil(dataList.value.length / queryParams.value.pageSize)))
+  loading.value = true
+  try {
+    const res = await apiDemoList(queryParams.value)
+    dataList.value = res.data || []
+    total.value = res.total || 0
+  } finally {
+    loading.value = false
+  }
 }
 
 /** 使用当前筛选和分页条件刷新列表。 */
@@ -211,12 +180,12 @@ function toUpdate(row: DemoListItem) {
 }
 
 /** 等待新增或修改请求完成后关闭弹窗。 */
-async function toConfirm(values: DemoListItem) {
+async function toConfirm(data: DemoListItem) {
   if (actionMode.value === 'update') {
-    await apiDemoUpdate(values)
+    await apiDemoUpdate(data)
     ElMessage.success('修改请求已提交')
   } else {
-    await apiDemoAdd(values)
+    await apiDemoAdd(data)
     ElMessage.success('新增请求已提交')
   }
   actionDialogOpen.value = false
@@ -229,7 +198,7 @@ async function toDelete(row?: DemoListItem) {
     await ElMessageBox.confirm('此模板只打印删除请求，不会修改示例列表。', `确认删除 ${count} 条数据？`, {
       confirmButtonText: '确认删除',
       cancelButtonText: '取消',
-      type: 'warning',
+      type: 'warning'
     })
   } catch {
     return

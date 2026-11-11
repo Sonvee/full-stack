@@ -1,45 +1,23 @@
 <template>
-  <el-button
-    class="hidden! w-42 sm:inline-flex! [&>span]:w-full [&>span]:justify-between [&>span]:gap-2"
-    @click="openSearch"
-  >
+  <el-button class="hidden! w-45 sm:inline-flex! [&>span]:w-full [&>span]:justify-between [&>span]:gap-2" @click="openSearch">
     <span class="flex min-w-0 items-center gap-2">
       <i class="sv-icon-magnify shrink-0" />
       <span class="truncate">搜索页面</span>
     </span>
-    <Kbd class="shrink-0">Ctrl + K</Kbd>
+    <kbd class="shrink-0 rounded-sm bg-muted px-1 py-0.5 text-xs text-muted-foreground"> Ctrl + K </kbd>
   </el-button>
-  <el-button
-    text
-    circle
-    class="sm:hidden!"
-    title="搜索页面"
-    @click="openSearch"
-  >
+  <el-button text circle class="sm:hidden!" title="搜索页面" @click="openSearch">
     <i class="sv-icon-magnify" />
   </el-button>
 
-  <el-dialog
-    v-model="isOpen"
-    title="搜索页面"
-    width="min(36rem, calc(100vw - 2rem))"
-    align-center
-    append-to-body
-    destroy-on-close
-  >
-    <el-input
-      v-model="query"
-      type="search"
-      autofocus
-      placeholder="搜索页面"
-      @keydown="handleSearchKeydown"
-    >
+  <el-dialog v-model="isOpen" title="搜索页面" width="min(36rem, calc(100vw - 2rem))" align-center append-to-body destroy-on-close>
+    <el-input v-model="query" clearable autofocus placeholder="请输入页面名称或路径" @keydown="handleSearchKeydown">
       <template #prefix>
         <i class="sv-icon-magnify" />
       </template>
     </el-input>
 
-    <div class="max-h-[min(60vh,24rem)] overflow-y-auto p-2">
+    <div class="max-h-[min(60vh,24rem)] overflow-y-auto my-2">
       <p class="px-2 py-1.5 text-xs font-medium text-muted-foreground">页面</p>
       <div v-if="filteredPages.length">
         <el-button
@@ -52,23 +30,19 @@
           @click="navigateTo(page.name)"
         >
           <i :class="[page.icon, 'shrink-0 text-muted-foreground']" />
-          <span class="min-w-0 flex-1 truncate">{{ page.title }}</span>
+          <span class="min-w-0 flex-1 truncate text-left">{{ page.title }}</span>
           <span class="hidden shrink-0 truncate text-xs text-muted-foreground sm:block">
             {{ page.path }}
           </span>
         </el-button>
       </div>
-      <p v-else class="px-2 py-8 text-center text-sm text-muted-foreground">
-        没有找到匹配的页面
-      </p>
+      <p v-else class="px-2 py-8 text-center text-sm text-muted-foreground">没有找到匹配的页面</p>
     </div>
 
-    <div
-      class="flex items-center gap-4 border-t bg-muted/30 px-4 py-2 text-xs text-muted-foreground"
-    >
-      <span><Kbd>↑↓</Kbd> 选择</span>
-      <span><Kbd>↵</Kbd> 打开</span>
-      <span><Kbd>Esc</Kbd> 关闭</span>
+    <div class="flex items-center gap-4 border-t bg-muted/30 px-4 py-2 text-xs text-muted-foreground">
+      <span><kbd class="rounded-sm bg-muted px-1 py-0.5">↑↓</kbd> 选择</span>
+      <span><kbd class="rounded-sm bg-muted px-1 py-0.5">↵</kbd> 打开</span>
+      <span><kbd class="rounded-sm bg-muted px-1 py-0.5">Esc</kbd> 关闭</span>
     </div>
   </el-dialog>
 </template>
@@ -76,8 +50,6 @@
 <script lang="ts" setup>
 import { computed, onBeforeUnmount, onMounted, shallowRef, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { ElButton, ElDialog, ElInput } from 'element-plus'
-import { Kbd } from '@/components/ui/kbd'
 
 const router = useRouter()
 const isOpen = shallowRef(false)
@@ -128,8 +100,7 @@ function handleSearchKeydown(event: Event) {
     activeIndex.value = (activeIndex.value + 1) % filteredPages.value.length
   } else if (event.key === 'ArrowUp') {
     event.preventDefault()
-    activeIndex.value =
-      (activeIndex.value - 1 + filteredPages.value.length) % filteredPages.value.length
+    activeIndex.value = (activeIndex.value - 1 + filteredPages.value.length) % filteredPages.value.length
   } else if (event.key === 'Enter') {
     event.preventDefault()
     const page = filteredPages.value[activeIndex.value]

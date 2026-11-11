@@ -1,13 +1,11 @@
 import { delay } from 'es-toolkit'
 import type { DemoListItem, DemoQueryParams, DemoApiResponse } from '@/types/demo'
 
-/** 查询 CRUD 示例列表。 */
+/** 按请求的页码和每页条数返回 CRUD 示例列表。 */
 export async function apiDemoList(params: DemoQueryParams): Promise<DemoApiResponse> {
   await delay(1000)
   console.log('查询数据', params)
-  return {
-    code: 200,
-    data: [
+  const data = [
     {
       id: 'R0001',
       aInput: '数据项甲示例 01',
@@ -250,9 +248,13 @@ export async function apiDemoList(params: DemoQueryParams): Promise<DemoApiRespo
       gSelect: '选项甲',
       createdAt: '2026-10-22',
     },
-    ],
+  ]
+  const start = (params.pageNum - 1) * params.pageSize
+  return {
+    code: 200,
+    data: data.slice(start, start + params.pageSize),
     message: '请求成功',
-    total: 22,
+    total: data.length,
   }
 }
 
