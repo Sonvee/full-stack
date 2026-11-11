@@ -75,10 +75,8 @@
         <el-table-column prop="createdAt" label="创建日期" :min-width="200" align="center" sortable="custom" show-overflow-tooltip />
         <el-table-column label="操作" :width="132" align="center" fixed="right">
           <template #default="{ row }">
-            <div class="flex items-center justify-center gap-1 [&>.el-button]:ml-0!">
-              <el-button type="primary" link size="small" @click="toUpdate(row as DemoListItem)">修改</el-button>
-              <el-button type="danger" link size="small" @click="toDelete(row as DemoListItem)">删除</el-button>
-            </div>
+            <el-button type="primary" link @click="toUpdate(row as DemoListItem)">修改</el-button>
+            <el-button type="danger" link @click="toDelete(row as DemoListItem)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>

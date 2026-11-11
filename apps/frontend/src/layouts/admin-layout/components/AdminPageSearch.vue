@@ -1,6 +1,5 @@
 <template>
   <el-button
-    size="small"
     class="hidden! w-42 sm:inline-flex! [&>span]:w-full [&>span]:justify-between [&>span]:gap-2"
     @click="openSearch"
   >
@@ -13,7 +12,6 @@
   <el-button
     text
     circle
-    size="small"
     class="sm:hidden!"
     title="搜索页面"
     @click="openSearch"

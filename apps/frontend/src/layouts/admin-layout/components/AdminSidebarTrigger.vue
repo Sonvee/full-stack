@@ -1,5 +1,5 @@
 <template>
-  <el-button text circle size="small" title="展开或收起侧栏" @click="toggleSidebar">
+  <el-button text circle title="展开或收起侧栏" @click="toggleSidebar">
     <i class="sv-icon-fold" />
   </el-button>
 </template>

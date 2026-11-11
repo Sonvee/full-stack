@@ -9,7 +9,6 @@
         <el-button
           text
           circle
-          size="small"
           :title="`主题色：${selectedColor.label}`"
         >
           <i class="sv-icon-palette" />
@@ -43,7 +42,6 @@
         <el-button
           text
           circle
-          size="small"
           :title="`显示模式：${selectedMode.label}`"
         >
           <i :class="selectedMode.icon" />
