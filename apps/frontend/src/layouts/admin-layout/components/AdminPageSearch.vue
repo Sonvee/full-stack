@@ -18,7 +18,6 @@
     </el-input>
 
     <div class="max-h-[min(60vh,24rem)] overflow-y-auto my-2">
-      <p class="px-2 py-1.5 text-xs font-medium text-muted-foreground">页面</p>
       <div v-if="filteredPages.length">
         <el-button
           v-for="(page, index) in filteredPages"

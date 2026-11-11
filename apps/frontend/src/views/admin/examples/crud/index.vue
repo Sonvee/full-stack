@@ -8,7 +8,7 @@
     <FilterForm v-show="showFilters" @search="toSearch" @reset="toReset" />
 
     <!-- 表格工具栏 -->
-    <div class="flex shrink-0 flex-wrap items-center gap-2 [&>.el-button]:ml-0!">
+    <div class="flex shrink-0 flex-wrap items-center">
       <el-button type="primary" @click="toAdd"><i class="sv-icon-plus mr-2" />新增</el-button>
       <el-button :disabled="selectedList.length === 0" @click="toDelete()"> <i class="sv-icon-delete mr-2" />删除 </el-button>
       <el-button @click="importList"><i class="sv-icon-import mr-2" />导入</el-button>
