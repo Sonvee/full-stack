@@ -24,7 +24,7 @@
 
     <!-- 数据表格 -->
     <div class="min-h-0 flex-1 overflow-hidden rounded-lg border">
-      <el-table ref="dataTableRef" v-loading="loading" :data="dataList" row-key="id" height="100%" @selection-change="handleSelectionChange">
+      <el-table v-loading="loading" :data="dataList" row-key="id" height="100%" @selection-change="handleSelectionChange">
         <el-table-column type="selection" :width="48" align="center" fixed="left" reserve-selection />
         <el-table-column prop="id" label="数据编号" :min-width="120" show-overflow-tooltip />
         <el-table-column prop="aInput" label="数据项甲" :min-width="120" show-overflow-tooltip />
@@ -73,17 +73,30 @@
     <footer class="flex shrink-0 flex-wrap items-center justify-between gap-3">
       <p class="text-sm text-muted-foreground">已选择 {{ selectedList.length }} 条</p>
       <div class="max-w-full overflow-x-auto">
-        <SvPagination v-model:current-page="queryParams.pageNum" v-model:page-size="queryParams.pageSize" :total="total" />
+        <SvPagination
+          v-model:current-page="queryParams.pageNum"
+          v-model:page-size="queryParams.pageSize"
+          :total="total"
+          @current-change="handleCurrentChange"
+          @size-change="handleSizeChange"
+        />
       </div>
     </footer>
 
     <!-- 新增 / 编辑弹窗 -->
-    <ActionDialog ref="actionDialogRef" v-model:open="actionDialogOpen" :title="actionTitle" :mode="actionMode" @confirm="toConfirm" />
+    <ActionDialog
+      ref="actionDialogRef"
+      v-model:open="actionDialogOpen"
+      :title="actionTitle"
+      :mode="actionMode"
+      :loading="actionLoading"
+      @confirm="toConfirm"
+    />
   </section>
 </template>
 
 <script lang="ts" setup>
-import { provide, ref, shallowRef, useTemplateRef, watch } from 'vue'
+import { onMounted, provide, ref, shallowRef, useTemplateRef } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { apiDemoAdd, apiDemoDelete, apiDemoExport, apiDemoImport, apiDemoList, apiDemoUpdate } from '@/api/demo'
 import type { DemoListItem, DemoQueryParams } from '@/types/demo'
@@ -119,21 +132,37 @@ const queryParams = ref<DemoQueryParams>({
 })
 const showFilters = shallowRef(true)
 const actionDialogOpen = shallowRef(false)
+const actionLoading = shallowRef(false)
 const actionTitle = shallowRef('新增数据')
 const actionMode = shallowRef<'add' | 'update'>('add')
 const actionDialogRef = useTemplateRef('actionDialogRef')
-const dataTableRef = useTemplateRef('dataTableRef')
 
-watch(queryParams, toQuery, { deep: true, immediate: true })
+onMounted(() => {
+  /** 页面加载时查询列表数据。 */
+  toQuery()
+})
 
 /** 提交筛选条件并从第一页重新查询。 */
 function toSearch(data: Omit<DemoQueryParams, 'pageNum' | 'pageSize'>) {
   queryParams.value = { ...queryParams.value, ...data, pageNum: 1 }
+  toQuery()
 }
 
 /** 清除筛选条件并从第一页重新查询。 */
 function toReset() {
   queryParams.value = { pageNum: 1, pageSize: queryParams.value.pageSize }
+  toQuery()
+}
+
+/** 页码切换后查询对应页面的数据。 */
+function handleCurrentChange() {
+  toQuery()
+}
+
+/** 每页条数切换后从第一页重新查询。 */
+function handleSizeChange() {
+  queryParams.value.pageNum = 1
+  toQuery()
 }
 
 /** 查询列表并更新表格数据和总数。 */
@@ -181,14 +210,20 @@ function toUpdate(row: DemoListItem) {
 
 /** 等待新增或修改请求完成后关闭弹窗。 */
 async function toConfirm(data: DemoListItem) {
-  if (actionMode.value === 'update') {
-    await apiDemoUpdate(data)
-    ElMessage.success('修改请求已提交')
-  } else {
-    await apiDemoAdd(data)
-    ElMessage.success('新增请求已提交')
+  if (actionLoading.value) return
+  actionLoading.value = true
+  try {
+    if (actionMode.value === 'update') {
+      await apiDemoUpdate(data)
+      ElMessage.success('修改请求已提交')
+    } else {
+      await apiDemoAdd(data)
+      ElMessage.success('新增请求已提交')
+    }
+    actionDialogOpen.value = false
+  } finally {
+    actionLoading.value = false
   }
-  actionDialogOpen.value = false
 }
 
 /** 打开删除确认弹窗，支持单行和已选数据。 */

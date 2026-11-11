@@ -6,9 +6,8 @@
     align-center
     append-to-body
     destroy-on-close
-    @closed="resetForm"
+    @closed="handleClosed"
   >
-    <p class="mb-4 text-sm text-muted-foreground">请填写各数据项。</p>
     <el-form
       ref="actionFormRef"
       :model="formData"
@@ -40,8 +39,8 @@
       </el-form-item>
     </el-form>
     <template #footer>
-      <el-button @click="open = false">取消</el-button>
-      <el-button type="primary" @click="toConfirm">
+      <el-button @click="toClose">取消</el-button>
+      <el-button type="primary" :loading="loading" @click="toConfirm">
         {{ mode === 'add' ? '确认新增' : '保存修改' }}
       </el-button>
     </template>
@@ -55,7 +54,7 @@ import type { FormRules } from 'element-plus'
 import SvDictSelect from '@/components/SvDictSelect/SvDictSelect.vue'
 import type { DemoListItem } from '@/types/demo'
 
-defineProps<{ title: string; mode: 'add' | 'update' }>()
+defineProps<{ title: string; mode: 'add' | 'update'; loading: boolean }>()
 const open = defineModel<boolean>('open', { default: false })
 const emit = defineEmits<{ confirm: [values: DemoListItem] }>()
 
@@ -90,7 +89,17 @@ const rules: FormRules<DemoListItem> = {
   gSelect: [{ required: true, message: '请选择数据项庚', trigger: 'change' }]
 }
 
-/** 弹窗关闭时重置表单。 */
+/** 关闭弹窗。 */
+function toClose() {
+  open.value = false
+}
+
+/** 弹窗关闭完成后重置表单。 */
+function handleClosed() {
+  resetForm()
+}
+
+/** 重置表单数据和校验状态。 */
 function resetForm() {
   actionFormRef.value?.clearValidate()
   formData.value = cloneDeep(defaultFormData)
