@@ -10,15 +10,15 @@
     <!-- 表格工具栏 -->
     <div class="flex shrink-0 flex-wrap items-center">
       <el-button type="primary" @click="toAdd"><i class="sv-icon-plus mr-2" />新增</el-button>
-      <el-button :disabled="selectedList.length === 0" @click="toDelete()"> <i class="sv-icon-delete mr-2" />删除 </el-button>
+      <el-button type="danger" :disabled="selectedList.length === 0" @click="toDelete()"><i class="sv-icon-delete mr-2" />删除</el-button>
       <el-button @click="importList"><i class="sv-icon-import mr-2" />导入</el-button>
       <el-button @click="exportList"><i class="sv-icon-export mr-2" />导出</el-button>
       <span class="min-w-0 flex-1" />
-      <el-button circle title="刷新" @click="toRefresh">
+      <el-button circle title="刷新" @click="toQuery">
         <i class="sv-icon-refresh" />
       </el-button>
       <el-button circle :title="showFilters ? '隐藏筛选' : '显示筛选'" @click="toToggleFilter">
-        <i :class="showFilters ? 'sv-icon-eyeoff' : 'sv-icon-filter'" />
+        <i :class="showFilters ? 'sv-icon-filterremove' : 'sv-icon-filter'" />
       </el-button>
     </div>
 
@@ -177,11 +177,6 @@ async function toQuery() {
   }
 }
 
-/** 使用当前筛选和分页条件刷新列表。 */
-function toRefresh() {
-  toQuery()
-}
-
 /** 切换筛选栏显示状态。 */
 function toToggleFilter() {
   showFilters.value = !showFilters.value
@@ -208,7 +203,7 @@ function toUpdate(row: DemoListItem) {
   actionDialogOpen.value = true
 }
 
-/** 等待新增或修改请求完成后关闭弹窗。 */
+/** 新增或修改成功后关闭弹窗并刷新列表。 */
 async function toConfirm(data: DemoListItem) {
   if (actionLoading.value) return
   actionLoading.value = true
@@ -221,6 +216,7 @@ async function toConfirm(data: DemoListItem) {
       ElMessage.success('新增请求已提交')
     }
     actionDialogOpen.value = false
+    await toQuery()
   } finally {
     actionLoading.value = false
   }
@@ -232,6 +228,7 @@ async function toDelete(row?: DemoListItem) {
   try {
     await ElMessageBox.confirm('此模板只打印删除请求，不会修改示例列表。', `确认删除 ${count} 条数据？`, {
       confirmButtonText: '确认删除',
+      confirmButtonType: 'danger',
       cancelButtonText: '取消',
       type: 'warning'
     })
@@ -240,6 +237,7 @@ async function toDelete(row?: DemoListItem) {
   }
   await apiDemoDelete()
   ElMessage.success(`删除请求已提交，共 ${count} 条数据`)
+  await toQuery()
 }
 
 /** 导入操作占位，接入业务后在此调用导入 API。 */
