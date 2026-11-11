@@ -28,16 +28,14 @@
       </blockquote>
     </article>
     <div>
-      <Button as-child variant="outline"
-        ><RouterLink :to="{ name: 'admin-buttons' }">返回按钮交互</RouterLink></Button
-      >
+      <ElButton :tag="RouterLink" :to="{ name: 'admin-buttons' }">返回按钮交互</ElButton>
     </div>
   </section>
 </template>
 
 <script lang="ts" setup>
 import { RouterLink } from 'vue-router'
-import { Button } from '@/components/ui/button'
+import { ElButton } from 'element-plus'
 import { Separator } from '@/components/ui/separator'
 </script>
 

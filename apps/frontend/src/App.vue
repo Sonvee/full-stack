@@ -1,15 +1,17 @@
 <template>
-  <RouterView />
-  <Toaster :theme="mode === 'auto' ? 'system' : mode" position="top-center" close-button />
+  <ElConfigProvider :locale="zhCn">
+    <RouterView />
+  </ElConfigProvider>
 </template>
 
 <script lang="ts" setup>
 import { RouterView } from 'vue-router'
-import { Toaster } from '@/components/ui/sonner'
+import { ElConfigProvider } from 'element-plus'
+import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import { useAppLoading } from '@/composables/use-app-loading'
 import { useAppearance } from '@/composables/use-appearance'
 
-const { mode } = useAppearance()
+useAppearance()
 useAppLoading()
 </script>
 

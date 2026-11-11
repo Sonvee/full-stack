@@ -3,7 +3,7 @@
     <AdminSidebar />
     <SidebarInset :class="cn('min-w-0', fixedHeight && 'min-h-0 overflow-hidden')">
       <header class="flex h-16 shrink-0 items-center gap-2 px-4">
-        <SidebarTrigger class="-ml-1" />
+        <AdminSidebarTrigger class="-ml-1" />
         <Separator orientation="vertical" class="mr-2 data-[orientation=vertical]:h-4" />
         <Breadcrumb class="min-w-0 overflow-hidden">
           <BreadcrumbList class="flex-nowrap">
@@ -55,8 +55,9 @@ import {
 } from '@/components/ui/breadcrumb'
 import { Separator } from '@/components/ui/separator'
 import { cn } from '@/lib/utils'
-import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
+import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
 import AdminSidebar from './components/AdminSidebar.vue'
+import AdminSidebarTrigger from './components/AdminSidebarTrigger.vue'
 import AdminAppearanceTools from './components/AdminAppearanceTools.vue'
 
 const route = useRoute()

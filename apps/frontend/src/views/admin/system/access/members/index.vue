@@ -24,9 +24,7 @@
       </li>
     </ul>
     <div>
-      <Button as-child variant="outline"
-        ><RouterLink :to="{ name: 'admin-roles' }">查看角色列表</RouterLink></Button
-      >
+      <ElButton :tag="RouterLink" :to="{ name: 'admin-roles' }">查看角色列表</ElButton>
     </div>
   </section>
 </template>
@@ -34,7 +32,7 @@
 <script lang="ts" setup>
 import { RouterLink } from 'vue-router'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-import { Button } from '@/components/ui/button'
+import { ElButton } from 'element-plus'
 
 const members = [
   { name: '演示管理员', initials: 'AD', email: 'admin@example.com', role: '管理员' },

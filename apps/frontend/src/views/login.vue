@@ -28,7 +28,8 @@
 
             <Field>
               <FieldLabel for="login-email">邮箱</FieldLabel>
-              <SvInput
+              <ElInput
+                v-model="email"
                 id="login-email"
                 name="email"
                 type="email"
@@ -42,7 +43,8 @@
 
             <Field>
               <FieldLabel for="login-password">密码</FieldLabel>
-              <SvInput
+              <ElInput
+                v-model="password"
                 id="login-password"
                 name="password"
                 type="password"
@@ -53,7 +55,7 @@
             </Field>
 
             <Field>
-              <Button type="submit">登录</Button>
+              <ElButton native-type="submit" type="primary">登录</ElButton>
               <FieldDescription>
                 {{ showLoginNotice ? '登录服务尚未接入，暂时无法登录。你可以先预览管理端。' : '' }}
               </FieldDescription>
@@ -62,9 +64,7 @@
             <FieldSeparator>或先体验</FieldSeparator>
 
             <Field>
-              <Button as-child variant="outline">
-                <RouterLink :to="{ name: 'admin-dashboard' }">预览管理端</RouterLink>
-              </Button>
+              <ElButton :tag="RouterLink" :to="{ name: 'admin-dashboard' }">预览管理端</ElButton>
               <FieldDescription class="text-center">无需登录即可查看演示页面</FieldDescription>
             </Field>
           </FieldGroup>
@@ -85,7 +85,7 @@
 <script lang="ts" setup>
 import { shallowRef } from 'vue'
 import { RouterLink } from 'vue-router'
-import { Button } from '@/components/ui/button'
+import { ElButton, ElInput } from 'element-plus'
 import {
   Field,
   FieldDescription,
@@ -93,8 +93,9 @@ import {
   FieldLabel,
   FieldSeparator,
 } from '@/components/ui/field'
-import SvInput from '@/components/SvInput/SvInput.vue'
 
+const email = shallowRef('')
+const password = shallowRef('')
 const showLoginNotice = shallowRef(false)
 </script>
 

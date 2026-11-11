@@ -1,61 +1,58 @@
 <template>
-  <Dialog v-model:open="open" @update:open="handleOpenChange">
-    <DialogContent class="flex max-h-[85svh] flex-col sm:max-w-xl">
-      <DialogHeader class="shrink-0">
-        <DialogTitle>{{ title }}</DialogTitle>
-        <DialogDescription>请填写各数据项。</DialogDescription>
-      </DialogHeader>
-      <SvForm
-        ref="actionFormRef"
-        v-model:model="formData"
-        :rules="rules"
-        class="flex min-h-0 min-w-0 flex-col gap-4"
-        content-class="grid min-h-0 min-w-0 overflow-x-hidden overflow-y-auto gap-4 p-1 sm:grid-cols-2"
-      >
-        <SvFormItem prop="aInput" label="数据项甲">
-          <SvInput v-model="formData.aInput" clearable placeholder="请输入数据项甲" :maxlength="100" />
-        </SvFormItem>
-        <SvFormItem prop="bInput" label="数据项乙">
-          <SvInput v-model="formData.bInput" clearable placeholder="请输入数据项乙" :maxlength="100" />
-        </SvFormItem>
-        <SvFormItem prop="cInput" label="数据项丙">
-          <SvInput v-model="formData.cInput" clearable placeholder="请输入数据项丙" :maxlength="100" />
-        </SvFormItem>
-        <SvFormItem prop="dSelect" label="数据项丁">
-          <SvDictSelect v-model="formData.dSelect" :dict-list="dict_d_select" label-key="label" value-key="value" />
-        </SvFormItem>
-        <SvFormItem prop="eSelect" label="数据项戊">
-          <SvDictSelect v-model="formData.eSelect" :dict-list="dict_e_select" label-key="label" value-key="value" />
-        </SvFormItem>
-        <SvFormItem prop="fSelect" label="数据项己">
-          <SvDictSelect v-model="formData.fSelect" :dict-list="dict_f_select" label-key="label" value-key="value" />
-        </SvFormItem>
-        <SvFormItem prop="gSelect" label="数据项庚">
-          <SvDictSelect v-model="formData.gSelect" :dict-list="dict_g_select" label-key="label" value-key="value" />
-        </SvFormItem>
-      </SvForm>
-      <DialogFooter class="shrink-0">
-        <DialogClose as-child>
-          <Button type="button" variant="outline">取消</Button>
-        </DialogClose>
-        <Button type="button" @click="toConfirm">
-          {{ mode === 'add' ? '确认新增' : '保存修改' }}
-        </Button>
-      </DialogFooter>
-    </DialogContent>
-  </Dialog>
+  <ElDialog
+    v-model="open"
+    :title="title"
+    width="min(36rem, calc(100vw - 2rem))"
+    top="7vh"
+    append-to-body
+    destroy-on-close
+    @closed="resetForm"
+  >
+    <p class="mb-4 text-sm text-muted-foreground">请填写各数据项。</p>
+    <ElForm
+      ref="actionFormRef"
+      :model="formData"
+      :rules="rules"
+      label-position="top"
+      class="grid max-h-[60svh] min-w-0 overflow-x-hidden overflow-y-auto gap-x-4 p-1 sm:grid-cols-2"
+      @submit.prevent="toConfirm"
+    >
+      <ElFormItem prop="aInput" label="数据项甲">
+        <ElInput v-model="formData.aInput" clearable placeholder="请输入数据项甲" :maxlength="100" />
+      </ElFormItem>
+      <ElFormItem prop="bInput" label="数据项乙">
+        <ElInput v-model="formData.bInput" clearable placeholder="请输入数据项乙" :maxlength="100" />
+      </ElFormItem>
+      <ElFormItem prop="cInput" label="数据项丙">
+        <ElInput v-model="formData.cInput" clearable placeholder="请输入数据项丙" :maxlength="100" />
+      </ElFormItem>
+      <ElFormItem prop="dSelect" label="数据项丁">
+        <SvDictSelect v-model="formData.dSelect" :dict-list="dict_d_select" label-key="label" value-key="value" />
+      </ElFormItem>
+      <ElFormItem prop="eSelect" label="数据项戊">
+        <SvDictSelect v-model="formData.eSelect" :dict-list="dict_e_select" label-key="label" value-key="value" />
+      </ElFormItem>
+      <ElFormItem prop="fSelect" label="数据项己">
+        <SvDictSelect v-model="formData.fSelect" :dict-list="dict_f_select" label-key="label" value-key="value" />
+      </ElFormItem>
+      <ElFormItem prop="gSelect" label="数据项庚">
+        <SvDictSelect v-model="formData.gSelect" :dict-list="dict_g_select" label-key="label" value-key="value" />
+      </ElFormItem>
+    </ElForm>
+    <template #footer>
+      <ElButton @click="open = false">取消</ElButton>
+      <ElButton type="primary" @click="toConfirm">
+        {{ mode === 'add' ? '确认新增' : '保存修改' }}
+      </ElButton>
+    </template>
+  </ElDialog>
 </template>
 
 <script lang="ts" setup>
 import { inject, ref, useTemplateRef } from 'vue'
 import { cloneDeep } from 'es-toolkit'
+import { ElButton, ElDialog, ElForm, ElFormItem, ElInput, type FormRules } from 'element-plus'
 import SvDictSelect from '@/components/SvDictSelect/SvDictSelect.vue'
-import SvForm from '@/components/SvForm/SvForm.vue'
-import type { SvFormRules } from '@/components/SvForm/types'
-import SvFormItem from '@/components/SvForm/SvFormItem.vue'
-import SvInput from '@/components/SvInput/SvInput.vue'
-import { Button } from '@/components/ui/button'
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import type { DemoListItem } from '@/types/demo'
 
 defineProps<{ title: string; mode: 'add' | 'update' }>()
@@ -83,7 +80,7 @@ const formData = ref({ ...defaultFormData })
 const actionFormRef = useTemplateRef('actionFormRef')
 
 /** 表单校验规则。 */
-const rules: SvFormRules<DemoListItem> = {
+const rules: FormRules<DemoListItem> = {
   aInput: [{ required: true, message: '请输入数据项甲', trigger: ['blur', 'change'] }],
   bInput: [{ required: true, message: '请输入数据项乙', trigger: ['blur', 'change'] }],
   cInput: [{ required: true, message: '请输入数据项丙', trigger: ['blur', 'change'] }],
@@ -94,10 +91,9 @@ const rules: SvFormRules<DemoListItem> = {
 }
 
 /** 弹窗关闭时重置表单。 */
-function handleOpenChange(value: boolean) {
-  if (!value) {
-    actionFormRef.value?.resetFields()
-  }
+function resetForm() {
+  actionFormRef.value?.clearValidate()
+  formData.value = { ...defaultFormData }
 }
 
 /** 为新增或编辑操作填入独立的表单数据。 */

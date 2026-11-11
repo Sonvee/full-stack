@@ -21,16 +21,14 @@
       </li>
     </ul>
     <div>
-      <Button as-child variant="outline"
-        ><RouterLink :to="{ name: 'admin-members' }">查看成员列表</RouterLink></Button
-      >
+      <ElButton :tag="RouterLink" :to="{ name: 'admin-members' }">查看成员列表</ElButton>
     </div>
   </section>
 </template>
 
 <script lang="ts" setup>
 import { RouterLink } from 'vue-router'
-import { Button } from '@/components/ui/button'
+import { ElButton } from 'element-plus'
 
 const roles = [
   { name: '管理员', description: '负责系统配置与团队管理。', members: 1 },

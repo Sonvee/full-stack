@@ -14,16 +14,14 @@
       <p class="max-w-md text-sm leading-6 text-muted-foreground">
         这里是页面内容区。你可以替换上方的布局占位，逐步添加业务页面。
       </p>
-      <Button as-child variant="outline" class="mt-2">
-        <RouterLink :to="{ name: 'admin-guide' }">查看布局说明</RouterLink>
-      </Button>
+      <ElButton :tag="RouterLink" :to="{ name: 'admin-guide' }" class="mt-2">查看布局说明</ElButton>
     </div>
   </section>
 </template>
 
 <script lang="ts" setup>
 import { RouterLink } from 'vue-router'
-import { Button } from '@/components/ui/button'
+import { ElButton } from 'element-plus'
 </script>
 
 <style lang="scss" scoped></style>

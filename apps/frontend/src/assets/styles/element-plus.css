@@ -1,0 +1,15 @@
+@import 'element-plus/theme-chalk/dark/css-vars.css';
+
+/* 共用现有主题色；提高根节点选择器优先级，避免按需载入的基础变量覆盖。 */
+html:root {
+  --el-color-primary: var(--primary);
+  --el-color-primary-light-3: color-mix(in srgb, var(--primary) 70%, var(--el-bg-color));
+  --el-color-primary-light-5: color-mix(in srgb, var(--primary) 50%, var(--el-bg-color));
+  --el-color-primary-light-7: color-mix(in srgb, var(--primary) 30%, var(--el-bg-color));
+  --el-color-primary-light-8: color-mix(in srgb, var(--primary) 20%, var(--el-bg-color));
+  --el-color-primary-light-9: color-mix(in srgb, var(--primary) 10%, var(--el-bg-color));
+  --el-color-primary-dark-2: color-mix(in srgb, var(--primary) 80%, var(--foreground));
+  --el-font-family: var(--font-sans);
+  --el-border-radius-base: var(--radius-md);
+  --el-border-radius-small: var(--radius-sm);
+}

@@ -1,6 +1,6 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
-import 'vue-sonner/style.css'
+import 'dayjs/locale/zh-cn'
 
 import './assets/styles/main.css'
 import './assets/styles/custom.css'

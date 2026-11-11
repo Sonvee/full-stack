@@ -6,14 +6,14 @@
 
     <DropdownMenu>
       <DropdownMenuTrigger as-child>
-        <Button
-          variant="ghost"
-          size="icon-sm"
-          class="rounded-lg"
+        <ElButton
+          text
+          circle
+          size="small"
           :title="`主题色：${selectedColor.label}`"
         >
           <i class="sv-icon-palette" />
-        </Button>
+        </ElButton>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" class="min-w-36">
         <DropdownMenuGroup>
@@ -40,14 +40,14 @@
 
     <DropdownMenu>
       <DropdownMenuTrigger as-child>
-        <Button
-          variant="ghost"
-          size="icon-sm"
-          class="rounded-lg"
+        <ElButton
+          text
+          circle
+          size="small"
           :title="`显示模式：${selectedMode.label}`"
         >
           <i :class="selectedMode.icon" />
-        </Button>
+        </ElButton>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" class="min-w-36">
         <DropdownMenuGroup>
@@ -70,7 +70,7 @@
 </template>
 
 <script lang="ts" setup>
-import { Button } from '@/components/ui/button'
+import { ElButton } from 'element-plus'
 import {
   DropdownMenu,
   DropdownMenuContent,

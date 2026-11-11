@@ -1,100 +1,89 @@
 <template>
-  <DialogRoot v-model:open="isOpen">
-    <Button
-      variant="outline"
-      size="sm"
-      class="hidden w-42 justify-between gap-2 rounded-lg text-muted-foreground sm:flex"
-      @click="openSearch"
+  <ElButton
+    size="small"
+    class="hidden! w-42 sm:inline-flex! [&>span]:w-full [&>span]:justify-between [&>span]:gap-2"
+    @click="openSearch"
+  >
+    <span class="flex min-w-0 items-center gap-2">
+      <i class="sv-icon-magnify shrink-0" />
+      <span class="truncate">搜索页面</span>
+    </span>
+    <Kbd class="shrink-0">Ctrl + K</Kbd>
+  </ElButton>
+  <ElButton
+    text
+    circle
+    size="small"
+    class="sm:hidden!"
+    title="搜索页面"
+    @click="openSearch"
+  >
+    <i class="sv-icon-magnify" />
+  </ElButton>
+
+  <ElDialog
+    v-model="isOpen"
+    title="搜索页面"
+    width="min(36rem, calc(100vw - 2rem))"
+    top="12vh"
+    append-to-body
+    destroy-on-close
+  >
+    <InputGroup
+      class="h-12 rounded-none border-0 border-b shadow-none has-[[data-slot=input-group-control]:focus-visible]:ring-0"
     >
-      <span class="flex min-w-0 items-center gap-2">
-        <i class="sv-icon-magnify shrink-0" />
-        <span class="truncate">搜索页面</span>
-      </span>
-      <Kbd class="shrink-0">Ctrl + K</Kbd>
-    </Button>
-    <Button
-      variant="ghost"
-      size="icon-sm"
-      class="rounded-lg sm:hidden"
-      title="搜索页面"
-      @click="openSearch"
+      <InputGroupInput
+        v-model="query"
+        type="search"
+        autofocus
+        placeholder="搜索页面"
+        @keydown="handleSearchKeydown"
+      />
+      <InputGroupAddon class="pl-4">
+        <span class="sv-icon-magnify" />
+      </InputGroupAddon>
+    </InputGroup>
+
+    <div class="max-h-[min(60vh,24rem)] overflow-y-auto p-2">
+      <p class="px-2 py-1.5 text-xs font-medium text-muted-foreground">页面</p>
+      <div v-if="filteredPages.length">
+        <ElButton
+          v-for="(page, index) in filteredPages"
+          :key="page.name"
+          text
+          :bg="activeIndex === index"
+          class="ml-0! h-9! w-full [&>span]:w-full [&>span]:gap-2"
+          @mouseenter="activeIndex = index"
+          @click="navigateTo(page.name)"
+        >
+          <i :class="[page.icon, 'shrink-0 text-muted-foreground']" />
+          <span class="min-w-0 flex-1 truncate">{{ page.title }}</span>
+          <span class="hidden shrink-0 truncate text-xs text-muted-foreground sm:block">
+            {{ page.path }}
+          </span>
+        </ElButton>
+      </div>
+      <p v-else class="px-2 py-8 text-center text-sm text-muted-foreground">
+        没有找到匹配的页面
+      </p>
+    </div>
+
+    <div
+      class="flex items-center gap-4 border-t bg-muted/30 px-4 py-2 text-xs text-muted-foreground"
     >
-      <i class="sv-icon-magnify" />
-    </Button>
-
-    <DialogPortal>
-      <DialogOverlay class="fixed inset-0 z-50 bg-black/45 backdrop-blur-[1px]" />
-      <DialogContent
-        class="fixed left-1/2 top-[12vh] z-50 grid w-[calc(100vw-2rem)] max-w-xl -translate-x-1/2 gap-0 overflow-hidden rounded-xl border bg-popover p-0 text-popover-foreground shadow-2xl"
-      >
-        <DialogTitle class="sr-only">搜索页面</DialogTitle>
-        <DialogDescription class="sr-only">输入页面名称或路径来筛选页面。</DialogDescription>
-
-        <InputGroup
-          class="h-12 rounded-none border-0 border-b shadow-none has-[[data-slot=input-group-control]:focus-visible]:ring-0"
-        >
-          <InputGroupInput
-            v-model="query"
-            type="search"
-            autofocus
-            placeholder="搜索页面"
-            @keydown="handleSearchKeydown"
-          />
-          <InputGroupAddon class="pl-4">
-            <span class="sv-icon-magnify" />
-          </InputGroupAddon>
-        </InputGroup>
-
-        <div class="max-h-[min(60vh,24rem)] overflow-y-auto p-2">
-          <p class="px-2 py-1.5 text-xs font-medium text-muted-foreground">页面</p>
-          <div v-if="filteredPages.length">
-            <button
-              v-for="(page, index) in filteredPages"
-              :key="page.name"
-              type="button"
-              class="flex h-9 w-full items-center gap-2 rounded-md px-2 text-left text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground"
-              :class="{ 'bg-accent text-accent-foreground': activeIndex === index }"
-              @mouseenter="activeIndex = index"
-              @click="navigateTo(page.name)"
-            >
-              <i :class="[page.icon, 'shrink-0 text-muted-foreground']" />
-              <span class="min-w-0 flex-1 truncate">{{ page.title }}</span>
-              <span class="hidden shrink-0 truncate text-xs text-muted-foreground sm:block">
-                {{ page.path }}
-              </span>
-            </button>
-          </div>
-          <p v-else class="px-2 py-8 text-center text-sm text-muted-foreground">
-            没有找到匹配的页面
-          </p>
-        </div>
-
-        <div
-          class="flex items-center gap-4 border-t bg-muted/30 px-4 py-2 text-xs text-muted-foreground"
-        >
-          <span><Kbd>↑↓</Kbd> 选择</span>
-          <span><Kbd>↵</Kbd> 打开</span>
-          <span><Kbd>Esc</Kbd> 关闭</span>
-        </div>
-      </DialogContent>
-    </DialogPortal>
-  </DialogRoot>
+      <span><Kbd>↑↓</Kbd> 选择</span>
+      <span><Kbd>↵</Kbd> 打开</span>
+      <span><Kbd>Esc</Kbd> 关闭</span>
+    </div>
+  </ElDialog>
 </template>
 
 <script lang="ts" setup>
 import { computed, onBeforeUnmount, onMounted, shallowRef, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { Button } from '@/components/ui/button'
+import { ElButton, ElDialog } from 'element-plus'
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group'
 import { Kbd } from '@/components/ui/kbd'
-import {
-  DialogContent,
-  DialogDescription,
-  DialogOverlay,
-  DialogPortal,
-  DialogRoot,
-  DialogTitle,
-} from 'reka-ui'
 
 const router = useRouter()
 const isOpen = shallowRef(false)
@@ -136,7 +125,9 @@ function navigateTo(name: string) {
 }
 
 function handleSearchKeydown(event: KeyboardEvent) {
-  if (!filteredPages.value.length) return
+  if (!filteredPages.value.length) {
+    return
+  }
 
   if (event.key === 'ArrowDown') {
     event.preventDefault()
@@ -148,7 +139,9 @@ function handleSearchKeydown(event: KeyboardEvent) {
   } else if (event.key === 'Enter') {
     event.preventDefault()
     const page = filteredPages.value[activeIndex.value]
-    if (page) navigateTo(page.name)
+    if (page) {
+      navigateTo(page.name)
+    }
   }
 }
 
