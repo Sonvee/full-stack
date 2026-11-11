@@ -22,7 +22,7 @@
           <SvDictSelect v-model="formData.dSelect" :dict-list="dict_d_select" label-key="label" value-key="value" placeholder="全部" />
         </el-form-item>
         <el-form-item prop="eSelect" label="数据项戊">
-          <SvDictSelect v-model="formData.eSelect" :dict-list="dict_e_select" label-key="label" value-key="value" placeholder="全部" />
+          <SvDictSelect v-model="formData.eSelect" :dict-list="dict_e_select" label-key="label" value-key="value" placeholder="全部" multiple />
         </el-form-item>
         <el-form-item prop="fSelect" label="数据项己">
           <SvDictSelect v-model="formData.fSelect" :dict-list="dict_f_select" label-key="label" value-key="value" placeholder="全部" />
@@ -77,7 +77,7 @@ const defaultQueryParams = {
   bInput: '',
   cInput: '',
   dSelect: '',
-  eSelect: '',
+  eSelect: [],
   fSelect: '',
   gSelect: '',
   id: '',

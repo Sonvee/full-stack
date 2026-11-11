@@ -30,7 +30,7 @@
         <SvDictSelect v-model="formData.dSelect" :dict-list="dict_d_select" label-key="label" value-key="value" />
       </el-form-item>
       <el-form-item prop="eSelect" label="数据项戊">
-        <SvDictSelect v-model="formData.eSelect" :dict-list="dict_e_select" label-key="label" value-key="value" />
+        <SvDictSelect v-model="formData.eSelect" :dict-list="dict_e_select" label-key="label" value-key="value" multiple />
       </el-form-item>
       <el-form-item prop="fSelect" label="数据项己">
         <SvDictSelect v-model="formData.fSelect" :dict-list="dict_f_select" label-key="label" value-key="value" />
@@ -69,14 +69,14 @@ const defaultFormData = {
   bInput: '',
   cInput: '',
   dSelect: '选项甲',
-  eSelect: '选项甲',
+  eSelect: ['选项甲'],
   fSelect: '选项甲',
   gSelect: '选项甲',
   createdAt: ''
 }
 
 /** 表单数据。 */
-const formData = ref({ ...defaultFormData })
+const formData = ref(cloneDeep(defaultFormData))
 const actionFormRef = useTemplateRef('actionFormRef')
 
 /** 表单校验规则。 */
@@ -85,7 +85,7 @@ const rules: FormRules<DemoListItem> = {
   bInput: [{ required: true, message: '请输入数据项乙', trigger: ['blur', 'change'] }],
   cInput: [{ required: true, message: '请输入数据项丙', trigger: ['blur', 'change'] }],
   dSelect: [{ required: true, message: '请选择数据项丁', trigger: 'change' }],
-  eSelect: [{ required: true, message: '请选择数据项戊', trigger: 'change' }],
+  eSelect: [{ type: 'array', required: true, message: '请选择数据项戊', trigger: 'change' }],
   fSelect: [{ required: true, message: '请选择数据项己', trigger: 'change' }],
   gSelect: [{ required: true, message: '请选择数据项庚', trigger: 'change' }]
 }
@@ -93,7 +93,7 @@ const rules: FormRules<DemoListItem> = {
 /** 弹窗关闭时重置表单。 */
 function resetForm() {
   actionFormRef.value?.clearValidate()
-  formData.value = { ...defaultFormData }
+  formData.value = cloneDeep(defaultFormData)
 }
 
 /** 为新增或编辑操作填入独立的表单数据。 */

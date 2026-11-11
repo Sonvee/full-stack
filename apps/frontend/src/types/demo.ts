@@ -5,7 +5,7 @@ export interface DemoListItem {
   bInput: string
   cInput: string
   dSelect: string
-  eSelect: string
+  eSelect: string[]
   fSelect: string
   gSelect: string
   createdAt: string
@@ -18,7 +18,7 @@ export interface DemoQueryParams {
   bInput?: string
   cInput?: string
   dSelect?: string
-  eSelect?: string
+  eSelect?: string[]
   fSelect?: string
   gSelect?: string
   /** 按开始、结束顺序提交，格式为 YYYY-MM-DD。 */

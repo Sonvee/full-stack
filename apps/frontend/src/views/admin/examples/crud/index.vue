@@ -38,35 +38,44 @@
         @selection-change="handleSelectionChange"
         @sort-change="sortProp = $event.prop; sortOrder = $event.order"
       >
-        <el-table-column type="selection" :width="48" reserve-selection />
-        <el-table-column prop="id" label="数据编号" :min-width="120" />
-        <el-table-column prop="aInput" label="数据项甲" :min-width="120" sortable="custom" />
-        <el-table-column prop="bInput" label="数据项乙" :min-width="120" />
-        <el-table-column prop="cInput" label="数据项丙" :min-width="120" />
-        <el-table-column prop="dSelect" label="数据项丁" :min-width="100">
+        <el-table-column type="selection" :width="48" align="center" fixed="left" reserve-selection />
+        <el-table-column prop="id" label="数据编号" :min-width="120" show-overflow-tooltip />
+        <el-table-column prop="aInput" label="数据项甲" :min-width="120" sortable="custom" show-overflow-tooltip />
+        <el-table-column prop="bInput" label="数据项乙" :min-width="120" show-overflow-tooltip />
+        <el-table-column prop="cInput" label="数据项丙" :min-width="120" show-overflow-tooltip />
+        <el-table-column prop="dSelect" label="数据项丁" :min-width="100" align="center">
           <template #default="{ row }">
             <SvDictTag :dict-list="dict_d_select" :data="row.dSelect" label-key="label" value-key="value" />
           </template>
         </el-table-column>
-        <el-table-column prop="eSelect" label="数据项戊" :min-width="100">
+        <el-table-column prop="eSelect" label="数据项戊" :min-width="100" align="center">
           <template #default="{ row }">
-            <SvDictTag :dict-list="dict_e_select" :data="row.eSelect" label-key="label" value-key="value" />
+            <div class="flex flex-wrap justify-center gap-1">
+              <SvDictTag
+                v-for="item in row.eSelect"
+                :key="item"
+                :dict-list="dict_e_select"
+                :data="item"
+                label-key="label"
+                value-key="value"
+              />
+            </div>
           </template>
         </el-table-column>
-        <el-table-column prop="fSelect" label="数据项己" :min-width="100">
+        <el-table-column prop="fSelect" label="数据项己" :min-width="100" align="center">
           <template #default="{ row }">
             <SvDictTag :dict-list="dict_f_select" :data="row.fSelect" label-key="label" value-key="value" />
           </template>
         </el-table-column>
-        <el-table-column prop="gSelect" label="数据项庚" :min-width="100">
+        <el-table-column prop="gSelect" label="数据项庚" :min-width="100" align="center">
           <template #default="{ row }">
             <SvDictTag :dict-list="dict_g_select" :data="row.gSelect" label-key="label" value-key="value" />
           </template>
         </el-table-column>
-        <el-table-column prop="createdAt" label="创建日期" :min-width="200" sortable="custom" />
-        <el-table-column column-key="actions" label="操作" :width="132">
+        <el-table-column prop="createdAt" label="创建日期" :min-width="200" align="center" sortable="custom" show-overflow-tooltip />
+        <el-table-column label="操作" :width="132" align="center" fixed="right">
           <template #default="{ row }">
-            <div class="flex items-center gap-1 [&>.el-button]:ml-0!">
+            <div class="flex items-center justify-center gap-1 [&>.el-button]:ml-0!">
               <el-button type="primary" link size="small" @click="toUpdate(row as DemoListItem)">修改</el-button>
               <el-button type="danger" link size="small" @click="toDelete(row as DemoListItem)">删除</el-button>
             </div>
@@ -122,7 +131,7 @@ const queryParams = ref<DemoQueryParams>({
   bInput: '',
   cInput: '',
   dSelect: '',
-  eSelect: '',
+  eSelect: [],
   fSelect: '',
   gSelect: '',
   createdRange: null,
