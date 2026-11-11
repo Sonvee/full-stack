@@ -14,7 +14,7 @@
           标题用于建立页面结构，正文用于传递信息。适当的留白与稳定的行距，可以让不同宽度下的阅读体验保持一致。
         </p>
       </div>
-      <Separator />
+      <el-divider class="my-0!" />
       <div class="flex flex-col gap-3">
         <h3 class="font-medium">内容组织建议</h3>
         <ul class="flex list-disc flex-col gap-2 pl-5 text-sm leading-7 text-muted-foreground">
@@ -35,8 +35,7 @@
 
 <script lang="ts" setup>
 import { RouterLink } from 'vue-router'
-import { ElButton } from 'element-plus'
-import { Separator } from '@/components/ui/separator'
+import { ElButton, ElDivider } from 'element-plus'
 </script>
 
 <style lang="scss" scoped></style>

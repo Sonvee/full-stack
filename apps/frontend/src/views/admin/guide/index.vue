@@ -6,7 +6,7 @@
         管理端参考 shadcn-vue sidebar-08，采用侧栏导航与内嵌内容区布局。
       </p>
     </div>
-    <Separator />
+    <el-divider class="my-0!" />
     <div class="flex flex-col gap-3">
       <h2 class="font-medium">侧栏与导航</h2>
       <p class="text-sm leading-7 text-muted-foreground">
@@ -35,8 +35,7 @@
 
 <script lang="ts" setup>
 import { RouterLink } from 'vue-router'
-import { ElButton } from 'element-plus'
-import { Separator } from '@/components/ui/separator'
+import { ElButton, ElDivider } from 'element-plus'
 </script>
 
 <style lang="scss" scoped></style>

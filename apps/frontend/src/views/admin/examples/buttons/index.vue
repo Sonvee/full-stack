@@ -13,7 +13,7 @@
         <el-button text @click="count++">轻量按钮</el-button>
         <el-button disabled>禁用按钮</el-button>
       </div>
-      <Separator />
+      <el-divider class="my-0!" />
       <div class="flex flex-wrap items-center justify-between gap-4">
         <p class="text-sm text-muted-foreground">已点击 {{ count }} 次</p>
         <el-button :disabled="count === 0" @click="count = 0"
@@ -37,8 +37,7 @@
 <script lang="ts" setup>
 import { shallowRef } from 'vue'
 import { RouterLink } from 'vue-router'
-import { ElButton } from 'element-plus'
-import { Separator } from '@/components/ui/separator'
+import { ElButton, ElDivider } from 'element-plus'
 
 const count = shallowRef(0)
 </script>

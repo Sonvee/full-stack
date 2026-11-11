@@ -27,20 +27,17 @@
     append-to-body
     destroy-on-close
   >
-    <InputGroup
-      class="h-12 rounded-none border-0 border-b shadow-none has-[[data-slot=input-group-control]:focus-visible]:ring-0"
+    <el-input
+      v-model="query"
+      type="search"
+      autofocus
+      placeholder="搜索页面"
+      @keydown="handleSearchKeydown"
     >
-      <InputGroupInput
-        v-model="query"
-        type="search"
-        autofocus
-        placeholder="搜索页面"
-        @keydown="handleSearchKeydown"
-      />
-      <InputGroupAddon class="pl-4">
-        <span class="sv-icon-magnify" />
-      </InputGroupAddon>
-    </InputGroup>
+      <template #prefix>
+        <i class="sv-icon-magnify" />
+      </template>
+    </el-input>
 
     <div class="max-h-[min(60vh,24rem)] overflow-y-auto p-2">
       <p class="px-2 py-1.5 text-xs font-medium text-muted-foreground">页面</p>
@@ -79,8 +76,7 @@
 <script lang="ts" setup>
 import { computed, onBeforeUnmount, onMounted, shallowRef, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { ElButton, ElDialog } from 'element-plus'
-import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group'
+import { ElButton, ElDialog, ElInput } from 'element-plus'
 import { Kbd } from '@/components/ui/kbd'
 
 const router = useRouter()
@@ -122,8 +118,8 @@ function navigateTo(name: string) {
   void router.push({ name })
 }
 
-function handleSearchKeydown(event: KeyboardEvent) {
-  if (!filteredPages.value.length) {
+function handleSearchKeydown(event: Event) {
+  if (!(event instanceof KeyboardEvent) || !filteredPages.value.length) {
     return
   }
 
