@@ -1,14 +1,14 @@
 /** CRUD 示例列表中的单条数据。 */
 export interface DemoListItem {
-  id: string
-  aInput: string
-  bInput: string
-  cInput: string
-  dSelect: string
-  eSelect: string[]
-  fSelect: string
-  gSelect: string
-  createdAt: string
+  id?: string
+  aInput?: string
+  bInput?: string
+  cInput?: string
+  dSelect?: string
+  eSelect?: string[]
+  fSelect?: string
+  gSelect?: string
+  createdAt?: string
 }
 
 /** CRUD 示例列表查询参数，筛选条件均可省略。 */
@@ -27,6 +27,11 @@ export interface DemoQueryParams {
   pageSize: number
 }
 
+/** CRUD 示例删除参数。 */
+export interface DemoDeleteParams {
+  ids: string[]
+}
+
 /** CRUD 示例列表接口响应。 */
 export interface DemoApiResponse {
   code: number
@@ -40,4 +45,3 @@ export interface DemoDictOption {
   label: string
   value: string
 }
-

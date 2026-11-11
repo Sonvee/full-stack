@@ -70,7 +70,7 @@
     </div>
 
     <!-- 表格分页栏 -->
-    <footer class="flex shrink-0 flex-wrap items-center justify-between gap-3">
+    <footer class="flex shrink-0 flex-wrap items-center justify-between">
       <p class="text-sm text-muted-foreground">已选择 {{ selectedList.length }} 条</p>
       <div class="max-w-full overflow-x-auto">
         <SvPagination
@@ -99,7 +99,7 @@
 import { onMounted, provide, ref, shallowRef, useTemplateRef } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { apiDemoAdd, apiDemoDelete, apiDemoExport, apiDemoImport, apiDemoList, apiDemoUpdate } from '@/api/demo'
-import type { DemoListItem, DemoQueryParams } from '@/types/demo'
+import type { DemoDeleteParams, DemoListItem, DemoQueryParams } from '@/types/demo'
 import SvDictTag from '@/components/SvDictTag/SvDictTag.vue'
 import SvPagination from '@/components/SvPagination/SvPagination.vue'
 import ActionDialog from './components/ActionDialog.vue'
@@ -224,7 +224,10 @@ async function toConfirm(data: DemoListItem) {
 
 /** 打开删除确认弹窗，支持单行和已选数据。 */
 async function toDelete(row?: DemoListItem) {
-  const count = row ? 1 : selectedList.value.length
+  const data: DemoDeleteParams = {
+    ids: (row ? [row] : selectedList.value).map(item => item.id).filter(id => id !== undefined)
+  }
+  const count = data.ids.length
   try {
     await ElMessageBox.confirm('此模板只打印删除请求，不会修改示例列表。', `确认删除 ${count} 条数据？`, {
       confirmButtonText: '确认删除',
@@ -235,7 +238,7 @@ async function toDelete(row?: DemoListItem) {
   } catch {
     return
   }
-  await apiDemoDelete()
+  await apiDemoDelete(data)
   ElMessage.success(`删除请求已提交，共 ${count} 条数据`)
   await toQuery()
 }
