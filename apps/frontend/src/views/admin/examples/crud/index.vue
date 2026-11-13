@@ -1,7 +1,8 @@
 <template>
-  <section class="flex min-h-0 flex-1 flex-col gap-4">
+  <section ref="containerRef" class="flex min-h-0 flex-1 flex-col gap-4">
     <header class="flex shrink-0 items-center justify-between gap-2">
       <h1 class="text-xl font-semibold">CRUD 模板</h1>
+      <SvFullscreen v-model:full="systemSettingStore.full" :container="containerRef" f11/>
     </header>
 
     <!-- 条件筛选栏 -->
@@ -99,8 +100,10 @@
 import { onMounted, provide, ref, shallowRef, useTemplateRef } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { apiDemoAdd, apiDemoDelete, apiDemoExport, apiDemoImport, apiDemoList, apiDemoUpdate } from '@/api/demo'
+import { useSystemSettingStore } from '@/stores/system-setting'
 import type { DemoDeleteParams, DemoListItem, DemoQueryParams } from '@/types/demo'
 import SvDictTag from '@/components/SvDictTag/SvDictTag.vue'
+import SvFullscreen from '@/components/SvFullscreen/SvFullscreen.vue'
 import SvPagination from '@/components/SvPagination/SvPagination.vue'
 import ActionDialog from './components/ActionDialog.vue'
 import FilterForm from './components/FilterForm.vue'
@@ -136,6 +139,8 @@ const actionLoading = shallowRef(false)
 const actionTitle = shallowRef('新增数据')
 const actionMode = shallowRef<'add' | 'update'>('add')
 const actionDialogRef = useTemplateRef('actionDialogRef')
+const containerRef = useTemplateRef('containerRef')
+const systemSettingStore = useSystemSettingStore()
 
 onMounted(() => {
   /** 页面加载时查询列表数据。 */
