@@ -13,3 +13,8 @@ html:root {
   --el-border-radius-base: var(--radius-md);
   --el-border-radius-small: var(--radius-sm);
 }
+
+/* 弹窗遮罩层统一使用毛玻璃效果。 */
+.el-overlay {
+  backdrop-filter: blur(4px);
+}
