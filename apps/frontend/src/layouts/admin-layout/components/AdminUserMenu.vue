@@ -27,7 +27,7 @@
               <i class="sv-icon-home mr-2" />
               返回首页
             </el-dropdown-item>
-            <el-dropdown-item divided @click="setOpenMobile(false); router.push({ name: 'login' })">
+            <el-dropdown-item divided @click="setOpenMobile(false); router.push({ name: 'admin-login' })">
               <span class="text-destructive"><i class="sv-icon-logout mr-2" />退出登录</span>
             </el-dropdown-item>
           </el-dropdown-menu>

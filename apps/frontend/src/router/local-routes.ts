@@ -8,9 +8,9 @@ export const localRoutes: RouteRecordRaw[] = [
     component: () => import('../views/index.vue'),
   },
   {
-    path: '/login',
-    name: 'login',
-    component: () => import('../views/login.vue'),
+    path: '/admin/login',
+    name: 'admin-login',
+    component: () => import('../views/admin/login.vue'),
     meta: { title: '登录' },
   },
   {
