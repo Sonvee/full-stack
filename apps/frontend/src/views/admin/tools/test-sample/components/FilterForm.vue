@@ -117,14 +117,14 @@ const emit = defineEmits<{
   reset: []
 }>()
 
-/** 默认筛选条件，pageNum 与 pageSize 由父页面管理。 */
+/** 默认筛选条件；单选和开关未筛选时使用 undefined，pageNum 与 pageSize 由父页面管理。 */
 const defaultFilters: Omit<TestSampleQueryParams, 'pageNum' | 'pageSize'> = {
   name: '',
   description: '',
   icon: '',
   numberRange: [0, 999],
-  enabled: '',
-  singleSelect: '',
+  enabled: undefined,
+  singleSelect: undefined,
   multiSelect: [],
   operator: '',
   createdRange: null,

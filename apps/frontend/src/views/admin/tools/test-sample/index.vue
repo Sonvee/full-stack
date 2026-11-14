@@ -25,6 +25,7 @@
     <div class="min-h-0 flex-1 overflow-hidden rounded-lg border">
       <el-table ref="tableRef" v-loading="loading" :data="dataList" row-key="id" height="100%" @selection-change="handleSelectionChange">
         <el-table-column type="selection" :width="48" align="center" fixed="left" />
+        <el-table-column prop="index" label="排序" :width="90" align="center" />
         <el-table-column prop="name" label="测试名称" :min-width="160" show-overflow-tooltip />
         <el-table-column prop="description" label="测试描述" :min-width="200" show-overflow-tooltip />
         <el-table-column prop="icon" label="测试图标" :min-width="180" show-overflow-tooltip>
@@ -163,7 +164,7 @@ async function toQuery() {
     const res = await apiTestSampleList(queryParams.value)
     if (sequence !== querySequence) return
     dataList.value = res.data
-    total.value = res.total
+    total.value = res.total ?? 0
     tableRef.value?.clearSelection()
   } catch {
     if (sequence !== querySequence) return
@@ -203,7 +204,7 @@ async function toConfirm(data: TestSampleListItem) {
   actionLoading.value = true
   try {
     if (editingId.value) {
-      await apiTestSampleUpdate(editingId.value, data)
+      await apiTestSampleUpdate({ ...data, id: editingId.value })
       ElMessage.success('修改成功')
     } else {
       await apiTestSampleAdd(data)

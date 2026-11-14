@@ -3,8 +3,6 @@ export interface ApiResponse<T> {
   code: number
   message: string
   data: T
-}
-
-export interface PageResponse<T> extends ApiResponse<T[]> {
-  total: number
+  /** 分页查询时返回记录总数。 */
+  total?: number
 }

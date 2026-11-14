@@ -1,11 +1,31 @@
 import Fastify from 'fastify'
+import type { FastifyError } from 'fastify'
 import fastifyRedis from '@fastify/redis'
 import { env } from './config/env.js'
 import { db, pool } from './db/client.js'
 import routes from './routes/index.js'
 
+/** 创建后端服务，统一注册基础设施、路由及 HTTP 错误响应。 */
 export function buildApp() {
   const app = Fastify({ logger: true })
+
+  // 响应体 code 与实际 HTTP 状态码保持一致，未明确分类的异常使用 500。
+  app.setErrorHandler<FastifyError>((error, request, reply) => {
+    const code = error.statusCode && error.statusCode >= 400 && error.statusCode <= 599
+      ? error.statusCode
+      : 500
+    if (code >= 500) {
+      request.log.error({ err: error }, '请求处理失败')
+    }
+    return reply.code(code).send({
+      code,
+      message: code >= 500 ? '服务暂时不可用，请稍后重试' : error.message,
+    })
+  })
+
+  app.setNotFoundHandler((_request, reply) => {
+    return reply.code(404).send({ code: 404, message: '接口不存在' })
+  })
 
   app.decorate('db', db)
   app.addHook('onReady', async () => {

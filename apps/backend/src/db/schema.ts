@@ -1,6 +1,7 @@
 import {
   boolean,
   doublePrecision,
+  integer,
   pgTable,
   text,
   timestamp,
@@ -15,6 +16,7 @@ export const testSamples = pgTable('test_samples', {
   description: text('description').notNull().default(''),
   icon: varchar('icon', { length: 100 }).notNull().default(''),
   number: doublePrecision('number').notNull().default(0),
+  index: integer('index').notNull().default(0),
   enabled: boolean('enabled').notNull().default(false),
   singleSelect: varchar('single_select', { length: 50 }).notNull(),
   multiSelect: text('multi_select').array().notNull().default([]),

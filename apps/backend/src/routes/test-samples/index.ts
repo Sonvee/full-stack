@@ -1,21 +1,21 @@
-import { and, arrayContains, between, desc, eq, ilike, inArray } from 'drizzle-orm'
-import type { FastifyError, FastifyPluginAsync } from 'fastify'
+import { and, arrayContains, asc, between, desc, eq, ilike, inArray } from 'drizzle-orm'
+import type { FastifyPluginAsync } from 'fastify'
 import { testSamples } from '../../db/schema.js'
 import type {
   TestSample,
   TestSampleDeleteParams,
-  TestSampleIdParams,
   TestSampleInput,
   TestSampleQueryParams,
+  TestSampleUpdateParams,
 } from '../../types/test-sample.js'
 import {
   testSampleDeleteResponseSchema,
   testSampleDeleteSchema,
-  testSampleIdSchema,
   testSampleInputSchema,
   testSampleListResponseSchema,
   testSampleQuerySchema,
   testSampleResponseSchema,
+  testSampleUpdateSchema,
 } from './schemas.js'
 
 /** 数据库日期统一转换为 Unix 毫秒时间戳，供接口返回。 */
@@ -28,19 +28,8 @@ function serializeTestSample(data: TestSample) {
 }
 
 const testSampleRoutes: FastifyPluginAsync = async (app) => {
-  app.setErrorHandler<FastifyError>((error, request, reply) => {
-    const code = error.statusCode ?? 500
-    if (code >= 500) {
-      request.log.error({ err: error }, '测试样例接口失败')
-    }
-    return reply.code(code).send({
-      code,
-      message: code >= 500 ? '服务暂时不可用，请稍后重试' : error.message,
-    })
-  })
-
   app.get<{ Querystring: TestSampleQueryParams }>(
-    '/',
+    '/list',
     {
       schema: {
         querystring: testSampleQuerySchema,
@@ -49,6 +38,10 @@ const testSampleRoutes: FastifyPluginAsync = async (app) => {
     },
     async (request, reply) => {
       const query = request.query
+      // 全量查询忽略页码，普通分页仍限制有效页码范围。
+      if (query.pageSize !== -1 && (query.pageNum < 1 || query.pageNum > 1000000)) {
+        return reply.code(400).send({ code: 400, message: '页码必须在 1 到 1000000 之间' })
+      }
       if (
         query.numberRange &&
         query.numberRange[0] > query.numberRange[1]
@@ -84,20 +77,22 @@ const testSampleRoutes: FastifyPluginAsync = async (app) => {
           : undefined,
       )
 
-      const data = await app.db
+      const listQuery = app.db
         .select()
         .from(testSamples)
         .where(filters)
-        .orderBy(desc(testSamples.createdAt), desc(testSamples.id))
-        .limit(query.pageSize)
-        .offset((query.pageNum - 1) * query.pageSize)
+        .orderBy(asc(testSamples.index), desc(testSamples.createdAt), desc(testSamples.id))
+      if (query.pageSize !== -1) {
+        listQuery.limit(query.pageSize).offset((query.pageNum - 1) * query.pageSize)
+      }
+      const data = await listQuery
       const total = await app.db.$count(testSamples, filters)
       return { code: 200, message: '查询成功', data: data.map(serializeTestSample), total }
     },
   )
 
   app.post<{ Body: TestSampleInput }>(
-    '/',
+    '/add',
     {
       schema: { body: testSampleInputSchema, response: { 201: testSampleResponseSchema } },
     },
@@ -107,20 +102,20 @@ const testSampleRoutes: FastifyPluginAsync = async (app) => {
     },
   )
 
-  app.put<{ Params: TestSampleIdParams; Body: TestSampleInput }>(
-    '/:id',
+  app.post<{ Body: TestSampleUpdateParams }>(
+    '/update',
     {
       schema: {
-        params: testSampleIdSchema,
-        body: testSampleInputSchema,
+        body: testSampleUpdateSchema,
         response: { 200: testSampleResponseSchema },
       },
     },
     async (request, reply) => {
+      const { id, ...input } = request.body
       const [data] = await app.db
         .update(testSamples)
-        .set({ ...request.body, updatedAt: new Date() })
-        .where(eq(testSamples.id, request.params.id))
+        .set({ ...input, updatedAt: new Date() })
+        .where(eq(testSamples.id, id))
         .returning()
       if (!data) {
         return reply.code(404).send({ code: 404, message: '测试样例不存在或已被删除' })
@@ -129,8 +124,8 @@ const testSampleRoutes: FastifyPluginAsync = async (app) => {
     },
   )
 
-  app.delete<{ Body: TestSampleDeleteParams }>(
-    '/',
+  app.post<{ Body: TestSampleDeleteParams }>(
+    '/delete',
     {
       schema: { body: testSampleDeleteSchema, response: { 200: testSampleDeleteResponseSchema } },
     },

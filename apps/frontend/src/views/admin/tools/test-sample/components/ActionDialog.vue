@@ -41,6 +41,16 @@
       <el-form-item prop="number" label="测试数字">
         <el-input-number v-model="formData.number" controls-position="right" class="w-full!" />
       </el-form-item>
+      <el-form-item prop="index" label="排序">
+        <el-input-number
+          v-model="formData.index"
+          :precision="0"
+          :min="-2147483648"
+          :max="2147483647"
+          controls-position="right"
+          class="w-full!"
+        />
+      </el-form-item>
       <el-form-item prop="enabled" label="测试开关">
         <el-switch v-model="formData.enabled" active-text="开启" inactive-text="关闭" />
       </el-form-item>
@@ -103,6 +113,7 @@ const defaultFormData: TestSampleListItem = {
   description: '',
   icon: 'sv-icon-tool',
   number: 0,
+  index: 0,
   enabled: false,
   singleSelect: '选项甲',
   multiSelect: [],
@@ -123,6 +134,9 @@ const rules: FormRules<TestSampleListItem> = {
   number: [
     { type: 'number', required: true, message: '请输入有效的数字', trigger: ['blur', 'change'] },
   ],
+  index: [
+    { type: 'integer', required: true, message: '请输入有效的排序整数', trigger: ['blur', 'change'] },
+  ],
   singleSelect: [{ required: true, message: '请选择测试单选', trigger: 'change' }],
 }
 
@@ -134,6 +148,7 @@ async function initForm(row?: TestSampleListItem) {
         description: row.description,
         icon: row.icon,
         number: row.number,
+        index: row.index,
         enabled: row.enabled,
         singleSelect: row.singleSelect,
         multiSelect: [...row.multiSelect],

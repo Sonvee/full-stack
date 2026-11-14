@@ -1,0 +1,1 @@
+ALTER TABLE "test_samples" ADD COLUMN "index" integer DEFAULT 0 NOT NULL;

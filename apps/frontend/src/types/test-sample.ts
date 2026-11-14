@@ -5,6 +5,8 @@ export interface TestSampleListItem {
   description: string
   icon: string
   number: number
+  /** 排序值，数值越小越靠前。 */
+  index: number
   enabled: boolean
   singleSelect: string
   multiSelect: string[]
@@ -22,7 +24,7 @@ export interface TestSampleQueryParams {
   description?: string
   icon?: string
   numberRange?: [number, number]
-  enabled?: boolean | ''
+  enabled?: boolean
   singleSelect?: string
   multiSelect?: string[]
   operator?: string
@@ -31,6 +33,7 @@ export interface TestSampleQueryParams {
   /** Unix 毫秒时间戳范围。 */
   updatedRange?: [number, number] | null
   pageNum: number
+  /** 每页条数，-1 表示忽略 pageNum 并查询全部匹配数据。 */
   pageSize: number
 }
 

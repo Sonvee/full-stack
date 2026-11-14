@@ -2,7 +2,7 @@ import type { testSamples } from '../db/schema.js'
 
 export type TestSample = typeof testSamples.$inferSelect
 
-/** 编号和审计时间由服务端生成，客户端只提交可编辑字段。 */
+/** 测试样例的可编辑字段，不包含编号和审计时间。 */
 export type TestSampleInput = Omit<TestSample, 'id' | 'createdAt' | 'updatedAt'>
 
 export interface TestSampleQueryParams {
@@ -21,6 +21,7 @@ export interface TestSampleQueryParams {
   /** Unix 毫秒时间戳范围，按开始、结束排列，包含两端边界。 */
   updatedRange?: [number, number]
   pageNum: number
+  /** 每页条数，-1 表示忽略 pageNum 并查询全部匹配数据。 */
   pageSize: number
 }
 
@@ -28,6 +29,7 @@ export interface TestSampleDeleteParams {
   ids: string[]
 }
 
-export interface TestSampleIdParams {
+/** 修改测试样例时，在请求体中提交编号和可编辑字段。 */
+export interface TestSampleUpdateParams extends TestSampleInput {
   id: string
 }

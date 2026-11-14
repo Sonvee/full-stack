@@ -28,6 +28,7 @@ const editableProperties = {
   description: { type: 'string', maxLength: 2000 },
   icon: { type: 'string', maxLength: 100 },
   number: { type: 'number' },
+  index: { type: 'integer', minimum: -2147483648, maximum: 2147483647, description: '排序，数值越小越靠前' },
   enabled: { type: 'boolean' },
   singleSelect: singleSelectSchema,
   multiSelect: multiSelectSchema,
@@ -60,15 +61,23 @@ export const testSampleQuerySchema = {
     operator: { type: 'string', maxLength: 100 },
     createdRange: timestampRangeSchema,
     updatedRange: timestampRangeSchema,
-    pageNum: { type: 'integer', minimum: 1, maximum: 1000000, default: 1 },
-    pageSize: { type: 'integer', minimum: 1, maximum: 100, default: 10 },
+    pageNum: { type: 'integer', default: 1 },
+    pageSize: {
+      type: 'integer',
+      anyOf: [{ const: -1 }, { minimum: 1, maximum: 100 }],
+      default: 10,
+      description: '每页条数，-1 表示忽略页码并查询全部匹配数据',
+    },
   },
 }
 
-export const testSampleIdSchema = {
-  type: 'object',
-  required: ['id'],
-  properties: { id: { type: 'string', format: 'uuid' } },
+export const testSampleUpdateSchema = {
+  ...testSampleInputSchema,
+  required: ['id', ...testSampleInputSchema.required],
+  properties: {
+    id: { type: 'string', format: 'uuid' },
+    ...editableProperties,
+  },
 }
 
 export const testSampleDeleteSchema = {
