@@ -2,11 +2,16 @@ import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
 import utc from 'dayjs/plugin/utc'
 import timezone from 'dayjs/plugin/timezone'
-import { dateTimeConfig } from '@/config/date-time'
 
 dayjs.extend(customParseFormat)
 dayjs.extend(utc)
 dayjs.extend(timezone)
+
+/** 前端统一的时间显示格式与时区；接口始终传输 Unix 毫秒时间戳。 */
+export const dateTimeConfig = {
+  format: 'YYYY-MM-DD HH:mm:ss',
+  timezone: 'Asia/Shanghai',
+}
 
 /** 将 Unix 毫秒时间戳转换为配置时区的日期，默认使用当前时间。 */
 export function getDateTime(value = Date.now()) {

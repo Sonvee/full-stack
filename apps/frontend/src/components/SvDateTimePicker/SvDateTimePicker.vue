@@ -16,8 +16,7 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 import { ElDatePicker } from 'element-plus'
-import { dateTimeConfig } from '@/config/date-time'
-import { formatDateTime, getDateTime, parseDateTime } from '@/utils/date-time'
+import { dateTimeConfig, formatDateTime, getDateTime, parseDateTime } from '@/utils/date-time'
 
 /** 按开始、结束顺序返回 Unix 毫秒时间戳，清空时为 null。 */
 const model = defineModel<[number, number] | null>({ default: null })
@@ -59,8 +58,8 @@ const shortcuts = [
 function getShortcutRange(days: number) {
   const today = getDateTime()
   return [
-    today.subtract(days - 1, 'day').startOf('day').format('YYYY-MM-DD HH:mm:ss'),
-    today.endOf('day').format('YYYY-MM-DD HH:mm:ss'),
+    today.subtract(days - 1, 'day').startOf('day').format(dateTimeConfig.format),
+    today.endOf('day').format(dateTimeConfig.format),
   ]
 }
 </script>
