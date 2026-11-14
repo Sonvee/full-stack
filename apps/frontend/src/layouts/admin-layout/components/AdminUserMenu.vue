@@ -19,11 +19,7 @@
                 <span class="truncate text-xs font-normal text-muted-foreground">admin</span>
               </span>
             </li>
-            <el-dropdown-item divided @click="setOpenMobile(false); router.push({ name: 'admin-guide' })">
-              <i class="sv-icon-informationoutline mr-2" />
-              布局说明
-            </el-dropdown-item>
-            <el-dropdown-item @click="router.push({ name: 'home' })">
+            <el-dropdown-item divided @click="router.push({ name: 'home' })">
               <i class="sv-icon-home mr-2" />
               返回首页
             </el-dropdown-item>

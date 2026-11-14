@@ -6,9 +6,7 @@
         <AdminSidebarTrigger class="-ml-1" />
         <el-divider direction="vertical" class="ml-0! h-4!" />
         <el-breadcrumb class="flex min-w-0 overflow-hidden whitespace-nowrap">
-          <el-breadcrumb-item :to="{ name: 'admin-dashboard' }" class="hidden! shrink-0 md:inline-flex!">
-            管理端
-          </el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ name: 'admin-dashboard' }" class="hidden! shrink-0 md:inline-flex!"> 管理端 </el-breadcrumb-item>
           <el-breadcrumb-item
             v-for="(item, index) in breadcrumbs"
             :key="item.path"
@@ -20,14 +18,7 @@
         </el-breadcrumb>
         <AdminAppearanceTools />
       </header>
-      <div
-        :class="
-          cn(
-            'flex min-w-0 flex-1 flex-col gap-4 p-4 pt-0',
-            fixedHeight && 'min-h-0 overflow-hidden',
-          )
-        "
-      >
+      <div :class="cn('flex min-w-0 flex-1 flex-col gap-4 p-4 pt-0', fixedHeight && 'min-h-0 overflow-hidden')">
         <RouterView />
       </div>
     </SidebarInset>
@@ -45,9 +36,7 @@ import AdminAppearanceTools from './components/AdminAppearanceTools.vue'
 
 const route = useRoute()
 const fixedHeight = computed(() => route.meta.fixedHeight === true)
-const breadcrumbs = computed(() =>
-  route.matched.filter((record) => typeof record.meta.title === 'string'),
-)
+const breadcrumbs = computed(() => route.matched.filter((record) => typeof record.meta.title === 'string'))
 </script>
 
 <style lang="scss" scoped></style>
