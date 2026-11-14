@@ -75,7 +75,7 @@ const defaultFormData = {
 }
 
 /** 表单数据。 */
-const formData = ref(cloneDeep(defaultFormData))
+const formData = ref<DemoListItem>(cloneDeep(defaultFormData))
 const actionFormRef = useTemplateRef('actionFormRef')
 
 /** 表单校验规则。 */

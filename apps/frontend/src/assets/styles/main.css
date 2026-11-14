@@ -1,6 +1,8 @@
 @import 'tailwindcss';
 @import "tw-animate-css";
+@import './nprogress.css';
 @import './element-plus.css';
+@import '../iconfont/iconfont.css';
 
 @custom-variant dark (&:is(.dark *));
 
