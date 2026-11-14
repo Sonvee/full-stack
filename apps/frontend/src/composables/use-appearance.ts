@@ -20,9 +20,9 @@ export const appearanceModes = [
 export const useAppearance = createSharedComposable(() => {
   const colorMode = useColorMode({
     initialValue: 'auto',
-    storageKey: 'full-stack-color-mode',
+    storageKey: 'color-mode',
   })
-  const themeColor = useStorage('full-stack-theme-color', 'blue')
+  const themeColor = useStorage('theme-color', 'blue')
   const selectedColor = computed(
     () => themeColors.find((color) => color.value === themeColor.value) ?? themeColors[0],
   )
