@@ -21,11 +21,11 @@ const httpCodeMap: Record<number, string> = {
 const client = axios.create({
   baseURL: '/api',
   timeout: 60000,
-  paramsSerializer: { indexes: null }, // 数组使用重复参数名，与 Fastify 的 querystring 解析保持一致。
-  withCredentials: true, // 跨域请求是否需要携带 cookie
-  headers: {
-    'Content-Type': 'application/json;charset=utf-8'
-  }
+  paramsSerializer: { indexes: null } // 数组使用重复参数名，与 Fastify 的 querystring 解析保持一致。
+  // withCredentials: true, // 跨域请求是否需要携带 cookie
+  // headers: {
+  //   'Content-Type': 'application/json;charset=utf-8'
+  // }
 })
 
 /** 请求拦截器。 */
