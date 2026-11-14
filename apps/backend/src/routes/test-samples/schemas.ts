@@ -1,0 +1,131 @@
+/** 单选、多选字段使用字符串存储，限制值与页面字典保持一致。 */
+const singleSelectSchema = { type: 'string', enum: ['选项甲', '选项乙', '选项丙'] }
+const multiSelectSchema = {
+  type: 'array',
+  items: { type: 'string', enum: ['选项甲', '选项乙', '选项丙'] },
+  uniqueItems: true,
+  maxItems: 3,
+}
+
+/** Unix 毫秒时间戳，限定在 JavaScript Date 的有效范围内。 */
+const timestampSchema = {
+  type: 'integer',
+  minimum: -8640000000000000,
+  maximum: 8640000000000000,
+  description: 'Unix 毫秒时间戳',
+}
+
+/** 时间范围固定为 [开始时间戳, 结束时间戳]。 */
+const timestampRangeSchema = {
+  type: 'array',
+  items: timestampSchema,
+  minItems: 2,
+  maxItems: 2,
+}
+
+const editableProperties = {
+  name: { type: 'string', minLength: 1, maxLength: 100, pattern: '\\S' },
+  description: { type: 'string', maxLength: 2000 },
+  icon: { type: 'string', maxLength: 100 },
+  number: { type: 'number' },
+  enabled: { type: 'boolean' },
+  singleSelect: singleSelectSchema,
+  multiSelect: multiSelectSchema,
+  operator: { type: 'string', minLength: 1, maxLength: 100, pattern: '\\S' },
+}
+
+export const testSampleInputSchema = {
+  type: 'object',
+  additionalProperties: false,
+  required: Object.keys(editableProperties),
+  properties: editableProperties,
+}
+
+export const testSampleQuerySchema = {
+  type: 'object',
+  additionalProperties: false,
+  properties: {
+    name: { type: 'string', maxLength: 100 },
+    description: { type: 'string', maxLength: 2000 },
+    icon: { type: 'string', maxLength: 100 },
+    numberRange: {
+      type: 'array',
+      items: { type: 'number' },
+      minItems: 2,
+      maxItems: 2,
+    },
+    enabled: { type: 'boolean' },
+    singleSelect: singleSelectSchema,
+    multiSelect: multiSelectSchema,
+    operator: { type: 'string', maxLength: 100 },
+    createdRange: timestampRangeSchema,
+    updatedRange: timestampRangeSchema,
+    pageNum: { type: 'integer', minimum: 1, maximum: 1000000, default: 1 },
+    pageSize: { type: 'integer', minimum: 1, maximum: 100, default: 10 },
+  },
+}
+
+export const testSampleIdSchema = {
+  type: 'object',
+  required: ['id'],
+  properties: { id: { type: 'string', format: 'uuid' } },
+}
+
+export const testSampleDeleteSchema = {
+  type: 'object',
+  additionalProperties: false,
+  required: ['ids'],
+  properties: {
+    ids: {
+      type: 'array',
+      minItems: 1,
+      uniqueItems: true,
+      items: { type: 'string', format: 'uuid' },
+    },
+  },
+}
+
+const testSampleSchema = {
+  type: 'object',
+  required: ['id', ...Object.keys(editableProperties), 'createdAt', 'updatedAt'],
+  properties: {
+    id: { type: 'string', format: 'uuid' },
+    ...editableProperties,
+    createdAt: timestampSchema,
+    updatedAt: timestampSchema,
+  },
+}
+
+const responseProperties = {
+  code: { type: 'integer' },
+  message: { type: 'string' },
+}
+
+export const testSampleResponseSchema = {
+  type: 'object',
+  required: ['code', 'message', 'data'],
+  properties: { ...responseProperties, data: testSampleSchema },
+}
+
+export const testSampleListResponseSchema = {
+  type: 'object',
+  required: ['code', 'message', 'data', 'total'],
+  properties: {
+    ...responseProperties,
+    data: { type: 'array', items: testSampleSchema },
+    total: { type: 'integer' },
+  },
+}
+
+export const testSampleDeleteResponseSchema = {
+  type: 'object',
+  required: ['code', 'message', 'data'],
+  properties: {
+    ...responseProperties,
+    data: {
+      type: 'object',
+      required: ['deletedCount'],
+      properties: { deletedCount: { type: 'integer' } },
+    },
+  },
+}

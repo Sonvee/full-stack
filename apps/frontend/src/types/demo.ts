@@ -1,4 +1,4 @@
-/** CRUD 示例列表中的单条数据。 */
+/** Demo 示例列表中的单条数据。 */
 export interface DemoListItem {
   id?: string
   aInput?: string
@@ -11,7 +11,7 @@ export interface DemoListItem {
   createdAt?: string
 }
 
-/** CRUD 示例列表查询参数，筛选条件均可省略。 */
+/** Demo 示例列表查询参数，筛选条件均可省略。 */
 export interface DemoQueryParams {
   id?: string
   aInput?: string
@@ -27,12 +27,12 @@ export interface DemoQueryParams {
   pageSize: number
 }
 
-/** CRUD 示例删除参数。 */
+/** Demo 示例删除参数。 */
 export interface DemoDeleteParams {
   ids: string[]
 }
 
-/** CRUD 示例列表接口响应。 */
+/** Demo 示例列表接口响应。 */
 export interface DemoApiResponse {
   code: number
   data: DemoListItem[]
@@ -40,7 +40,7 @@ export interface DemoApiResponse {
   total: number
 }
 
-/** CRUD 示例字典选项。 */
+/** Demo 示例字典选项。 */
 export interface DemoDictOption {
   label: string
   value: string

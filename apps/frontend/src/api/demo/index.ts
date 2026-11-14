@@ -1,7 +1,7 @@
 import { delay } from 'es-toolkit'
 import type { DemoListItem, DemoQueryParams, DemoApiResponse, DemoDeleteParams } from '@/types/demo'
 
-/** 按请求的页码和每页条数返回 CRUD 示例列表。 */
+/** 按请求的页码和每页条数返回 Demo 示例列表。 */
 export async function apiDemoList(params: DemoQueryParams): Promise<DemoApiResponse> {
   await delay(1000)
   console.log('查询数据', params)
@@ -258,31 +258,31 @@ export async function apiDemoList(params: DemoQueryParams): Promise<DemoApiRespo
   }
 }
 
-/** 提交 CRUD 示例新增请求的占位 API。 */
+/** 提交 Demo 示例新增请求的占位 API。 */
 export async function apiDemoAdd(data: DemoListItem): Promise<void> {
   await delay(1000)
   console.log('新增数据', data)
 }
 
-/** 提交 CRUD 示例修改请求的占位 API。 */
+/** 提交 Demo 示例修改请求的占位 API。 */
 export async function apiDemoUpdate(data: DemoListItem): Promise<void> {
   await delay(1000)
   console.log('修改数据', data)
 }
 
-/** 提交 CRUD 示例删除请求的占位 API。 */
+/** 提交 Demo 示例删除请求的占位 API。 */
 export async function apiDemoDelete(data: DemoDeleteParams): Promise<void> {
   await delay(1000)
   console.log('删除数据', data)
 }
 
-/** 提交 CRUD 示例导入请求的占位 API。 */
+/** 提交 Demo 示例导入请求的占位 API。 */
 export async function apiDemoImport(): Promise<void> {
   await delay(1000)
   console.log('导入数据')
 }
 
-/** 提交 CRUD 示例导出请求的占位 API。 */
+/** 提交 Demo 示例导出请求的占位 API。 */
 export async function apiDemoExport(): Promise<void> {
   await delay(1000)
   console.log('导出数据')

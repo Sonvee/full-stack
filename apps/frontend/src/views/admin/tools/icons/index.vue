@@ -34,10 +34,7 @@
 import { computed, shallowRef } from 'vue'
 import { useClipboard } from '@vueuse/core'
 import { ElMessage } from 'element-plus'
-import iconfontCss from '@/assets/iconfont/iconfont.css?raw'
-
-/** 直接读取字体样式中的类名，更新 iconfont 时同步图标清单。 */
-const iconNames = (iconfontCss.match(/\.sv-icon-[\w-]+(?=:before)/g) ?? []).map((name) => name.slice(1))
+import { iconNames } from '@/utils/iconfont'
 const searchQuery = shallowRef('')
 const filteredIconNames = computed(() => {
   const keyword = searchQuery.value.trim().toLowerCase()
