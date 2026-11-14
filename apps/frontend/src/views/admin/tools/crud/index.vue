@@ -1,8 +1,8 @@
 <template>
   <section ref="containerRef" class="flex min-h-0 flex-1 flex-col gap-4">
-    <header class="flex shrink-0 items-center justify-between gap-2">
+    <header class="flex shrink-0 items-center justify-between gap-4">
       <h1 class="text-xl font-semibold">CRUD 模板</h1>
-      <SvFullscreen v-model:full="systemSettingStore.full" :container="containerRef" f11/>
+      <SvFullscreen v-model:full="systemSettingStore.full" :container="containerRef" size="small" f11/>
     </header>
 
     <!-- 条件筛选栏 -->

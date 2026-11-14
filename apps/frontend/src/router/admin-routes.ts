@@ -24,7 +24,7 @@ export const adminRoutes: RouteRecordRaw[] = [
         path: 'icons',
         name: 'admin-icons',
         component: () => import('../views/admin/tools/icons/index.vue'),
-        meta: { title: '图标库', icon: 'sv-icon-my-icons' },
+        meta: { title: '图标库', icon: 'sv-icon-my-icons', fixedHeight: true },
       },
     ],
   },

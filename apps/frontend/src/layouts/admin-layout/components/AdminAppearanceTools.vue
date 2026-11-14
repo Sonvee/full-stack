@@ -6,7 +6,7 @@
 
     <el-dropdown trigger="click" placement="bottom-end">
       <el-button text circle :title="`主题色：${selectedColor.label}`">
-        <i class="sv-icon-palette" />
+        <i class="sv-icon-palette text-lg" />
       </el-button>
       <template #dropdown>
         <el-dropdown-menu>
@@ -29,7 +29,7 @@
 
     <el-dropdown trigger="click" placement="bottom-end">
       <el-button text circle :title="`显示模式：${selectedMode.label}`">
-        <i :class="selectedMode.icon" />
+        <i :class="selectedMode.icon" class="text-lg" />
       </el-button>
       <template #dropdown>
         <el-dropdown-menu>
