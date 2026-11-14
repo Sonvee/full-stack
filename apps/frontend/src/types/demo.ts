@@ -27,21 +27,10 @@ export interface DemoQueryParams {
   pageSize: number
 }
 
-/** Demo 示例删除参数。 */
-export interface DemoDeleteParams {
-  ids: string[]
-}
-
 /** Demo 示例列表接口响应。 */
 export interface DemoApiResponse {
   code: number
   data: DemoListItem[]
   message: string
   total: number
-}
-
-/** Demo 示例字典选项。 */
-export interface DemoDictOption {
-  label: string
-  value: string
 }

@@ -2,7 +2,7 @@
   <section ref="containerRef" class="flex min-h-0 flex-1 flex-col gap-4">
     <header class="flex shrink-0 items-center justify-between gap-4">
       <h1 class="text-xl font-semibold">Demo 模板</h1>
-      <SvFullscreen v-model:full="systemSettingStore.full" :container="containerRef" size="small" f11/>
+      <SvFullscreen v-model:full="systemSettingStore.full" :container="containerRef" size="small" />
     </header>
 
     <!-- 条件筛选栏 -->
@@ -101,7 +101,8 @@ import { onMounted, provide, ref, shallowRef, useTemplateRef } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { apiDemoAdd, apiDemoDelete, apiDemoExport, apiDemoImport, apiDemoList, apiDemoUpdate } from '@/api/demo'
 import { useSystemSettingStore } from '@/stores/system-setting'
-import type { DemoDeleteParams, DemoListItem, DemoQueryParams } from '@/types/demo'
+import type { ApiDeleteParams } from '@/types/api'
+import type { DemoListItem, DemoQueryParams } from '@/types/demo'
 import SvDictTag from '@/components/SvDictTag/SvDictTag.vue'
 import SvFullscreen from '@/components/SvFullscreen/SvFullscreen.vue'
 import SvPagination from '@/components/SvPagination/SvPagination.vue'
@@ -229,8 +230,8 @@ async function toConfirm(data: DemoListItem) {
 
 /** 打开删除确认弹窗，支持单行和已选数据。 */
 async function toDelete(row?: DemoListItem) {
-  const data: DemoDeleteParams = {
-    ids: (row ? [row] : selectedList.value).map(item => item.id).filter(id => id !== undefined)
+  const data: ApiDeleteParams = {
+    ids: (row ? [row] : selectedList.value).map((item) => item.id).filter((id) => id !== undefined)
   }
   const count = data.ids.length
   try {

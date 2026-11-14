@@ -36,13 +36,3 @@ export interface TestSampleQueryParams {
   /** 每页条数，-1 表示忽略 pageNum 并查询全部匹配数据。 */
   pageSize: number
 }
-
-/** 测试样例单条或批量删除参数。 */
-export interface TestSampleDeleteParams {
-  ids: string[]
-}
-
-/** 测试样例删除接口返回的实际删除数量。 */
-export interface TestSampleDeleteResult {
-  deletedCount: number
-}

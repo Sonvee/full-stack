@@ -6,3 +6,13 @@ export interface ApiResponse<T> {
   /** 分页查询时返回记录总数。 */
   total?: number
 }
+
+/** 单条或批量删除接口的通用参数。 */
+export interface ApiDeleteParams {
+  ids: string[]
+}
+
+/** 删除接口返回的实际删除数量。 */
+export interface ApiDeleteResult {
+  deletedCount: number
+}

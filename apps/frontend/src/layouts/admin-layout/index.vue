@@ -35,7 +35,7 @@ import AdminSidebarTrigger from './components/AdminSidebarTrigger.vue'
 import AdminAppearanceTools from './components/AdminAppearanceTools.vue'
 
 const route = useRoute()
-const fixedHeight = computed(() => route.meta.fixedHeight === true)
+const fixedHeight = computed(() => route.meta.fixedHeight !== false)
 const breadcrumbs = computed(() => route.matched.filter((record) => typeof record.meta.title === 'string'))
 </script>
 

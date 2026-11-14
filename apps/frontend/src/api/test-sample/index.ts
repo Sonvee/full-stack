@@ -1,11 +1,6 @@
 import useRequest from '@/composables/use-request'
-import type { ApiResponse } from '@/types/api'
-import type {
-  TestSampleListItem,
-  TestSampleDeleteParams,
-  TestSampleDeleteResult,
-  TestSampleQueryParams,
-} from '@/types/test-sample'
+import type { ApiDeleteParams, ApiDeleteResult, ApiResponse } from '@/types/api'
+import type { TestSampleListItem, TestSampleQueryParams } from '@/types/test-sample'
 
 /** 分页查询测试样例。 */
 export function apiTestSampleList(params: TestSampleQueryParams) {
@@ -35,8 +30,8 @@ export function apiTestSampleUpdate(data: TestSampleListItem) {
 }
 
 /** 删除单条或已选测试样例。 */
-export function apiTestSampleDelete(data: TestSampleDeleteParams) {
-  return useRequest<ApiResponse<TestSampleDeleteResult>>({
+export function apiTestSampleDelete(data: ApiDeleteParams) {
+  return useRequest<ApiResponse<ApiDeleteResult>>({
     url: '/test-samples/delete',
     method: 'post',
     data,

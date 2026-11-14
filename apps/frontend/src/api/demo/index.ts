@@ -1,5 +1,6 @@
 import { delay } from 'es-toolkit'
-import type { DemoListItem, DemoQueryParams, DemoApiResponse, DemoDeleteParams } from '@/types/demo'
+import type { ApiDeleteParams } from '@/types/api'
+import type { DemoListItem, DemoQueryParams, DemoApiResponse } from '@/types/demo'
 
 /** 按请求的页码和每页条数返回 Demo 示例列表。 */
 export async function apiDemoList(params: DemoQueryParams): Promise<DemoApiResponse> {
@@ -271,7 +272,7 @@ export async function apiDemoUpdate(data: DemoListItem): Promise<void> {
 }
 
 /** 提交 Demo 示例删除请求的占位 API。 */
-export async function apiDemoDelete(data: DemoDeleteParams): Promise<void> {
+export async function apiDemoDelete(data: ApiDeleteParams): Promise<void> {
   await delay(1000)
   console.log('删除数据', data)
 }

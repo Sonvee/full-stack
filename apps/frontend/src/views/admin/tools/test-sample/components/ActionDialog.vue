@@ -1,55 +1,35 @@
 <template>
   <el-dialog
     v-model="open"
-    :title="mode === 'add' ? '新增测试样例' : '修改测试样例'"
+    :title="title"
     width="min(40rem, calc(100vw - 2rem))"
     align-center
     append-to-body
     destroy-on-close
-    :close-on-click-modal="!loading"
-    :close-on-press-escape="!loading"
-    :show-close="!loading"
+    @closed="handleClosed"
   >
     <el-form
       ref="actionFormRef"
       :model="formData"
       :rules="rules"
-      :disabled="loading"
       label-position="top"
       class="grid max-h-[60svh] min-w-0 overflow-x-hidden overflow-y-auto gap-x-4 p-1 sm:grid-cols-2"
       @submit.prevent="toConfirm"
     >
       <el-form-item prop="name" label="测试名称">
-        <el-input
-          v-model.trim="formData.name"
-          clearable
-          placeholder="请输入测试名称"
-          :maxlength="100"
-        />
+        <el-input v-model.trim="formData.name" clearable placeholder="请输入测试名称" :maxlength="100" />
       </el-form-item>
       <el-form-item prop="operator" label="操作人">
-        <el-input
-          v-model.trim="formData.operator"
-          clearable
-          placeholder="请输入本次操作人"
-          :maxlength="100"
-        />
+        <el-input v-model.trim="formData.operator" clearable placeholder="请输入本次操作人" :maxlength="100" />
       </el-form-item>
       <el-form-item prop="icon" label="测试图标">
         <SvIconSelect v-model="formData.icon" clearable />
       </el-form-item>
-      <el-form-item prop="number" label="测试数字">
-        <el-input-number v-model="formData.number" controls-position="right" class="w-full!" />
-      </el-form-item>
       <el-form-item prop="index" label="排序">
-        <el-input-number
-          v-model="formData.index"
-          :precision="0"
-          :min="-2147483648"
-          :max="2147483647"
-          controls-position="right"
-          class="w-full!"
-        />
+        <el-input-number v-model="formData.index" :precision="0" controls-position="right" class="w-full!" />
+      </el-form-item>
+      <el-form-item prop="number" label="测试数字">
+        <el-input-number v-model="formData.number" :precision="2" :step="0.1" controls-position="right" class="w-full!" />
       </el-form-item>
       <el-form-item prop="enabled" label="测试开关">
         <el-switch v-model="formData.enabled" active-text="开启" inactive-text="关闭" />
@@ -63,7 +43,7 @@
           placeholder="请选择测试单选"
         />
       </el-form-item>
-      <el-form-item prop="multiSelect" label="测试多选" class="sm:col-span-2">
+      <el-form-item prop="multiSelect" label="测试多选">
         <SvDictSelect
           v-model="formData.multiSelect"
           :dict-list="dict_multi_select"
@@ -71,22 +51,15 @@
           value-key="value"
           multiple
           clearable
-          placeholder="请选择，可留空"
+          placeholder="请选择测试多选"
         />
       </el-form-item>
       <el-form-item prop="description" label="测试描述" class="sm:col-span-2">
-        <el-input
-          v-model="formData.description"
-          type="textarea"
-          :rows="3"
-          :maxlength="2000"
-          show-word-limit
-          placeholder="请输入测试描述"
-        />
+        <el-input v-model="formData.description" type="textarea" :rows="3" :maxlength="2000" show-word-limit placeholder="请输入测试描述" />
       </el-form-item>
     </el-form>
     <template #footer>
-      <el-button :disabled="loading" @click="open = false">取消</el-button>
+      <el-button @click="toClose">取消</el-button>
       <el-button type="primary" :loading="loading" @click="toConfirm">
         {{ mode === 'add' ? '确认新增' : '保存修改' }}
       </el-button>
@@ -95,17 +68,19 @@
 </template>
 
 <script lang="ts" setup>
-import { nextTick, ref, useTemplateRef } from 'vue'
-import { cloneDeep } from 'es-toolkit'
+import { inject, ref, useTemplateRef } from 'vue'
+import { cloneDeep, omit } from 'es-toolkit'
 import type { FormRules } from 'element-plus'
 import SvDictSelect from '@/components/SvDictSelect/SvDictSelect.vue'
 import SvIconSelect from '@/components/SvIconSelect/SvIconSelect.vue'
 import type { TestSampleListItem } from '@/types/test-sample'
-import { dict_multi_select, dict_single_select } from '../dict-data'
 
-const props = defineProps<{ mode: 'add' | 'update'; loading: boolean }>()
+defineProps<{ title: string; mode: 'add' | 'update'; loading: boolean }>()
 const open = defineModel<boolean>('open', { default: false })
 const emit = defineEmits<{ confirm: [values: TestSampleListItem] }>()
+
+/** 注入字典数据。 */
+const { dict_single_select, dict_multi_select } = inject<any>('__DICT__')
 
 /** 新增样例的默认表单数据，编号与创建、更新时间由服务端维护。 */
 const defaultFormData: TestSampleListItem = {
@@ -117,54 +92,48 @@ const defaultFormData: TestSampleListItem = {
   enabled: false,
   singleSelect: '选项甲',
   multiSelect: [],
-  operator: '',
+  operator: ''
 }
-/** 独立的表单草稿，避免编辑时直接修改表格行。 */
+
+/** 表单数据。 */
 const formData = ref(cloneDeep(defaultFormData))
 const actionFormRef = useTemplateRef('actionFormRef')
 
 /** 表单校验规则。 */
 const rules: FormRules<TestSampleListItem> = {
-  name: [
-    { required: true, whitespace: true, message: '请输入测试名称', trigger: ['blur', 'change'] },
-  ],
-  operator: [
-    { required: true, whitespace: true, message: '请输入操作人', trigger: ['blur', 'change'] },
-  ],
-  number: [
-    { type: 'number', required: true, message: '请输入有效的数字', trigger: ['blur', 'change'] },
-  ],
-  index: [
-    { type: 'integer', required: true, message: '请输入有效的排序整数', trigger: ['blur', 'change'] },
-  ],
-  singleSelect: [{ required: true, message: '请选择测试单选', trigger: 'change' }],
+  name: [{ required: true, message: '请输入测试名称', trigger: ['blur', 'change'] }],
+  operator: [{ required: true, message: '请输入操作人', trigger: ['blur', 'change'] }],
+  number: [{ required: true, message: '请输入有效的数字', trigger: ['blur', 'change'] }],
+  index: [{ required: true, message: '请输入有效的排序整数', trigger: ['blur', 'change'] }],
+  singleSelect: [{ required: true, message: '请选择测试单选', trigger: 'change' }]
 }
 
-/** 创建独立的表单副本，排除编号和审计时间等只读字段。 */
-async function initForm(row?: TestSampleListItem) {
-  formData.value = row
-    ? {
-        name: row.name,
-        description: row.description,
-        icon: row.icon,
-        number: row.number,
-        index: row.index,
-        enabled: row.enabled,
-        singleSelect: row.singleSelect,
-        multiSelect: [...row.multiSelect],
-        operator: row.operator,
-      }
-    : cloneDeep(defaultFormData)
-  await nextTick()
+/** 关闭弹窗。 */
+function toClose() {
+  open.value = false
+}
+
+/** 弹窗关闭完成后重置表单。 */
+function handleClosed() {
+  resetForm()
+}
+
+/** 重置表单数据和校验状态。 */
+function resetForm() {
   actionFormRef.value?.clearValidate()
+  formData.value = cloneDeep(defaultFormData)
 }
 
-/** 校验通过后将表单副本交给父页面执行新增或修改。 */
+/** 为新增或编辑操作填入独立的表单数据，排除服务端维护的时间字段。 */
+function initForm(row?: TestSampleListItem) {
+  formData.value = cloneDeep(row ? omit(row, ['createdAt', 'updatedAt']) : defaultFormData)
+}
+
+/** 校验通过后将表单数据交给页面处理。 */
 function toConfirm() {
-  if (props.loading) return
   void actionFormRef.value?.validate((valid) => {
     if (valid) {
-      emit('confirm', cloneDeep(formData.value))
+      emit('confirm', formData.value)
     }
   })
 }

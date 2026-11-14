@@ -1,8 +1,5 @@
 <template>
-  <section
-    class="filter-form flex min-h-0 min-w-0 max-h-[70%] flex-col rounded-lg border p-4"
-    :class="{ 'is-expanded': expanded }"
-  >
+  <section class="filter-form flex min-h-0 min-w-0 max-h-[70%] flex-col rounded-lg border p-4" :class="{ 'is-expanded': expanded }">
     <el-form
       ref="filterFormRef"
       :model="formData"
@@ -13,20 +10,10 @@
     >
       <div class="filter-form-grid grid min-w-0 overflow-x-hidden overflow-y-auto gap-4 p-1">
         <el-form-item prop="name" label="测试名称">
-          <el-input
-            v-model.trim="formData.name"
-            clearable
-            placeholder="请输入测试名称"
-            :maxlength="100"
-          />
+          <el-input v-model.trim="formData.name" clearable placeholder="请输入测试名称" :maxlength="100" />
         </el-form-item>
         <el-form-item prop="description" label="测试描述">
-          <el-input
-            v-model.trim="formData.description"
-            clearable
-            placeholder="请输入测试描述"
-            :maxlength="2000"
-          />
+          <el-input v-model.trim="formData.description" clearable placeholder="请输入测试描述" :maxlength="2000" />
         </el-form-item>
         <el-form-item prop="enabled" label="测试开关">
           <SvDictSelect
@@ -60,25 +47,13 @@
           />
         </el-form-item>
         <el-form-item prop="numberRange" label="数字范围">
-          <el-slider
-            v-model="formData.numberRange"
-            range
-            :min="0"
-            :max="999"
-            :step="1"
-            class="mx-3 flex-1"
-          />
+          <el-slider v-model="formData.numberRange" range :min="0" :max="999" :step="1" class="mx-3 flex-1" />
         </el-form-item>
         <el-form-item prop="icon" label="测试图标">
           <SvIconSelect v-model="formData.icon" placeholder="全部" clearable />
         </el-form-item>
         <el-form-item prop="operator" label="操作人">
-          <el-input
-            v-model.trim="formData.operator"
-            clearable
-            placeholder="请输入操作人"
-            :maxlength="100"
-          />
+          <el-input v-model.trim="formData.operator" clearable placeholder="请输入操作人" :maxlength="100" />
         </el-form-item>
         <el-form-item prop="createdRange" label="创建时间">
           <SvDateTimePicker v-model="formData.createdRange" />
@@ -86,14 +61,10 @@
         <el-form-item prop="updatedRange" label="更新时间">
           <SvDateTimePicker v-model="formData.updatedRange" />
         </el-form-item>
-        <div
-          class="filter-form-actions flex min-w-0 flex-wrap items-center justify-end gap-2 self-end [&>.el-button]:ml-0!"
-        >
-          <el-button native-type="submit" type="primary"
-            ><i class="sv-icon-magnify mr-2" />查询</el-button
-          >
+        <div class="filter-form-actions flex min-w-0 flex-wrap items-center justify-end gap-2 self-end [&>.el-button]:ml-0!">
+          <el-button native-type="submit" type="primary"><i class="sv-icon-magnify mr-2" />查询</el-button>
           <el-button @click="reset"><i class="sv-icon-reload mr-2" />重置</el-button>
-          <el-button class="filter-form-toggle" text @click="expanded = !expanded">
+          <el-button class="filter-form-toggle" text @click="toggleExpanded">
             {{ expanded ? '收起条件' : '展开条件' }}
             <i class="ml-2" :class="expanded ? 'sv-icon-chevronup' : 'sv-icon-chevrondown'" />
           </el-button>
@@ -104,21 +75,22 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, shallowRef, useTemplateRef } from 'vue'
-import { cloneDeep } from 'es-toolkit'
+import { inject, ref, shallowRef, useTemplateRef } from 'vue'
 import SvDateTimePicker from '@/components/SvDateTimePicker/SvDateTimePicker.vue'
 import SvDictSelect from '@/components/SvDictSelect/SvDictSelect.vue'
 import SvIconSelect from '@/components/SvIconSelect/SvIconSelect.vue'
 import type { TestSampleQueryParams } from '@/types/test-sample'
-import { dict_enabled, dict_multi_select, dict_single_select } from '../dict-data'
 
 const emit = defineEmits<{
   search: [filters: Omit<TestSampleQueryParams, 'pageNum' | 'pageSize'>]
   reset: []
 }>()
 
+/** 注入字典数据。 */
+const { dict_single_select, dict_multi_select, dict_enabled } = inject<any>('__DICT__')
+
 /** 默认筛选条件；单选和开关未筛选时使用 undefined，pageNum 与 pageSize 由父页面管理。 */
-const defaultFilters: Omit<TestSampleQueryParams, 'pageNum' | 'pageSize'> = {
+const defaultQueryParams: Omit<TestSampleQueryParams, 'pageNum' | 'pageSize'> = {
   name: '',
   description: '',
   icon: '',
@@ -128,23 +100,32 @@ const defaultFilters: Omit<TestSampleQueryParams, 'pageNum' | 'pageSize'> = {
   multiSelect: [],
   operator: '',
   createdRange: null,
-  updatedRange: null,
+  updatedRange: null
 }
-/** 筛选条件草稿，查询时再提交给父页面。 */
-const formData = ref(cloneDeep(defaultFilters))
+
+/** 筛选条件表单数据。 */
+const formData = ref({ ...defaultQueryParams })
 const filterFormRef = useTemplateRef('filterFormRef')
 const expanded = shallowRef(false)
 
-/** 提交当前筛选条件的副本，避免后续输入影响已经提交的条件。 */
+/** 校验通过后提交当前筛选条件。 */
 function toConfirm() {
-  emit('search', cloneDeep(formData.value))
+  void filterFormRef.value?.validate((valid) => {
+    if (valid) {
+      emit('search', formData.value)
+    }
+  })
 }
 
-/** 重置表单草稿和校验状态，并通知父页面清除已提交的筛选条件。 */
+/** 同时清除草稿与已经提交的筛选条件。 */
 function reset() {
-  formData.value = cloneDeep(defaultFilters)
-  filterFormRef.value?.clearValidate()
+  filterFormRef.value?.resetFields()
   emit('reset')
+}
+
+/** 切换筛选条件的显示行数。 */
+function toggleExpanded() {
+  expanded.value = !expanded.value
 }
 </script>
 
@@ -176,13 +157,11 @@ function reset() {
     grid-template-columns: repeat($columns, minmax(0, 1fr));
   }
 
-  .filter-form:not(.is-expanded)
-    :deep(.filter-form-grid > .el-form-item:nth-child(n + #{$overflow-start})) {
+  .filter-form:not(.is-expanded) :deep(.filter-form-grid > .el-form-item:nth-child(n + #{$overflow-start})) {
     display: none;
   }
 
-  .filter-form:has(.filter-form-grid > .el-form-item:nth-child(#{$overflow-start}))
-    .filter-form-toggle {
+  .filter-form:has(.filter-form-grid > .el-form-item:nth-child(#{$overflow-start})) .filter-form-toggle {
     display: inline-flex;
   }
 }
