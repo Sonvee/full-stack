@@ -11,7 +11,7 @@
       </template>
     </el-input>
 
-    <el-scrollbar class="min-h-0 flex-1" wrap-class="icons-scrollbar">
+    <el-scrollbar class="min-h-0 flex-1" wrap-class="icons-scrollbar" mask>
       <ul v-if="filteredIconNames.length" class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
         <li v-for="iconName in filteredIconNames" :key="iconName" class="min-w-0">
           <el-button

@@ -4,8 +4,8 @@
     <SidebarInset :class="cn('min-w-0', fixedHeight && 'min-h-0 overflow-hidden')">
       <header class="flex h-16 shrink-0 items-center gap-2 px-4">
         <AdminSidebarTrigger class="-ml-1" />
-        <el-divider direction="vertical" class="ml-0! h-4!" />
-        <el-breadcrumb class="flex min-w-0 overflow-hidden whitespace-nowrap">
+        <el-divider direction="vertical" class="hidden! ml-0! h-4! md:inline-block!" />
+        <el-breadcrumb class="hidden! min-w-0 overflow-hidden whitespace-nowrap md:flex!">
           <el-breadcrumb-item :to="{ name: 'admin-dashboard' }" class="hidden! shrink-0 md:inline-flex!"> 管理端 </el-breadcrumb-item>
           <el-breadcrumb-item
             v-for="(item, index) in breadcrumbs"

@@ -14,6 +14,11 @@ html:root {
   --el-border-radius-small: var(--radius-sm);
 }
 
+/* Tag 在组件节点定义独立圆角变量，需在同一节点关联主题圆角。 */
+html .el-tag {
+  --el-tag-border-radius: var(--el-border-radius-base);
+}
+
 /* 弹窗遮罩层统一使用毛玻璃效果。 */
 .el-overlay {
   backdrop-filter: blur(4px);
