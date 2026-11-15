@@ -7,5 +7,7 @@ declare module 'vue-router' {
     icon?: string
     /** 默认使用剩余视口高度，由页面内部管理滚动；显式设为 false 时关闭。 */
     fixedHeight?: boolean
+    /** 显式设为 true 时按页面路径缓存管理端页面；路由须提供字符串 name，组件名称由路由守卫统一设置。 */
+    keepAlive?: boolean
   }
 }

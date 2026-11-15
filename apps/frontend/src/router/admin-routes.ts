@@ -6,7 +6,7 @@ export const adminRoutes: RouteRecordRaw[] = [
     path: '',
     name: 'admin-dashboard',
     component: () => import('../views/admin/dashboard/index.vue'),
-    meta: { title: '工作台', icon: 'sv-icon-viewdashboard' },
+    meta: { title: '工作台', icon: 'sv-icon-viewdashboard' }
   },
   {
     path: 'tools',
@@ -18,14 +18,14 @@ export const adminRoutes: RouteRecordRaw[] = [
         path: 'test-sample',
         name: 'admin-test-sample',
         component: () => import('../views/admin/tools/test-sample/index.vue'),
-        meta: { title: '测试样例', icon: 'sv-icon-tool' },
+        meta: { title: '测试样例', icon: 'sv-icon-tool', keepAlive: true }
       },
       {
         path: 'icons',
         name: 'admin-icons',
         component: () => import('../views/admin/tools/icons/index.vue'),
-        meta: { title: '图标库', icon: 'sv-icon-my-icons' },
-      },
-    ],
-  },
+        meta: { title: '图标库', icon: 'sv-icon-my-icons', keepAlive: true }
+      }
+    ]
+  }
 ]
