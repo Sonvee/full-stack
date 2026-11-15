@@ -10,6 +10,12 @@ export const themeColors = [
   { value: 'pink', label: '樱花粉', swatch: 'var(--color-pink-600)' },
 ] as const
 
+export const radiusModes = [
+  { value: 'square', label: '方正' },
+  { value: 'rounded', label: '圆角' },
+  { value: 'capsule', label: '胶囊' },
+] as const
+
 export const appearanceModes = [
   { value: 'light', label: '白昼', icon: 'sv-icon-daytime-mode' },
   { value: 'dark', label: '暗夜', icon: 'sv-icon-night-mode' },
@@ -23,12 +29,16 @@ export const useAppearance = createSharedComposable(() => {
     storageKey: 'color-mode',
   })
   const themeColor = useStorage('theme-color', 'blue')
+  const radiusMode = useStorage('radius-mode', 'rounded')
   const selectedColor = computed(
     () => themeColors.find((color) => color.value === themeColor.value) ?? themeColors[0],
   )
   const selectedMode = computed(
     () =>
       appearanceModes.find((mode) => mode.value === colorMode.store.value) ?? appearanceModes[2],
+  )
+  const selectedRadiusMode = computed(
+    () => radiusModes.find((mode) => mode.value === radiusMode.value) ?? radiusModes[1],
   )
 
   watch(
@@ -39,5 +49,20 @@ export const useAppearance = createSharedComposable(() => {
     { immediate: true },
   )
 
-  return { themeColor, mode: colorMode.store, selectedColor, selectedMode }
+  watch(
+    selectedRadiusMode,
+    (mode) => {
+      document.documentElement.dataset.radius = mode.value
+    },
+    { immediate: true },
+  )
+
+  return {
+    themeColor,
+    radiusMode,
+    mode: colorMode.store,
+    selectedColor,
+    selectedRadiusMode,
+    selectedMode,
+  }
 })

@@ -5,6 +5,28 @@
     <el-divider direction="vertical" class="mx-1! h-4!" />
 
     <el-dropdown trigger="click" placement="bottom-end">
+      <el-button text circle :title="`圆角模式：${selectedRadiusMode.label}`">
+        <i class="sv-icon-borderstyle text-lg" />
+      </el-button>
+      <template #dropdown>
+        <el-dropdown-menu>
+          <li class="px-4 py-1 text-sm font-semibold">圆角模式</li>
+          <el-dropdown-item
+            v-for="(item, index) in radiusModes"
+            :key="item.value"
+            :divided="index === 0"
+            @click="radiusMode = item.value"
+          >
+            <i class="sv-icon-check mr-2" :class="{ invisible: radiusMode !== item.value }" />
+            {{ item.label }}
+          </el-dropdown-item>
+        </el-dropdown-menu>
+      </template>
+    </el-dropdown>
+
+    <el-divider direction="vertical" class="mx-1! h-4!" />
+
+    <el-dropdown trigger="click" placement="bottom-end">
       <el-button text circle :title="`主题色：${selectedColor.label}`">
         <i class="sv-icon-palette text-lg" />
       </el-button>
@@ -51,10 +73,10 @@
 </template>
 
 <script lang="ts" setup>
-import { appearanceModes, themeColors, useAppearance } from '@/composables/use-appearance'
+import { appearanceModes, radiusModes, themeColors, useAppearance } from '@/composables/use-appearance'
 import AdminPageSearch from './AdminPageSearch.vue'
 
-const { themeColor, mode, selectedColor, selectedMode } = useAppearance()
+const { themeColor, radiusMode, mode, selectedColor, selectedRadiusMode, selectedMode } = useAppearance()
 </script>
 
 <style lang="scss" scoped></style>

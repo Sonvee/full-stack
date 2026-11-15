@@ -121,6 +121,14 @@
   --sidebar-ring: var(--primary);
 }
 
+:root[data-radius='square'] {
+  --radius: 0;
+}
+
+:root[data-radius='capsule'] {
+  --radius: 1.5rem;
+}
+
 :root[data-theme='red'] {
   --theme-color: var(--color-red-600);
   --theme-color-dark: var(--color-red-400);
