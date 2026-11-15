@@ -11,15 +11,9 @@ export const adminRoutes: RouteRecordRaw[] = [
   {
     path: 'tools',
     name: 'admin-tools',
-    redirect: { name: 'admin-demo' },
+    redirect: { name: 'admin-test-sample' },
     meta: { title: '系统工具', icon: 'sv-icon-tool' },
     children: [
-      {
-        path: 'demo',
-        name: 'admin-demo',
-        component: () => import('../views/admin/tools/demo/index.vue'),
-        meta: { title: 'Demo 模板', icon: 'sv-icon-table' },
-      },
       {
         path: 'test-sample',
         name: 'admin-test-sample',

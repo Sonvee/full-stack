@@ -1,13 +1,7 @@
 <template>
-  <el-select-v2
-    v-model="model"
-    :options="options"
-    :placeholder="props.placeholder"
-    filterable
-    value-on-clear=""
-  >
+  <el-select-v2 v-model="model" :options="options" :placeholder="props.placeholder" filterable value-on-clear="">
     <template #prefix>
-      <i v-if="model" :class="model" />
+      <i :class="model || 'sv-icon-my-icons'" />
     </template>
     <template #default="{ item }">
       <span class="flex min-w-0 items-center gap-2">
@@ -23,7 +17,7 @@ import { ElSelectV2 } from 'element-plus'
 import { iconNames } from '@/utils/iconfont'
 
 const props = withDefaults(defineProps<{ placeholder?: string }>(), {
-  placeholder: '请选择图标',
+  placeholder: '请选择图标'
 })
 
 /** 选中值为项目图标类名，可直接绑定到图标的 class。 */

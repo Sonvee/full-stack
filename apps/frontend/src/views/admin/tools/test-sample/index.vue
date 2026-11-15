@@ -24,16 +24,16 @@
     <!-- 数据表格 -->
     <div class="min-h-0 flex-1 overflow-hidden rounded-lg border">
       <el-table v-loading="loading" :data="dataList" row-key="id" height="100%" @selection-change="handleSelectionChange">
-        <el-table-column type="selection" :width="48" align="center" fixed="left" />
-        <el-table-column prop="index" label="排序" :width="90" align="center" />
+        <el-table-column type="selection" :width="50" align="center" fixed="left" />
+        <el-table-column prop="index" label="排序" :width="80" align="center" />
         <el-table-column prop="name" label="测试名称" :min-width="160" show-overflow-tooltip />
         <el-table-column prop="description" label="测试描述" :min-width="200" show-overflow-tooltip />
-        <el-table-column prop="icon" label="测试图标" :min-width="180" show-overflow-tooltip>
+        <el-table-column prop="icon" label="测试图标" :min-width="180" align="center" show-overflow-tooltip>
           <template #default="{ row }">
-            <span v-if="row.icon" class="inline-flex items-center gap-2"> <i :class="row.icon" />{{ row.icon }} </span>
+            <i v-if="row.icon" :class="row.icon" />
           </template>
         </el-table-column>
-        <el-table-column prop="number" label="测试数字" :min-width="120" align="right" />
+        <el-table-column prop="number" label="测试数字" :min-width="120" align="center" />
         <el-table-column prop="enabled" label="测试开关" :min-width="100" align="center">
           <template #default="{ row }">
             <SvDictTag :dict-list="dict_enabled" :data="row.enabled" label-key="label" value-key="value" />
@@ -58,15 +58,15 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="createdAt" label="创建时间" :min-width="180" align="center">
+        <el-table-column prop="id" label="数据编号" :min-width="280" show-overflow-tooltip />
+        <el-table-column prop="createdAt" label="创建时间" :width="180" align="center">
           <template #default="{ row }">{{ formatDateTime(row.createdAt) }}</template>
         </el-table-column>
-        <el-table-column prop="updatedAt" label="更新时间" :min-width="180" align="center">
+        <el-table-column prop="updatedAt" label="更新时间" :width="180" align="center">
           <template #default="{ row }">{{ formatDateTime(row.updatedAt) }}</template>
         </el-table-column>
-        <el-table-column prop="operator" label="操作人" :min-width="120" show-overflow-tooltip />
-        <el-table-column prop="id" label="数据编号" :min-width="280" show-overflow-tooltip />
-        <el-table-column label="操作" :width="132" align="center" fixed="right">
+        <el-table-column prop="operator" label="操作人" :min-width="120" align="center" show-overflow-tooltip />
+        <el-table-column label="操作" :width="120" align="center" fixed="right">
           <template #default="{ row }">
             <el-button type="primary" link @click="toUpdate(row as TestSampleListItem)">修改</el-button>
             <el-button type="danger" link @click="toDelete(row as TestSampleListItem)">删除</el-button>
@@ -126,7 +126,7 @@ const dataList = shallowRef<TestSampleListItem[]>([])
 const loading = shallowRef(false)
 const total = shallowRef(0)
 const selectedList = shallowRef<TestSampleListItem[]>([])
-const queryParams = ref<TestSampleQueryParams>({ pageNum: 1, pageSize: 10 })
+const queryParams = ref<TestSampleQueryParams>({ pageNum: 1, pageSize: 20 })
 const showFilters = shallowRef(true)
 const actionDialogOpen = shallowRef(false)
 const actionLoading = shallowRef(false)
@@ -227,7 +227,7 @@ async function toDelete(row?: TestSampleListItem) {
   const ids = (row ? [row] : selectedList.value).map((item) => item.id).filter((id) => id !== undefined)
   if (ids.length === 0) return
   try {
-    await ElMessageBox.confirm(`删除后无法恢复，确认删除选中的 ${ids.length} 条测试样例？`, '确认删除', {
+    await ElMessageBox.confirm(`删除后无法恢复，确认删除选中的 ${ids.length} 条数据？`, '确认删除', {
       confirmButtonText: '确认删除',
       confirmButtonType: 'danger',
       cancelButtonText: '取消',
