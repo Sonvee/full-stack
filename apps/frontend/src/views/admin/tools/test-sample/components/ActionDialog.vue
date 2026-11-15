@@ -51,6 +51,7 @@
           value-key="value"
           multiple
           clearable
+          check-all
           placeholder="请选择测试多选"
         />
       </el-form-item>
