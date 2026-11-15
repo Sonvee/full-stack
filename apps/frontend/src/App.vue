@@ -1,5 +1,5 @@
 <template>
-  <el-config-provider :locale="zhCn">
+  <el-config-provider :locale="zhCn" :size="currentSize.value">
     <RouterView />
   </el-config-provider>
 </template>
@@ -11,7 +11,7 @@ import 'dayjs/locale/zh-cn'
 import { useAppLoading } from '@/composables/use-app-loading'
 import { useAppearance } from '@/composables/use-appearance'
 
-useAppearance()
+const { currentSize } = useAppearance()
 useAppLoading()
 </script>
 
