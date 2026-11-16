@@ -1,8 +1,8 @@
-/** API 响应包络，HTTP 状态码同时用于 code。 */
+/** API 响应包络，HTTP 状态码同时用于 code，错误响应可省略 data。 */
 export interface ApiResponse<T> {
   code: number
   message: string
-  data: T
+  data?: T
   /** 分页查询时返回记录总数。 */
   total?: number
 }

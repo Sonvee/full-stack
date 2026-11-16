@@ -63,8 +63,8 @@ client.interceptors.response.use(
       if (error.response) {
         // console.log('响应拦截器 error.response ===> ', error.response)
         const { data, status, statusText } = error.response
-        const httpCode = data?.code ?? status
-        const message = data?.message || httpCodeMap[httpCode] || statusText
+        // 优先展示后端消息，缺省时按真实 HTTP 状态码提供兜底提示。
+        const message = data?.message || httpCodeMap[status] || statusText
         ElMessage.error(message)
       } else {
         ElMessage.error(error.message)

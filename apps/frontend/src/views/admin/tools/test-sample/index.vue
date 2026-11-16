@@ -169,7 +169,7 @@ async function toQuery() {
   loading.value = true
   try {
     const res = await apiTestSampleList(queryParams.value)
-    dataList.value = res.data
+    dataList.value = res.data ?? []
     total.value = res.total ?? 0
   } finally {
     loading.value = false
@@ -242,7 +242,7 @@ async function toDelete(row?: TestSampleListItem) {
         try {
           const res = await apiTestSampleDelete({ ids })
           ElMessage.success(res.message)
-          const lastPage = Math.max(1, Math.ceil((total.value - res.data.deletedCount) / queryParams.value.pageSize))
+          const lastPage = Math.max(1, Math.ceil((total.value - (res.data?.deletedCount ?? 0)) / queryParams.value.pageSize))
           queryParams.value.pageNum = Math.min(queryParams.value.pageNum, lastPage)
           instance.action = 'confirm'
           done()
