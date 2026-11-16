@@ -7,6 +7,7 @@ import type {
   DictDetailInput,
   DictDetailQueryParams,
   DictDetailUpdateParams,
+  DictTypeParams,
 } from '../../../types/dict.js'
 import {
   dictDetailDeleteSchema,
@@ -16,7 +17,7 @@ import {
   dictDetailResponseSchema,
   dictDetailUpdateSchema,
 } from './schemas.js'
-import { dictDeleteResponseSchema } from '../schemas.js'
+import { dictDeleteResponseSchema, dictParamsSchema } from '../schemas.js'
 
 const dictDetailRoutes: FastifyPluginAsync = async (app) => {
   app.setErrorHandler<FastifyError>((error, _request, reply) => {
@@ -31,12 +32,12 @@ const dictDetailRoutes: FastifyPluginAsync = async (app) => {
     throw error
   })
 
-  app.get<{ Querystring: DictDetailQueryParams }>('/list', {
-    schema: { querystring: dictDetailQuerySchema, response: { 200: dictDetailListResponseSchema } },
+  app.get<{ Params: DictTypeParams; Querystring: DictDetailQueryParams }>('/:dictType', {
+    schema: { params: dictParamsSchema, querystring: dictDetailQuerySchema, response: { 200: dictDetailListResponseSchema } },
   }, async (request) => {
     const query = request.query
     const filters = and(
-      eq(dictDetail.dictType, query.dictType),
+      eq(dictDetail.dictType, request.params.dictType),
       query.label ? ilike(dictDetail.label, `%${query.label}%`) : undefined,
       query.value ? ilike(dictDetail.value, `%${query.value}%`) : undefined,
       query.status ? eq(dictDetail.status, query.status) : undefined,

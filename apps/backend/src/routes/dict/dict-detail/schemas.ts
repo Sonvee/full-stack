@@ -32,9 +32,7 @@ export const dictDetailUpdateSchema = {
 export const dictDetailQuerySchema = {
   type: 'object',
   additionalProperties: false,
-  required: ['dictType'],
   properties: {
-    dictType: dictTypeSchema,
     label: { type: 'string', maxLength: 100 },
     value: { type: 'string', maxLength: 100 },
     status: { type: 'string', maxLength: 50 },

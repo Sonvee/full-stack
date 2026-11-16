@@ -35,7 +35,7 @@ const dictRoutes: FastifyPluginAsync = async (app) => {
     throw error
   })
 
-  app.register(dictDetailRoutes, { prefix: '/dict-detail' })
+  app.register(dictDetailRoutes, { prefix: '/detail' })
 
   app.get<{ Querystring: DictQueryParams }>('/list', {
     schema: { querystring: dictQuerySchema, response: { 200: dictListResponseSchema } },

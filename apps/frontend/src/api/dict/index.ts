@@ -27,22 +27,22 @@ export function apiDictDelete(data: ApiDeleteParams) {
   return useRequest<ApiResponse<ApiDeleteResult>>({ url: '/dict/delete', method: 'post', data })
 }
 
-/** 分页查询所属字典的数据项。 */
+/** 按路径中的字典类型分页查询数据项。 */
 export function apiDictDetailList(params: DictDetailQueryParams) {
-  return useRequest<ApiResponse<DictDetailListItem[]>>({ url: '/dict/dict-detail/list', method: 'get', params })
+  return useRequest<ApiResponse<DictDetailListItem[]>>({ url: `/dict/detail/${params.dictType}`, method: 'get', params })
 }
 
 /** 新增字典数据。 */
 export function apiDictDetailAdd(data: DictDetailListItem) {
-  return useRequest<ApiResponse<DictDetailListItem>>({ url: '/dict/dict-detail/add', method: 'post', data })
+  return useRequest<ApiResponse<DictDetailListItem>>({ url: '/dict/detail/add', method: 'post', data })
 }
 
 /** 修改字典数据。 */
 export function apiDictDetailUpdate(data: DictDetailListItem) {
-  return useRequest<ApiResponse<DictDetailListItem>>({ url: '/dict/dict-detail/update', method: 'post', data })
+  return useRequest<ApiResponse<DictDetailListItem>>({ url: '/dict/detail/update', method: 'post', data })
 }
 
 /** 删除单条或已选字典数据，始终限定所属字典。 */
 export function apiDictDetailDelete(dictType: string, data: ApiDeleteParams) {
-  return useRequest<ApiResponse<ApiDeleteResult>>({ url: '/dict/dict-detail/delete', method: 'post', data: { ...data, dictType } })
+  return useRequest<ApiResponse<ApiDeleteResult>>({ url: '/dict/detail/delete', method: 'post', data: { ...data, dictType } })
 }

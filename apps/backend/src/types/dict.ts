@@ -15,7 +15,6 @@ export interface DictQueryParams {
 }
 
 export interface DictDetailQueryParams {
-  dictType: string
   label?: string
   value?: string
   status?: string
