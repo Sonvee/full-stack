@@ -37,7 +37,7 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 import { RouterView, useRoute, useRouter } from 'vue-router'
-import { cn } from '@/lib/utils'
+import { cn } from 'cn'
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
 import AdminSidebar from './components/AdminSidebar.vue'
 import AdminSidebarTrigger from './components/AdminSidebarTrigger.vue'
