@@ -27,7 +27,7 @@ export const adminRoutes: RouteRecordRaw[] = [
             meta: { hide: true, keepAlive: true }
           },
           {
-            path: 'dict-detail/:dictionaryId',
+            path: 'dict-detail/:dictType',
             name: 'admin-dict-detail',
             component: () => import('../views/admin/system/dict/dict-detail/index.vue'),
             props: true,

@@ -41,10 +41,10 @@
 <script lang="ts" setup>
 import { inject, ref, shallowRef, useTemplateRef } from 'vue'
 import SvDictSelect from '@/components/SvDictSelect/SvDictSelect.vue'
-import type { DictionaryDataQueryParams } from '@/types/dictionary'
+import type { DictDetailQueryParams } from '@/types/dict'
 
 const emit = defineEmits<{
-  search: [filters: Omit<DictionaryDataQueryParams, 'dictionaryId' | 'pageNum' | 'pageSize'>]
+  search: [filters: Omit<DictDetailQueryParams, 'dictType' | 'pageNum' | 'pageSize'>]
   reset: []
 }>()
 
@@ -52,7 +52,7 @@ const emit = defineEmits<{
 const { sys_status } = inject<any>('__DICT__')
 
 /** 默认筛选条件，分页及所属字典由父页面管理。 */
-const defaultQueryParams: Omit<DictionaryDataQueryParams, 'dictionaryId' | 'pageNum' | 'pageSize'> = {
+const defaultQueryParams: Omit<DictDetailQueryParams, 'dictType' | 'pageNum' | 'pageSize'> = {
   label: '',
   value: '',
   status: undefined

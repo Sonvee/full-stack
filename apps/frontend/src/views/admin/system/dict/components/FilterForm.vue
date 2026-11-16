@@ -12,8 +12,8 @@
         <el-form-item prop="name" label="字典名称">
           <el-input v-model.trim="formData.name" clearable placeholder="请输入字典名称" :maxlength="100" />
         </el-form-item>
-        <el-form-item prop="type" label="字典类型">
-          <el-input v-model.trim="formData.type" clearable placeholder="请输入字典类型" :maxlength="100" />
+        <el-form-item prop="dictType" label="字典类型">
+          <el-input v-model.trim="formData.dictType" clearable placeholder="请输入字典类型" :maxlength="100" />
         </el-form-item>
         <el-form-item prop="status" label="状态">
           <SvDictSelect
@@ -41,10 +41,10 @@
 <script lang="ts" setup>
 import { inject, ref, shallowRef, useTemplateRef } from 'vue'
 import SvDictSelect from '@/components/SvDictSelect/SvDictSelect.vue'
-import type { DictionaryQueryParams } from '@/types/dictionary'
+import type { DictQueryParams } from '@/types/dict'
 
 const emit = defineEmits<{
-  search: [filters: Omit<DictionaryQueryParams, 'pageNum' | 'pageSize'>]
+  search: [filters: Omit<DictQueryParams, 'pageNum' | 'pageSize'>]
   reset: []
 }>()
 
@@ -52,9 +52,9 @@ const emit = defineEmits<{
 const { sys_status } = inject<any>('__DICT__')
 
 /** 默认筛选条件，分页由父页面管理。 */
-const defaultQueryParams: Omit<DictionaryQueryParams, 'pageNum' | 'pageSize'> = {
+const defaultQueryParams: Omit<DictQueryParams, 'pageNum' | 'pageSize'> = {
   name: '',
-  type: '',
+  dictType: '',
   status: undefined
 }
 

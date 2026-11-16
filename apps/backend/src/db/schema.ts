@@ -26,21 +26,22 @@ export const testSamples = pgTable('test_samples', {
   updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
 })
 
-/** 字典类型，type 是业务使用的唯一标识。 */
-export const dictionaries = pgTable('dictionaries', {
+/** 字典类型，dictType 是业务使用的唯一标识。 */
+export const dict = pgTable('dict', {
   id: uuid('id').primaryKey().defaultRandom(),
   name: varchar('name', { length: 100 }).notNull(),
-  type: varchar('type', { length: 100 }).notNull().unique('dictionaries_type_unique'),
+  dictType: varchar('dict_type', { length: 100 }).notNull().unique('dict_type_unique'),
   status: varchar('status', { length: 50 }).notNull().default('1'),
   remark: varchar('remark', { length: 500 }).notNull().default(''),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
 })
 
-/** 字典数据通过编号关联类型，修改类型标识不会影响所属数据。 */
-export const dictionaryData = pgTable('dictionary_data', {
+/** 字典数据通过 dictType 关联字典，修改类型标识时同步更新关联值。 */
+export const dictDetail = pgTable('dict-detail', {
   id: uuid('id').primaryKey().defaultRandom(),
-  dictionaryId: uuid('dictionary_id').notNull().references(() => dictionaries.id, { onDelete: 'restrict' }),
+  dictType: varchar('dict_type', { length: 100 }).notNull()
+    .references(() => dict.dictType, { onDelete: 'restrict', onUpdate: 'cascade' }),
   label: varchar('label', { length: 100 }).notNull(),
   value: varchar('value', { length: 100 }).notNull(),
   index: integer('index').notNull().default(0),
@@ -50,5 +51,5 @@ export const dictionaryData = pgTable('dictionary_data', {
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
 }, (table) => [
-  unique('dictionary_data_dictionary_value_unique').on(table.dictionaryId, table.value),
+  unique('dict_detail_dict_value_unique').on(table.dictType, table.value),
 ])

@@ -26,9 +26,9 @@
       <el-table v-loading="loading" :data="dataList" row-key="id" height="100%" @selection-change="handleSelectionChange">
         <el-table-column type="selection" :width="50" align="center" fixed="left" />
         <el-table-column prop="name" label="字典名称" :min-width="160" show-overflow-tooltip />
-        <el-table-column prop="type" label="字典类型" :min-width="180" show-overflow-tooltip>
+        <el-table-column prop="dictType" label="字典类型" :min-width="180" show-overflow-tooltip>
           <template #default="{ row }">
-            <el-button type="primary" link title="管理字典数据" @click="toDetail(row as DictionaryListItem)">{{ row.type }}</el-button>
+            <el-button type="primary" link title="管理字典数据" @click="toDetail(row as DictListItem)">{{ row.dictType }}</el-button>
           </template>
         </el-table-column>
         <el-table-column prop="status" label="状态" :width="100" align="center">
@@ -45,8 +45,8 @@
         </el-table-column>
         <el-table-column label="操作" :width="120" align="center" fixed="right">
           <template #default="{ row }">
-            <el-button type="primary" link @click="toUpdate(row as DictionaryListItem)">修改</el-button>
-            <el-button type="danger" link @click="toDelete(row as DictionaryListItem)">删除</el-button>
+            <el-button type="primary" link @click="toUpdate(row as DictListItem)">修改</el-button>
+            <el-button type="danger" link @click="toDelete(row as DictListItem)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -82,9 +82,9 @@
 import { onMounted, provide, ref, shallowRef, useTemplateRef } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { apiDictionaryAdd, apiDictionaryDelete, apiDictionaryList, apiDictionaryUpdate } from '@/api/dictionary'
+import { apiDictAdd, apiDictDelete, apiDictList, apiDictUpdate } from '@/api/dict'
 import { useSystemSettingStore } from '@/stores/system-setting'
-import type { DictionaryListItem, DictionaryQueryParams } from '@/types/dictionary'
+import type { DictListItem, DictQueryParams } from '@/types/dict'
 import { formatDateTime } from '@/utils/date-time'
 import SvDictTag from '@/components/SvDictTag/SvDictTag.vue'
 import SvFullscreen from '@/components/SvFullscreen/SvFullscreen.vue'
@@ -99,11 +99,11 @@ provide('__DICT__', {
 })
 
 const router = useRouter()
-const dataList = shallowRef<DictionaryListItem[]>([])
+const dataList = shallowRef<DictListItem[]>([])
 const loading = shallowRef(false)
 const total = shallowRef(0)
-const selectedList = shallowRef<DictionaryListItem[]>([])
-const queryParams = ref<DictionaryQueryParams>({ pageNum: 1, pageSize: 20 })
+const selectedList = shallowRef<DictListItem[]>([])
+const queryParams = ref<DictQueryParams>({ pageNum: 1, pageSize: 20 })
 const showFilters = shallowRef(true)
 const actionDialogOpen = shallowRef(false)
 const actionLoading = shallowRef(false)
@@ -119,7 +119,7 @@ onMounted(() => {
 })
 
 /** 提交筛选条件并从第一页重新查询。 */
-function toSearch(data: Omit<DictionaryQueryParams, 'pageNum' | 'pageSize'>) {
+function toSearch(data: Omit<DictQueryParams, 'pageNum' | 'pageSize'>) {
   queryParams.value = { ...queryParams.value, ...data, pageNum: 1 }
   toQuery()
 }
@@ -145,7 +145,7 @@ function handleSizeChange() {
 async function toQuery() {
   loading.value = true
   try {
-    const res = await apiDictionaryList(queryParams.value)
+    const res = await apiDictList(queryParams.value)
     dataList.value = res.data ?? []
     total.value = res.total ?? 0
   } finally {
@@ -159,7 +159,7 @@ function toToggleFilter() {
 }
 
 /** 记录当前选择的表格行。 */
-function handleSelectionChange(rows: DictionaryListItem[]) {
+function handleSelectionChange(rows: DictListItem[]) {
   selectedList.value = rows
 }
 
@@ -172,7 +172,7 @@ function toAdd() {
 }
 
 /** 根据操作栏传入的行数据初始化并打开修改弹窗。 */
-function toUpdate(row: DictionaryListItem) {
+function toUpdate(row: DictListItem) {
   actionTitle.value = '修改字典'
   actionMode.value = 'update'
   actionDialogRef.value?.initForm(row)
@@ -180,20 +180,20 @@ function toUpdate(row: DictionaryListItem) {
 }
 
 /** 打开当前字典的数据管理子页面。 */
-function toDetail(row: DictionaryListItem) {
-  void router.push({ name: 'admin-dict-detail', params: { dictionaryId: row.id } })
+function toDetail(row: DictListItem) {
+  void router.push({ name: 'admin-dict-detail', params: { dictType: row.dictType } })
 }
 
 /** 新增或修改成功后关闭弹窗并刷新列表，新增时回到第一页。 */
-async function toConfirm(data: DictionaryListItem) {
+async function toConfirm(data: DictListItem) {
   if (actionLoading.value) return
   actionLoading.value = true
   try {
     if (actionMode.value === 'update') {
-      const res = await apiDictionaryUpdate(data)
+      const res = await apiDictUpdate(data)
       ElMessage.success(res.message)
     } else {
-      const res = await apiDictionaryAdd(data)
+      const res = await apiDictAdd(data)
       queryParams.value.pageNum = 1
       ElMessage.success(res.message)
     }
@@ -205,7 +205,7 @@ async function toConfirm(data: DictionaryListItem) {
 }
 
 /** 打开删除确认弹窗，请求成功后关闭弹窗并刷新列表。 */
-async function toDelete(row?: DictionaryListItem) {
+async function toDelete(row?: DictListItem) {
   const ids = (row ? [row] : selectedList.value).map((item) => item.id).filter((id) => id !== undefined)
   if (ids.length === 0) return
   try {
@@ -222,7 +222,7 @@ async function toDelete(row?: DictionaryListItem) {
         }
         instance.confirmButtonLoading = true
         try {
-          const res = await apiDictionaryDelete({ ids })
+          const res = await apiDictDelete({ ids })
           ElMessage.success(res.message)
           const lastPage = Math.max(1, Math.ceil((total.value - (res.data?.deletedCount ?? 0)) / queryParams.value.pageSize))
           queryParams.value.pageNum = Math.min(queryParams.value.pageNum, lastPage)

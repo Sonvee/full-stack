@@ -49,18 +49,18 @@ import { inject, ref, useTemplateRef } from 'vue'
 import { cloneDeep, omit } from 'es-toolkit'
 import type { FormRules } from 'element-plus'
 import SvDictSelect from '@/components/SvDictSelect/SvDictSelect.vue'
-import type { DictionaryDataListItem } from '@/types/dictionary'
+import type { DictDetailListItem } from '@/types/dict'
 
-const { dictionaryId } = defineProps<{ title: string; mode: 'add' | 'update'; loading: boolean; dictionaryId: string }>()
+const { dictType } = defineProps<{ title: string; mode: 'add' | 'update'; loading: boolean; dictType: string }>()
 const open = defineModel<boolean>('open', { default: false })
-const emit = defineEmits<{ confirm: [values: DictionaryDataListItem] }>()
+const emit = defineEmits<{ confirm: [values: DictDetailListItem] }>()
 
 /** 注入字典数据。 */
 const { sys_status, sys_tag_type } = inject<any>('__DICT__')
 
 /** 新增字典数据的默认表单，编号与创建、更新时间由服务端维护。 */
-const defaultFormData: DictionaryDataListItem = {
-  dictionaryId,
+const defaultFormData: DictDetailListItem = {
+  dictType,
   label: '',
   value: '',
   index: 0,
@@ -74,7 +74,7 @@ const formData = ref(cloneDeep(defaultFormData))
 const actionFormRef = useTemplateRef('actionFormRef')
 
 /** 表单校验规则。 */
-const rules: FormRules<DictionaryDataListItem> = {
+const rules: FormRules<DictDetailListItem> = {
   label: [{ required: true, message: '请输入字典标签', trigger: ['blur', 'change'] }],
   value: [{ required: true, message: '请输入字典键值', trigger: ['blur', 'change'] }],
   index: [{ required: true, message: '请输入有效的排序整数', trigger: ['blur', 'change'] }],
@@ -99,7 +99,7 @@ function resetForm() {
 }
 
 /** 为新增或编辑操作填入独立的表单数据，排除服务端维护的时间字段。 */
-function initForm(row?: DictionaryDataListItem) {
+function initForm(row?: DictDetailListItem) {
   formData.value = cloneDeep(row ? omit(row, ['createdAt', 'updatedAt']) : defaultFormData)
 }
 

@@ -1,6 +1,8 @@
-export const dictionaryIdSchema = { type: 'string', format: 'uuid' }
+export const dictIdSchema = { type: 'string', format: 'uuid' }
 
-export const dictionaryPaginationProperties = {
+export const dictTypeSchema = { type: 'string', minLength: 1, maxLength: 100, pattern: '^[a-z][a-z0-9_]*$' }
+
+export const dictPaginationProperties = {
   pageNum: { type: 'integer', minimum: 1, maximum: 1000000, default: 1 },
   pageSize: {
     type: 'integer',
@@ -12,88 +14,88 @@ export const dictionaryPaginationProperties = {
 
 const editableProperties = {
   name: { type: 'string', minLength: 1, maxLength: 100, pattern: '\\S' },
-  type: { type: 'string', minLength: 1, maxLength: 100, pattern: '^[a-z][a-z0-9_]*$' },
+  dictType: dictTypeSchema,
   status: { type: 'string', minLength: 1, maxLength: 50 },
   remark: { type: 'string', maxLength: 500 },
 }
 
-export const dictionaryInputSchema = {
+export const dictInputSchema = {
   type: 'object',
   additionalProperties: false,
   required: Object.keys(editableProperties),
   properties: editableProperties,
 }
 
-export const dictionaryUpdateSchema = {
-  ...dictionaryInputSchema,
-  required: ['id', ...dictionaryInputSchema.required],
-  properties: { id: dictionaryIdSchema, ...editableProperties },
+export const dictUpdateSchema = {
+  ...dictInputSchema,
+  required: ['id', ...dictInputSchema.required],
+  properties: { id: dictIdSchema, ...editableProperties },
 }
 
-export const dictionaryQuerySchema = {
+export const dictQuerySchema = {
   type: 'object',
   additionalProperties: false,
   properties: {
     name: { type: 'string', maxLength: 100 },
-    type: { type: 'string', maxLength: 100 },
+    dictType: { type: 'string', maxLength: 100 },
     status: { type: 'string', maxLength: 50 },
-    ...dictionaryPaginationProperties,
+    ...dictPaginationProperties,
   },
 }
 
-export const dictionaryParamsSchema = {
+export const dictParamsSchema = {
   type: 'object',
   additionalProperties: false,
-  required: ['id'],
-  properties: { id: dictionaryIdSchema },
+  required: ['dictType'],
+  properties: { dictType: dictTypeSchema },
 }
 
-export const dictionaryDeleteSchema = {
+export const dictDeleteSchema = {
   type: 'object',
   additionalProperties: false,
   required: ['ids'],
   properties: {
-    ids: { type: 'array', minItems: 1, uniqueItems: true, items: dictionaryIdSchema },
+    ids: { type: 'array', minItems: 1, uniqueItems: true, items: dictIdSchema },
   },
 }
 
-const dictionarySchema = {
+const dictSchema = {
   type: 'object',
   required: ['id', ...Object.keys(editableProperties), 'createdAt', 'updatedAt'],
   properties: {
-    id: dictionaryIdSchema,
+    id: dictIdSchema,
     ...editableProperties,
     createdAt: { type: 'string', format: 'date-time' },
     updatedAt: { type: 'string', format: 'date-time' },
   },
 }
 
-export const dictionaryResponseProperties = {
+export const dictResponseProperties = {
   code: { type: 'integer' },
   message: { type: 'string' },
 }
 
-export const dictionaryResponseSchema = {
+export const dictResponseSchema = {
   type: 'object',
   required: ['code', 'message', 'data'],
-  properties: { ...dictionaryResponseProperties, data: dictionarySchema },
+  properties: { ...dictResponseProperties, data: dictSchema },
 }
 
-export const dictionaryListResponseSchema = {
+export const dictListResponseSchema = {
   type: 'object',
   required: ['code', 'message', 'data', 'total'],
   properties: {
-    ...dictionaryResponseProperties,
-    data: { type: 'array', items: dictionarySchema },
+    ...dictResponseProperties,
+    data: { type: 'array', items: dictSchema },
     total: { type: 'integer' },
   },
 }
 
-export const dictionaryDeleteResponseSchema = {
+export const dictDeleteResponseSchema = {
   type: 'object',
   required: ['code', 'message', 'data'],
   properties: {
-    ...dictionaryResponseProperties,
+    ...dictResponseProperties,
     data: {
       type: 'object',
       required: ['deletedCount'],

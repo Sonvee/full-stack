@@ -3,7 +3,7 @@
     <header class="flex shrink-0 items-center justify-between gap-4">
       <div class="flex min-w-0 items-center gap-3">
         <h1 class="shrink-0 text-xl font-semibold">字典详情</h1>
-        <span v-if="dictionary" class="truncate text-sm text-muted-foreground" :title="dictionary.type">{{ dictionary.type }}</span>
+        <span v-if="dict" class="truncate text-sm text-muted-foreground" :title="dict.dictType">{{ dict.dictType }}</span>
       </div>
       <SvFullscreen v-model:full="systemSettingStore.full" :container="containerRef" size="small" />
     </header>
@@ -13,7 +13,7 @@
 
     <!-- 表格工具栏 -->
     <div class="flex shrink-0 flex-wrap items-center">
-      <el-button type="primary" :disabled="!dictionary" @click="toAdd"><i class="sv-icon-plus mr-2" />新增</el-button>
+      <el-button type="primary" :disabled="!dict" @click="toAdd"><i class="sv-icon-plus mr-2" />新增</el-button>
       <el-button type="danger" :disabled="selectedList.length === 0" @click="toDelete()"> <i class="sv-icon-delete mr-2" />删除 </el-button>
       <el-button @click="toBack"><i class="sv-icon-arrowleft mr-2" />返回字典管理</el-button>
       <span class="min-w-0 flex-1" />
@@ -50,8 +50,8 @@
         </el-table-column>
         <el-table-column label="操作" :width="120" align="center" fixed="right">
           <template #default="{ row }">
-            <el-button type="primary" link @click="toUpdate(row as DictionaryDataListItem)">修改</el-button>
-            <el-button type="danger" link @click="toDelete(row as DictionaryDataListItem)">删除</el-button>
+            <el-button type="primary" link @click="toUpdate(row as DictDetailListItem)">修改</el-button>
+            <el-button type="danger" link @click="toDelete(row as DictDetailListItem)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -78,7 +78,7 @@
       :title="actionTitle"
       :mode="actionMode"
       :loading="actionLoading"
-      :dictionary-id="dictionaryId"
+      :dict-type="dictType"
       @confirm="toConfirm"
     />
   </section>
@@ -88,9 +88,9 @@
 import { onMounted, provide, ref, shallowRef, useTemplateRef } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { apiDictionaryDataAdd, apiDictionaryDataDelete, apiDictionaryDataList, apiDictionaryDataUpdate, apiDictionaryDetail } from '@/api/dictionary'
+import { apiDictDetailAdd, apiDictDetailDelete, apiDictDetailList, apiDictDetailUpdate, apiDictDetail } from '@/api/dict'
 import { useSystemSettingStore } from '@/stores/system-setting'
-import type { DictionaryDataListItem, DictionaryDataQueryParams, DictionaryListItem } from '@/types/dictionary'
+import type { DictDetailListItem, DictDetailQueryParams, DictListItem } from '@/types/dict'
 import { formatDateTime } from '@/utils/date-time'
 import SvDictTag from '@/components/SvDictTag/SvDictTag.vue'
 import SvFullscreen from '@/components/SvFullscreen/SvFullscreen.vue'
@@ -99,7 +99,7 @@ import ActionDialog from './components/ActionDialog.vue'
 import FilterForm from './components/FilterForm.vue'
 import { sys_status, sys_tag_type } from '../dict-data'
 
-const { dictionaryId } = defineProps<{ dictionaryId: string }>()
+const { dictType } = defineProps<{ dictType: string }>()
 
 /** 页面统一向子组件提供字典。 */
 provide('__DICT__', {
@@ -108,12 +108,12 @@ provide('__DICT__', {
 })
 
 const router = useRouter()
-const dictionary = shallowRef<DictionaryListItem>()
-const dataList = shallowRef<DictionaryDataListItem[]>([])
+const dict = shallowRef<DictListItem>()
+const dataList = shallowRef<DictDetailListItem[]>([])
 const loading = shallowRef(false)
 const total = shallowRef(0)
-const selectedList = shallowRef<DictionaryDataListItem[]>([])
-const queryParams = ref<DictionaryDataQueryParams>({ dictionaryId, pageNum: 1, pageSize: 20 })
+const selectedList = shallowRef<DictDetailListItem[]>([])
+const queryParams = ref<DictDetailQueryParams>({ dictType, pageNum: 1, pageSize: 20 })
 const showFilters = shallowRef(true)
 const actionDialogOpen = shallowRef(false)
 const actionLoading = shallowRef(false)
@@ -129,14 +129,14 @@ onMounted(() => {
 })
 
 /** 提交筛选条件并从第一页重新查询。 */
-function toSearch(data: Omit<DictionaryDataQueryParams, 'dictionaryId' | 'pageNum' | 'pageSize'>) {
+function toSearch(data: Omit<DictDetailQueryParams, 'dictType' | 'pageNum' | 'pageSize'>) {
   queryParams.value = { ...queryParams.value, ...data, pageNum: 1 }
   toQuery()
 }
 
 /** 清除筛选条件并从第一页重新查询，保留每页条数。 */
 function toReset() {
-  queryParams.value = { dictionaryId, pageNum: 1, pageSize: queryParams.value.pageSize }
+  queryParams.value = { dictType, pageNum: 1, pageSize: queryParams.value.pageSize }
   toQuery()
 }
 
@@ -155,11 +155,11 @@ function handleSizeChange() {
 async function toQuery() {
   loading.value = true
   try {
-    const [dictionaryRes, res] = await Promise.all([
-      apiDictionaryDetail(dictionaryId),
-      apiDictionaryDataList(queryParams.value)
+    const [dictRes, res] = await Promise.all([
+      apiDictDetail(dictType),
+      apiDictDetailList(queryParams.value)
     ])
-    dictionary.value = dictionaryRes.data
+    dict.value = dictRes.data
     dataList.value = res.data ?? []
     total.value = res.total ?? 0
   } finally {
@@ -178,7 +178,7 @@ function toToggleFilter() {
 }
 
 /** 记录当前选择的表格行。 */
-function handleSelectionChange(rows: DictionaryDataListItem[]) {
+function handleSelectionChange(rows: DictDetailListItem[]) {
   selectedList.value = rows
 }
 
@@ -191,7 +191,7 @@ function toAdd() {
 }
 
 /** 根据操作栏传入的行数据初始化并打开修改弹窗。 */
-function toUpdate(row: DictionaryDataListItem) {
+function toUpdate(row: DictDetailListItem) {
   actionTitle.value = '修改字典数据'
   actionMode.value = 'update'
   actionDialogRef.value?.initForm(row)
@@ -199,15 +199,15 @@ function toUpdate(row: DictionaryDataListItem) {
 }
 
 /** 新增或修改成功后关闭弹窗并刷新列表，新增时回到第一页。 */
-async function toConfirm(data: DictionaryDataListItem) {
+async function toConfirm(data: DictDetailListItem) {
   if (actionLoading.value) return
   actionLoading.value = true
   try {
     if (actionMode.value === 'update') {
-      const res = await apiDictionaryDataUpdate(data)
+      const res = await apiDictDetailUpdate(data)
       ElMessage.success(res.message)
     } else {
-      const res = await apiDictionaryDataAdd(data)
+      const res = await apiDictDetailAdd(data)
       queryParams.value.pageNum = 1
       ElMessage.success(res.message)
     }
@@ -219,7 +219,7 @@ async function toConfirm(data: DictionaryDataListItem) {
 }
 
 /** 打开删除确认弹窗，请求成功后关闭弹窗并刷新列表。 */
-async function toDelete(row?: DictionaryDataListItem) {
+async function toDelete(row?: DictDetailListItem) {
   const ids = (row ? [row] : selectedList.value).map((item) => item.id).filter((id) => id !== undefined)
   if (ids.length === 0) return
   try {
@@ -236,7 +236,7 @@ async function toDelete(row?: DictionaryDataListItem) {
         }
         instance.confirmButtonLoading = true
         try {
-          const res = await apiDictionaryDataDelete(dictionaryId, { ids })
+          const res = await apiDictDetailDelete(dictType, { ids })
           ElMessage.success(res.message)
           const lastPage = Math.max(1, Math.ceil((total.value - (res.data?.deletedCount ?? 0)) / queryParams.value.pageSize))
           queryParams.value.pageNum = Math.min(queryParams.value.pageNum, lastPage)
