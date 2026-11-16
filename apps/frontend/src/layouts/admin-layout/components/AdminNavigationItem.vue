@@ -1,5 +1,5 @@
 <template>
-  <Collapsible v-if="item.children?.length" v-model:open="open" as-child>
+  <Collapsible v-if="visibleChildren.length" v-model:open="open" as-child>
     <component :is="containerComponent">
       <CollapsibleTrigger as-child>
         <component
@@ -19,7 +19,7 @@
       <CollapsibleContent>
         <SidebarMenuSub class="mr-0 translate-x-0 pr-0">
           <AdminNavigationItem
-            v-for="child in item.children"
+            v-for="child in visibleChildren"
             :key="child.path"
             :item="child"
             nested
@@ -56,6 +56,8 @@ const { item, nested = false } = defineProps<{ item: RouteRecordRaw; nested?: bo
 const route = useRoute()
 const { setOpenMobile } = useSidebar()
 const open = shallowRef(false)
+/** 过滤后再判断是否展开，只有隐藏子路由的菜单仍可直接点击。 */
+const visibleChildren = computed(() => item.children?.filter((child) => child.meta?.hide !== true) ?? [])
 const isActive = computed(() => route.matched.some((record) => record.name === item.name))
 const containerComponent = computed(() => (nested ? SidebarMenuSubItem : SidebarMenuItem))
 const buttonComponent = computed(() => (nested ? SidebarMenuSubButton : SidebarMenuButton))

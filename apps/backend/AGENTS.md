@@ -5,6 +5,7 @@
 ## 开发环境
 
 - 修改后端代码后，如需同步更新由 Docker Compose 部署的开发环境，必须及时提示用户在仓库根目录手动运行 `docker compose -f docker-compose.dev.yml up -d` 或必要的相关更新命令。
+- 后端代码未自动重载或新接口尚未生效时，提示用户在仓库根目录手动运行 `docker compose -f docker-compose.dev.yml restart backend`，重启后端容器。
 
 ## 数据库迁移
 

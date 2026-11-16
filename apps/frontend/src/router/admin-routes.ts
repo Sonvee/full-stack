@@ -9,6 +9,35 @@ export const adminRoutes: RouteRecordRaw[] = [
     meta: { title: '工作台', icon: 'sv-icon-viewdashboard' }
   },
   {
+    path: 'system',
+    name: 'admin-system',
+    redirect: { name: 'admin-dict-list' },
+    meta: { title: '系统管理', icon: 'sv-icon-menu-management' },
+    children: [
+      {
+        path: 'dict',
+        name: 'admin-dict',
+        redirect: { name: 'admin-dict-list' },
+        meta: { title: '字典管理', icon: 'sv-icon-bookopen' },
+        children: [
+          {
+            path: '',
+            name: 'admin-dict-list',
+            component: () => import('../views/admin/system/dict/index.vue'),
+            meta: { hide: true, keepAlive: true }
+          },
+          {
+            path: 'dict-detail/:dictionaryId',
+            name: 'admin-dict-detail',
+            component: () => import('../views/admin/system/dict/dict-detail/index.vue'),
+            props: true,
+            meta: { title: '字典详情', hide: true }
+          }
+        ]
+      }
+    ]
+  },
+  {
     path: 'tools',
     name: 'admin-tools',
     redirect: { name: 'admin-test-sample' },

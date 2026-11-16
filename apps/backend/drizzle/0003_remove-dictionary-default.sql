@@ -1,0 +1,1 @@
+ALTER TABLE "dictionary_data" DROP COLUMN "is_default";

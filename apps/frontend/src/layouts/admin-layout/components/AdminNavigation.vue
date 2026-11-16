@@ -2,7 +2,7 @@
   <SidebarGroup>
     <SidebarGroupLabel>工作空间</SidebarGroupLabel>
     <SidebarMenu>
-      <AdminNavigationItem v-for="item in adminRoutes" :key="item.path" :item="item" />
+      <AdminNavigationItem v-for="item in visibleRoutes" :key="item.path" :item="item" />
     </SidebarMenu>
   </SidebarGroup>
   <SidebarGroup>
@@ -44,6 +44,9 @@ import {
 } from '@/components/ui/sidebar'
 import { adminRoutes } from '@/router/admin-routes'
 import AdminNavigationItem from './AdminNavigationItem.vue'
+
+/** 菜单隐藏不影响传给 Vue Router 的完整路由表。 */
+const visibleRoutes = adminRoutes.filter((item) => item.meta?.hide !== true)
 </script>
 
 <style lang="scss" scoped></style>

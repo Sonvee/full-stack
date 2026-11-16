@@ -15,6 +15,34 @@
       "when": 1794675326630,
       "tag": "0001_add-test-sample-index",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1794837312465,
+      "tag": "0002_create-dictionaries",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1794843562841,
+      "tag": "0003_remove-dictionary-default",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1794846706799,
+      "tag": "0004_rename-dictionary-status",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1794847124995,
+      "tag": "0005_dictionary-status-string",
+      "breakpoints": true
     }
   ]
 }

@@ -1,0 +1,141 @@
+<template>
+  <section class="filter-form flex min-h-0 min-w-0 max-h-[70%] flex-col rounded-lg border p-4" :class="{ 'is-expanded': expanded }">
+    <el-form
+      ref="filterFormRef"
+      :model="formData"
+      label-width="auto"
+      label-position="right"
+      class="flex min-h-0 min-w-0 flex-col"
+      @submit.prevent="toConfirm"
+    >
+      <div class="filter-form-grid grid min-w-0 overflow-x-hidden overflow-y-auto gap-4 p-1">
+        <el-form-item prop="name" label="字典名称">
+          <el-input v-model.trim="formData.name" clearable placeholder="请输入字典名称" :maxlength="100" />
+        </el-form-item>
+        <el-form-item prop="type" label="字典类型">
+          <el-input v-model.trim="formData.type" clearable placeholder="请输入字典类型" :maxlength="100" />
+        </el-form-item>
+        <el-form-item prop="status" label="状态">
+          <SvDictSelect
+            v-model="formData.status"
+            :dict-list="sys_status"
+            label-key="label"
+            value-key="value"
+            placeholder="全部"
+            clearable
+          />
+        </el-form-item>
+        <div class="filter-form-actions flex min-w-0 flex-wrap items-center justify-end gap-2 self-end [&>.el-button]:ml-0!">
+          <el-button native-type="submit" type="primary"><i class="sv-icon-magnify mr-2" />查询</el-button>
+          <el-button @click="reset"><i class="sv-icon-reload mr-2" />重置</el-button>
+          <el-button class="filter-form-toggle" text @click="toggleExpanded">
+            {{ expanded ? '收起条件' : '展开条件' }}
+            <i class="ml-2" :class="expanded ? 'sv-icon-chevronup' : 'sv-icon-chevrondown'" />
+          </el-button>
+        </div>
+      </div>
+    </el-form>
+  </section>
+</template>
+
+<script lang="ts" setup>
+import { inject, ref, shallowRef, useTemplateRef } from 'vue'
+import SvDictSelect from '@/components/SvDictSelect/SvDictSelect.vue'
+import type { DictionaryQueryParams } from '@/types/dictionary'
+
+const emit = defineEmits<{
+  search: [filters: Omit<DictionaryQueryParams, 'pageNum' | 'pageSize'>]
+  reset: []
+}>()
+
+/** 注入字典数据。 */
+const { sys_status } = inject<any>('__DICT__')
+
+/** 默认筛选条件，分页由父页面管理。 */
+const defaultQueryParams: Omit<DictionaryQueryParams, 'pageNum' | 'pageSize'> = {
+  name: '',
+  type: '',
+  status: undefined
+}
+
+/** 筛选条件表单数据。 */
+const formData = ref({ ...defaultQueryParams })
+const filterFormRef = useTemplateRef('filterFormRef')
+const expanded = shallowRef(false)
+
+/** 校验通过后提交当前筛选条件。 */
+function toConfirm() {
+  void filterFormRef.value?.validate((valid) => {
+    if (valid) {
+      emit('search', formData.value)
+    }
+  })
+}
+
+/** 同时清除草稿与已经提交的筛选条件。 */
+function reset() {
+  filterFormRef.value?.resetFields()
+  emit('reset')
+}
+
+/** 切换筛选条件的显示行数。 */
+function toggleExpanded() {
+  expanded.value = !expanded.value
+}
+</script>
+
+<style lang="scss" scoped>
+.filter-form {
+  container-name: filter-form;
+  container-type: inline-size;
+}
+
+.filter-form-toggle {
+  display: none;
+}
+
+.filter-form-actions {
+  grid-column: -2 / -1;
+}
+
+.filter-form-grid > .el-form-item {
+  min-width: 0;
+  margin-bottom: 0;
+}
+
+// $columns 控制每行的等宽列数，操作区也占一格；收起时最多显示两行，并为操作区预留末格。
+@mixin filter-columns($columns) {
+  // 从第 $columns * 2 个字段开始折叠；存在该字段时显示展开按钮。
+  $overflow-start: $columns * 2;
+
+  :deep(.filter-form-grid) {
+    grid-template-columns: repeat($columns, minmax(0, 1fr));
+  }
+
+  .filter-form:not(.is-expanded) :deep(.filter-form-grid > .el-form-item:nth-child(n + #{$overflow-start})) {
+    display: none;
+  }
+
+  .filter-form:has(.filter-form-grid > .el-form-item:nth-child(#{$overflow-start})) .filter-form-toggle {
+    display: inline-flex;
+  }
+}
+
+// 默认四列；以下按 filter-form 容器宽度调整列数，非浏览器窗口宽度。
+@include filter-columns(4);
+
+// 容器宽度 < 29rem：一列。
+@container filter-form (width < 29rem) {
+  @include filter-columns(1);
+}
+
+// 29rem <= 容器宽度 < 44rem：两列。
+@container filter-form (29rem <= width < 44rem) {
+  @include filter-columns(2);
+}
+
+// 44rem <= 容器宽度 < 59rem：三列；达到 59rem 后使用默认四列。
+@container filter-form (44rem <= width < 59rem) {
+  @include filter-columns(3);
+}
+</style>

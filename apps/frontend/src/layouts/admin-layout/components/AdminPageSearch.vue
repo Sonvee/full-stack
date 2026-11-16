@@ -59,7 +59,8 @@ const pages = router.getRoutes().flatMap((route) => {
   if (
     typeof route.name !== 'string' ||
     !route.name.startsWith('admin-') ||
-    route.redirect ||
+    route.meta.hide === true ||
+    (route.redirect && route.children.some((child) => child.meta?.hide !== true)) ||
     typeof route.meta.title !== 'string' ||
     typeof route.meta.icon !== 'string'
   ) {
