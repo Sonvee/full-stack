@@ -2,22 +2,9 @@ import Fastify from 'fastify'
 import type { FastifyError } from 'fastify'
 import fastifyRedis from '@fastify/redis'
 import { env } from './config/env.js'
+import { httpCodeMap } from './constants/http.js'
 import { db, pool } from './db/client.js'
 import routes from './routes/index.js'
-
-/** HTTP 状态码的默认提示，与前端请求层保持一致。 */
-const httpCodeMap: Record<number, string> = {
-  400: '请求参数有误，请检查后重试',
-  401: '未登录或登录状态已失效，请重新登录',
-  403: '没有权限访问该资源',
-  404: '请求的资源不存在',
-  409: '数据发生冲突，请刷新后重试',
-  429: '请求过于频繁，请稍后重试',
-  500: '服务器内部错误，请稍后重试',
-  502: '网关异常，请稍后重试',
-  503: '服务暂时不可用，请稍后重试',
-  504: '网关请求超时，请稍后重试',
-}
 
 /** 创建后端服务，统一注册基础设施、路由及 HTTP 错误响应。 */
 export function buildApp() {

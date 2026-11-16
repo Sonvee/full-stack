@@ -44,7 +44,7 @@
             <SvDictTag :dict-list="dict_single_select" :data="row.singleSelect" label-key="label" value-key="value" />
           </template>
         </el-table-column>
-        <el-table-column prop="multiSelect" label="测试多选" :min-width="180" align="center">
+        <el-table-column prop="multiSelect" label="测试多选" :min-width="200" align="center">
           <template #default="{ row }">
             <div class="flex flex-wrap justify-center gap-1">
               <SvDictTag

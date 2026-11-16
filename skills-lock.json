@@ -7,12 +7,6 @@
       "skillPath": "skills/code-with-docs/SKILL.md",
       "computedHash": "cfebbba4b3daf535d563942fdc559e6b8626d8d14aba563201dfafed5886f35b"
     },
-    "shadcn-vue": {
-      "source": "unovue/shadcn-vue",
-      "sourceType": "github",
-      "skillPath": "skills/shadcn-vue/SKILL.md",
-      "computedHash": "8f889bee4622048473cab8272b5bbcdf3e0e83929afb1b444adf572fa9c252a3"
-    },
     "sove-coding-style": {
       "source": "Sonvee/sv-ai",
       "sourceType": "github",

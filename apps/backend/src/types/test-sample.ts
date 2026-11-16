@@ -16,10 +16,10 @@ export interface TestSampleQueryParams {
   /** 匹配包含全部已选项的记录。 */
   multiSelect?: string[]
   operator?: string
-  /** Unix 毫秒时间戳范围，按开始、结束排列，包含两端边界。 */
-  createdRange?: [number, number]
-  /** Unix 毫秒时间戳范围，按开始、结束排列，包含两端边界。 */
-  updatedRange?: [number, number]
+  /** ISO 8601 日期时间范围，按开始、结束排列，包含两端边界。 */
+  createdRange?: [string, string]
+  /** ISO 8601 日期时间范围，按开始、结束排列，包含两端边界。 */
+  updatedRange?: [string, string]
   pageNum: number
   /** 每页条数，-1 表示忽略 pageNum 并查询全部匹配数据。 */
   pageSize: number

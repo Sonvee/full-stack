@@ -18,10 +18,10 @@ import { computed } from 'vue'
 import { ElDatePicker } from 'element-plus'
 import { dateTimeConfig, formatDateTime, getDateTime, parseDateTime } from '@/utils/date-time'
 
-/** 按开始、结束顺序返回 Unix 毫秒时间戳，清空时为 null。 */
-const model = defineModel<[number, number] | null>({ default: null })
+/** 按开始、结束顺序返回 ISO 8601 日期时间字符串，清空时为 null。 */
+const model = defineModel<[string, string] | null>({ default: null })
 
-/** 面板显示配置时区的日历时间，提交时转换为时间戳；结束边界包含整秒。 */
+/** 面板显示配置时区的日历时间，提交时转换为 ISO 字符串；结束边界包含整秒。 */
 const pickerValue = computed<[string, string] | null>({
   get(): [string, string] | null {
     const range = model.value
@@ -30,7 +30,7 @@ const pickerValue = computed<[string, string] | null>({
   },
   set(value) {
     model.value = value
-      ? [parseDateTime(value[0]).valueOf(), parseDateTime(value[1]).endOf('second').valueOf()]
+      ? [parseDateTime(value[0]).toISOString(), parseDateTime(value[1]).endOf('second').toISOString()]
       : null
   },
 })
@@ -54,7 +54,7 @@ const shortcuts = [
   },
 ]
 
-/** 快捷值使用面板可直接解析的日历格式，再由模型转换为对应时区的时间戳。 */
+/** 快捷值使用面板可直接解析的日历格式，再由模型按配置时区转换为 ISO 字符串。 */
 function getShortcutRange(days: number) {
   const today = getDateTime()
   return [

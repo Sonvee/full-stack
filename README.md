@@ -82,31 +82,6 @@ curl http://localhost:3001/health
 pnpm dev:frontend
 ```
 
-### 管理端布局
-
-首页仅保留项目名称和「进入管理端」按钮。启动前端后，访问 `/admin` 或点击该按钮即可预览管理端。布局参考 shadcn-vue `sidebar-08`，包含内嵌内容区、可折叠的侧栏与子菜单、移动端抽屉导航、动态面包屑和底部菜单。
-
-布局入口位于 `apps/frontend/src/layouts/admin-layout/index.vue`，导航组件放在同目录的 `components` 中。管理端子路由统一配置在 `apps/frontend/src/router/admin-routes.ts`，菜单根据路由的 `children`、`meta.title` 和 `meta.icon` 递归生成，面包屑根据当前匹配的路由层级生成。直接访问深层链接时会自动展开对应的菜单分组。
-
-| 菜单层级 | 演示页面 | 访问路径 |
-| --- | --- | --- |
-| 一级 | 工作台、布局说明 | `/admin`、`/admin/guide` |
-| 一级 | 消息中心 | `/admin/notifications` |
-| 二级 | 页面示例 → 按钮交互、排版展示 | `/admin/examples/buttons`、`/admin/examples/typography` |
-| 三级 | 系统演示 → 权限管理 → 角色列表、成员列表 | `/admin/system/access/roles`、`/admin/system/access/members` |
-
-页面示例、系统演示和权限管理的父级地址会跳转到各自的默认子页面。演示页面仅使用静态数据和组件本地状态，刷新或离开页面后恢复初始状态。
-
-当前仅提供布局与页面导航，尚未接入身份认证及业务接口。
-
-管理端 header 右侧提供外观设置：主题色支持蓝色（默认）、红色、绿色、橙色和紫色；显示模式支持白昼、暗夜、系统（默认）。设置通过 VueUse 保存在浏览器 localStorage，应用启动时恢复；系统模式会随系统设置自动变化，主题同时应用于登录页和首页。
-
-### 登录页
-
-访问 `/login` 查看登录页，入口为 `apps/frontend/src/views/login.vue`。页面参考 shadcn-vue `login-02`，桌面端显示双栏封面，移动端仅显示登录表单；品牌标识可返回首页，「预览管理端」可直接进入演示页面。封面暂用占位图。
-
-邮箱和密码使用浏览器原生必填及邮箱格式校验。当前未接入登录接口，提交有效表单会提示服务尚未接入，不会发起登录请求或保存凭据。
-
 ### Workspace 依赖安装
 
 项目使用 pnpm workspace 统一管理依赖。推荐在仓库根目录使用 `--filter`，明确将依赖安装到对应应用：

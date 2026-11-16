@@ -7,7 +7,6 @@
 - 遵循 Vue 3 Composition API 与 `<script setup>`。
 - Vue 模板引用变量统一以 `Ref` 结尾，模板 `ref` 与 `useTemplateRef` 的名称保持一致，例如 `filterFormRef`。
 - `useTemplateRef` 默认不写泛型，由 Vue 工具链自动推断类型，例如 `const actionDialogRef = useTemplateRef('actionDialogRef')`；仅在无法正确推断类型时才显式指定泛型。
-- 涉及 shadcn-vue 的组件安装、使用、样式定制、调试或更新时，必须先阅读并遵守 [shadcn-vue skill](../../.agents/skills/shadcn-vue/SKILL.md)，并按其要求读取相关参考文件。
 - 编写工具逻辑前，先检查原生 JavaScript API、项目已有工具、`@vueuse/core` 和 `es-toolkit`；Vue 响应式及浏览器交互优先使用 VueUse，通用数据处理优先复用 `es-toolkit`，按需导入，避免重复造轮子。
 
 ## CRUD 页面实现基准（强制）

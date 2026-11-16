@@ -2,7 +2,6 @@ import { and, arrayContains, asc, between, desc, eq, ilike, inArray } from 'driz
 import type { FastifyPluginAsync } from 'fastify'
 import { testSamples } from '../../db/schema.js'
 import type {
-  TestSample,
   TestSampleDeleteParams,
   TestSampleInput,
   TestSampleQueryParams,
@@ -17,15 +16,6 @@ import {
   testSampleResponseSchema,
   testSampleUpdateSchema,
 } from './schemas.js'
-
-/** 数据库日期统一转换为 Unix 毫秒时间戳，供接口返回。 */
-function serializeTestSample(data: TestSample) {
-  return {
-    ...data,
-    createdAt: data.createdAt.getTime(),
-    updatedAt: data.updatedAt.getTime(),
-  }
-}
 
 const testSampleRoutes: FastifyPluginAsync = async (app) => {
   app.get<{ Querystring: TestSampleQueryParams }>(
@@ -49,13 +39,13 @@ const testSampleRoutes: FastifyPluginAsync = async (app) => {
         return reply.code(400).send({ code: 400, message: '数字下限不能大于上限' })
       }
       if (
-        (query.createdRange && query.createdRange[0] > query.createdRange[1]) ||
-        (query.updatedRange && query.updatedRange[0] > query.updatedRange[1])
+        (query.createdRange && Date.parse(query.createdRange[0]) > Date.parse(query.createdRange[1])) ||
+        (query.updatedRange && Date.parse(query.updatedRange[0]) > Date.parse(query.updatedRange[1]))
       ) {
         return reply.code(400).send({ code: 400, message: '开始时间不能晚于结束时间' })
       }
 
-      // 时间范围使用毫秒时间戳，包含开始和结束边界。
+      // 时间范围使用 ISO 8601 日期时间字符串，包含开始和结束边界。
       const filters = and(
         query.name ? ilike(testSamples.name, `%${query.name}%`) : undefined,
         query.description ? ilike(testSamples.description, `%${query.description}%`) : undefined,
@@ -87,7 +77,7 @@ const testSampleRoutes: FastifyPluginAsync = async (app) => {
       }
       const data = await listQuery
       const total = await app.db.$count(testSamples, filters)
-      return { code: 200, message: '查询成功', data: data.map(serializeTestSample), total }
+      return { code: 200, message: '查询成功', data, total }
     },
   )
 
@@ -98,7 +88,7 @@ const testSampleRoutes: FastifyPluginAsync = async (app) => {
     },
     async (request, reply) => {
       const [data] = await app.db.insert(testSamples).values(request.body).returning()
-      return reply.code(201).send({ code: 201, message: '新增成功', data: serializeTestSample(data) })
+      return reply.code(201).send({ code: 201, message: '新增成功', data })
     },
   )
 
@@ -120,7 +110,7 @@ const testSampleRoutes: FastifyPluginAsync = async (app) => {
       if (!data) {
         return reply.code(404).send({ code: 404, message: '测试样例不存在或已被删除' })
       }
-      return { code: 200, message: '修改成功', data: serializeTestSample(data) }
+      return { code: 200, message: '修改成功', data }
     },
   )
 

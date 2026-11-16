@@ -12,10 +12,10 @@ export interface TestSampleListItem {
   multiSelect: string[]
   /** 当前未接入登录，由表单填写最后一次操作人的名称。 */
   operator: string
-  /** Unix 毫秒时间戳。 */
-  createdAt?: number
-  /** Unix 毫秒时间戳。 */
-  updatedAt?: number
+  /** ISO 8601 日期时间字符串。 */
+  createdAt?: string
+  /** ISO 8601 日期时间字符串。 */
+  updatedAt?: string
 }
 
 /** 测试样例列表查询参数，筛选条件均可省略。 */
@@ -28,10 +28,10 @@ export interface TestSampleQueryParams {
   singleSelect?: string
   multiSelect?: string[]
   operator?: string
-  /** Unix 毫秒时间戳范围。 */
-  createdRange?: [number, number] | null
-  /** Unix 毫秒时间戳范围。 */
-  updatedRange?: [number, number] | null
+  /** ISO 8601 日期时间范围。 */
+  createdRange?: [string, string] | null
+  /** ISO 8601 日期时间范围。 */
+  updatedRange?: [string, string] | null
   pageNum: number
   /** 每页条数，-1 表示忽略 pageNum 并查询全部匹配数据。 */
   pageSize: number

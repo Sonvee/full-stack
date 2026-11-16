@@ -7,18 +7,10 @@ const multiSelectSchema = {
   maxItems: 3,
 }
 
-/** Unix 毫秒时间戳，限定在 JavaScript Date 的有效范围内。 */
-const timestampSchema = {
-  type: 'integer',
-  minimum: -8640000000000000,
-  maximum: 8640000000000000,
-  description: 'Unix 毫秒时间戳',
-}
-
-/** 时间范围固定为 [开始时间戳, 结束时间戳]。 */
-const timestampRangeSchema = {
+/** 时间范围固定为 [开始时间, 结束时间]。 */
+const dateTimeRangeSchema = {
   type: 'array',
-  items: timestampSchema,
+  items: { type: 'string', format: 'date-time' },
   minItems: 2,
   maxItems: 2,
 }
@@ -59,8 +51,8 @@ export const testSampleQuerySchema = {
     singleSelect: singleSelectSchema,
     multiSelect: multiSelectSchema,
     operator: { type: 'string', maxLength: 100 },
-    createdRange: timestampRangeSchema,
-    updatedRange: timestampRangeSchema,
+    createdRange: dateTimeRangeSchema,
+    updatedRange: dateTimeRangeSchema,
     pageNum: { type: 'integer', default: 1 },
     pageSize: {
       type: 'integer',
@@ -100,8 +92,8 @@ const testSampleSchema = {
   properties: {
     id: { type: 'string', format: 'uuid' },
     ...editableProperties,
-    createdAt: timestampSchema,
-    updatedAt: timestampSchema,
+    createdAt: { type: 'string', format: 'date-time' },
+    updatedAt: { type: 'string', format: 'date-time' },
   },
 }
 

@@ -7,19 +7,19 @@ dayjs.extend(customParseFormat)
 dayjs.extend(utc)
 dayjs.extend(timezone)
 
-/** 前端统一的时间显示格式与时区；接口始终传输 Unix 毫秒时间戳。 */
+/** 前端统一的时间显示格式与时区。 */
 export const dateTimeConfig = {
   format: 'YYYY-MM-DD HH:mm:ss',
   timezone: 'Asia/Shanghai',
 }
 
-/** 将 Unix 毫秒时间戳转换为配置时区的日期，默认使用当前时间。 */
-export function getDateTime(value = Date.now()) {
+/** 将日期字符串转换为配置时区的日期，默认使用当前时间。 */
+export function getDateTime(value?: string) {
   return dayjs(value).tz(dateTimeConfig.timezone)
 }
 
-/** 按前端配置显示 Unix 毫秒时间戳，未提供时间时保持空白。 */
-export function formatDateTime(value?: number) {
+/** 按前端配置显示日期，未提供时间时保持空白。 */
+export function formatDateTime(value?: string) {
   if (value === undefined) return ''
   return getDateTime(value).format(dateTimeConfig.format)
 }
