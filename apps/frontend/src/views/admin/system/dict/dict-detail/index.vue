@@ -15,6 +15,9 @@
     <div class="flex shrink-0 flex-wrap items-center">
       <el-button type="primary" :disabled="!dict" @click="toAdd"><i class="sv-icon-plus mr-2" />新增</el-button>
       <el-button type="danger" :disabled="selectedList.length === 0" @click="toDelete()"> <i class="sv-icon-delete mr-2" />删除 </el-button>
+      <el-button type="warning" :disabled="!dict" :loading="cacheLoading" @click="toUpdateCache">
+        <i class="sv-icon-database-cache mr-2" />更新字典缓存
+      </el-button>
       <el-button @click="toBack"><i class="sv-icon-arrowleft mr-2" />返回字典管理</el-button>
       <span class="min-w-0 flex-1" />
       <el-button circle title="刷新" @click="toQuery">
@@ -88,7 +91,7 @@
 import { onMounted, provide, ref, shallowRef, useTemplateRef } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { apiDictDetail, apiDictDetailAdd, apiDictDetailDelete, apiDictDetailUpdate, apiDictType } from '@/api/dict'
+import { apiDictDetail, apiDictDetailAdd, apiDictDetailCacheUpdate, apiDictDetailDelete, apiDictDetailUpdate, apiDictType } from '@/api/dict'
 import { useSystemSettingStore } from '@/stores/system-setting'
 import type { DictDetailListItem, DictDetailQueryParams, DictListItem } from '@/types/dict'
 import { formatDateTime } from '@/utils/date-time'
@@ -111,6 +114,7 @@ const router = useRouter()
 const dict = shallowRef<DictListItem>()
 const dataList = shallowRef<DictDetailListItem[]>([])
 const loading = shallowRef(false)
+const cacheLoading = shallowRef(false)
 const total = shallowRef(0)
 const selectedList = shallowRef<DictDetailListItem[]>([])
 const queryParams = ref<DictDetailQueryParams>({ dictType, pageNum: 1, pageSize: 20 })
@@ -164,6 +168,18 @@ async function toQuery() {
     total.value = res.total ?? 0
   } finally {
     loading.value = false
+  }
+}
+
+/** 清除当前字典缓存，后续查询时重新缓存。 */
+async function toUpdateCache() {
+  if (cacheLoading.value) return
+  cacheLoading.value = true
+  try {
+    const res = await apiDictDetailCacheUpdate(dictType)
+    ElMessage.success(res.message)
+  } finally {
+    cacheLoading.value = false
   }
 }
 

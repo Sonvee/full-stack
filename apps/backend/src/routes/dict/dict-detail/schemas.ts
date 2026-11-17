@@ -57,6 +57,12 @@ const dictDetailSchema = {
   },
 }
 
+export const dictDetailCacheResponseSchema = {
+  type: 'object',
+  required: ['code', 'message'],
+  properties: dictResponseProperties,
+}
+
 export const dictDetailResponseSchema = {
   type: 'object',
   required: ['code', 'message', 'data'],

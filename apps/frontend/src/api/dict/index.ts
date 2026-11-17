@@ -32,6 +32,11 @@ export function apiDictDetail(params: DictDetailQueryParams) {
   return useRequest<ApiResponse<DictDetailListItem[]>>({ url: `/dict/detail/${params.dictType}`, method: 'get', params })
 }
 
+/** 清除当前字典缓存，后续查询时重新缓存。 */
+export function apiDictDetailCacheUpdate(dictType: string) {
+  return useRequest<ApiResponse<never>>({ url: `/dict/detail/cache/${dictType}`, method: 'post' })
+}
+
 /** 新增字典数据。 */
 export function apiDictDetailAdd(data: DictDetailListItem) {
   return useRequest<ApiResponse<DictDetailListItem>>({ url: '/dict/detail/add', method: 'post', data })

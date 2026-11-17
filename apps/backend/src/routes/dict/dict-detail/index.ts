@@ -11,6 +11,7 @@ import type {
   DictTypeParams,
 } from '../../../types/dict.js'
 import {
+  dictDetailCacheResponseSchema,
   dictDetailDeleteSchema,
   dictDetailInputSchema,
   dictDetailListResponseSchema,
@@ -76,6 +77,14 @@ const dictDetailRoutes: FastifyPluginAsync = async (app) => {
       }
     }
     return response
+  })
+
+  /** 清除当前字典所有状态的缓存，后续全量查询时重新缓存。 */
+  app.post<{ Params: DictTypeParams }>('/cache/:dictType', {
+    schema: { params: dictParamsSchema, response: { 200: dictDetailCacheResponseSchema } },
+  }, async (request) => {
+    await app.redis.del(getDictDetailCacheKey(request.params.dictType))
+    return { code: 200, message: '字典缓存更新成功' }
   })
 
   app.post<{ Body: DictDetailInput }>('/add', {
