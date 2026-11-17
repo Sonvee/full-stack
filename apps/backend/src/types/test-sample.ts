@@ -11,7 +11,7 @@ export interface TestSampleQueryParams {
   icon?: string
   /** 数字范围，按下限、上限排列。 */
   numberRange?: [number, number]
-  enabled?: boolean
+  status?: string
   singleSelect?: string
   /** 匹配包含全部已选项的记录。 */
   multiSelect?: string[]

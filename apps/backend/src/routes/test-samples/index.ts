@@ -53,7 +53,7 @@ const testSampleRoutes: FastifyPluginAsync = async (app) => {
         query.numberRange
           ? between(testSamples.number, query.numberRange[0], query.numberRange[1])
           : undefined,
-        query.enabled !== undefined ? eq(testSamples.enabled, query.enabled) : undefined,
+        query.status ? eq(testSamples.status, query.status) : undefined,
         query.singleSelect ? eq(testSamples.singleSelect, query.singleSelect) : undefined,
         query.multiSelect?.length
           ? arrayContains(testSamples.multiSelect, query.multiSelect)

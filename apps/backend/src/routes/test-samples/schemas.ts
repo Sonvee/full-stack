@@ -1,10 +1,9 @@
-/** 单选、多选字段使用字符串存储，限制值与页面字典保持一致。 */
-const singleSelectSchema = { type: 'string', enum: ['选项甲', '选项乙', '选项丙'] }
+/** 单选、多选字段保存字典值，选项由字典管理维护。 */
+const singleSelectSchema = { type: 'string', minLength: 1, maxLength: 100 }
 const multiSelectSchema = {
   type: 'array',
-  items: { type: 'string', enum: ['选项甲', '选项乙', '选项丙'] },
+  items: { type: 'string', minLength: 1, maxLength: 100 },
   uniqueItems: true,
-  maxItems: 3,
 }
 
 /** 时间范围固定为 [开始时间, 结束时间]。 */
@@ -21,7 +20,7 @@ const editableProperties = {
   icon: { type: 'string', maxLength: 100 },
   number: { type: 'number' },
   index: { type: 'integer', minimum: -2147483648, maximum: 2147483647, description: '排序，数值越小越靠前' },
-  enabled: { type: 'boolean' },
+  status: { type: 'string', minLength: 1, maxLength: 100 },
   singleSelect: singleSelectSchema,
   multiSelect: multiSelectSchema,
   operator: { type: 'string', minLength: 1, maxLength: 100, pattern: '\\S' },
@@ -47,8 +46,8 @@ export const testSampleQuerySchema = {
       minItems: 2,
       maxItems: 2,
     },
-    enabled: { type: 'boolean' },
-    singleSelect: singleSelectSchema,
+    status: { type: 'string', maxLength: 100 },
+    singleSelect: { type: 'string', maxLength: 100 },
     multiSelect: multiSelectSchema,
     operator: { type: 'string', maxLength: 100 },
     createdRange: dateTimeRangeSchema,

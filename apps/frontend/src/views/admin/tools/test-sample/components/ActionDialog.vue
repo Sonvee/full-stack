@@ -31,13 +31,19 @@
       <el-form-item prop="number" label="测试数字">
         <el-input-number v-model="formData.number" :precision="2" :step="0.1" controls-position="right" class="w-full!" />
       </el-form-item>
-      <el-form-item prop="enabled" label="测试开关">
-        <el-switch v-model="formData.enabled" active-text="开启" inactive-text="关闭" />
+      <el-form-item prop="status" label="测试状态">
+        <SvDictSelect
+          v-model="formData.status"
+          :dict-list="sys_status"
+          label-key="label"
+          value-key="value"
+          placeholder="请选择测试状态"
+        />
       </el-form-item>
       <el-form-item prop="singleSelect" label="测试单选">
         <SvDictSelect
           v-model="formData.singleSelect"
-          :dict-list="dict_single_select"
+          :dict-list="test_single_select"
           label-key="label"
           value-key="value"
           placeholder="请选择测试单选"
@@ -46,7 +52,7 @@
       <el-form-item prop="multiSelect" label="测试多选">
         <SvDictSelect
           v-model="formData.multiSelect"
-          :dict-list="dict_multi_select"
+          :dict-list="test_multi_select"
           label-key="label"
           value-key="value"
           multiple
@@ -81,7 +87,7 @@ const open = defineModel<boolean>('open', { default: false })
 const emit = defineEmits<{ confirm: [values: TestSampleListItem] }>()
 
 /** 注入字典数据。 */
-const { dict_single_select, dict_multi_select } = inject<any>('__DICT__')
+const { sys_status, test_single_select, test_multi_select } = inject<any>('__DICT__')
 
 /** 新增样例的默认表单数据，编号与创建、更新时间由服务端维护。 */
 const defaultFormData: TestSampleListItem = {
@@ -90,8 +96,8 @@ const defaultFormData: TestSampleListItem = {
   icon: 'sv-icon-tool',
   number: 0,
   index: 0,
-  enabled: false,
-  singleSelect: '选项甲',
+  status: '',
+  singleSelect: '',
   multiSelect: [],
   operator: ''
 }
@@ -106,6 +112,7 @@ const rules: FormRules<TestSampleListItem> = {
   operator: [{ required: true, message: '请输入操作人', trigger: ['blur', 'change'] }],
   number: [{ required: true, message: '请输入有效的数字', trigger: ['blur', 'change'] }],
   index: [{ required: true, message: '请输入有效的排序整数', trigger: ['blur', 'change'] }],
+  status: [{ required: true, message: '请选择测试状态', trigger: 'change' }],
   singleSelect: [{ required: true, message: '请选择测试单选', trigger: 'change' }]
 }
 

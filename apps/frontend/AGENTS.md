@@ -12,10 +12,10 @@
 ## CRUD 页面实现基准（强制）
 
 - `src/views/admin/tools/test-sample/` 是前端 CRUD 页面的强制实现基准。凡涉及新增（Create）、查询（Read，包括列表与详情）、修改（Update）、删除（Delete）中任意一个或多个操作的页面及其配套组件，在新增、修改或重构时都必须严格仿照该样例，无论是否同时具备四项功能。
-- 开始开发或修改前，必须先阅读样例的当前实现：[页面入口](src/views/admin/tools/test-sample/index.vue)、[筛选表单](src/views/admin/tools/test-sample/components/FilterForm.vue)、[新增 / 编辑弹窗](src/views/admin/tools/test-sample/components/ActionDialog.vue)及[字典数据](src/views/admin/tools/test-sample/dict-data.ts)，按所涉及的功能对照对应实现。
+- 开始开发或修改前，必须先阅读样例的当前实现：[页面入口](src/views/admin/tools/test-sample/index.vue)、[筛选表单](src/views/admin/tools/test-sample/components/FilterForm.vue)、[新增 / 编辑弹窗](src/views/admin/tools/test-sample/components/ActionDialog.vue)及[字典 composable](src/composables/use-dict.ts)，按所涉及的功能对照对应实现。
 - 严格遵循的范围包括但不限于：目录与文件组织、组件职责拆分、Vue SFC 块顺序、导入与代码排列、模板布局、组件及工具复用、状态与类型组织、函数写法、异步处理、样式写法，以及注释、代码风格和命名风格；均以样例当前代码为准。
 - 注释须沿用样例的位置、格式和说明粒度：模板按区域添加 `<!-- ... -->` 注释，函数及关键数据使用中文 `/** ... */` 文档注释，样式中的非直观规则按样例补充说明；注释内容须与当前业务一致。
-- 同职责的变量、方法、事件和组件沿用样例命名，如 `dataList`、`queryParams`、`selectedList`、`toQuery`、`toSearch`、`toReset`、`toAdd`、`toUpdate`、`toDelete`、`toConfirm`、`handleSelectionChange`、`FilterForm` 和 `ActionDialog`；字典沿用 `dict_` 加字段 snake_case 的命名约定。
+- 同职责的变量、方法、事件和组件沿用样例命名，如 `dataList`、`queryParams`、`selectedList`、`toQuery`、`toSearch`、`toReset`、`toAdd`、`toUpdate`、`toDelete`、`toConfirm`、`handleSelectionChange`、`FilterForm` 和 `ActionDialog`；字典通过 `useDict` 加载，变量名沿用字典编码。
 - 涉及筛选、分页、行选择、表单校验、弹窗初始化与重置、提交、单条或批量删除时，必须沿用样例对应的数据流、事件契约、加载状态、重复提交防护、确认提示，以及成功后的列表刷新和页码处理方式。
 - 按实际需求保留对应操作及其配套实现，未涉及的操作、组件、状态、方法和依赖不添加；业务实体、字段、文案和 API 标识符等按实际模块替换，所涉及部分的通用结构和写法仍须严格遵循样例。
 

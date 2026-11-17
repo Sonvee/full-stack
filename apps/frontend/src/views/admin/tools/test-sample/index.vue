@@ -34,14 +34,14 @@
           </template>
         </el-table-column>
         <el-table-column prop="number" label="测试数字" :min-width="120" align="center" />
-        <el-table-column prop="enabled" label="测试开关" :min-width="100" align="center">
+        <el-table-column prop="status" label="测试状态" :min-width="100" align="center">
           <template #default="{ row }">
-            <SvDictTag :dict-list="dict_enabled" :data="row.enabled" label-key="label" value-key="value" />
+            <SvDictTag :dict-list="sys_status" :data="row.status" label-key="label" value-key="value" />
           </template>
         </el-table-column>
         <el-table-column prop="singleSelect" label="测试单选" :min-width="120" align="center">
           <template #default="{ row }">
-            <SvDictTag :dict-list="dict_single_select" :data="row.singleSelect" label-key="label" value-key="value" />
+            <SvDictTag :dict-list="test_single_select" :data="row.singleSelect" label-key="label" value-key="value" />
           </template>
         </el-table-column>
         <el-table-column prop="multiSelect" label="测试多选" :min-width="200" align="center">
@@ -50,7 +50,7 @@
               <SvDictTag
                 v-for="item in row.multiSelect"
                 :key="item"
-                :dict-list="dict_multi_select"
+                :dict-list="test_multi_select"
                 :data="item"
                 label-key="label"
                 value-key="value"
@@ -105,6 +105,7 @@
 import { onMounted, provide, ref, shallowRef, useTemplateRef } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { apiTestSampleAdd, apiTestSampleDelete, apiTestSampleList, apiTestSampleUpdate } from '@/api/test-sample'
+import { useDict } from '@/composables/use-dict'
 import { useSystemSettingStore } from '@/stores/system-setting'
 import type { TestSampleListItem, TestSampleQueryParams } from '@/types/test-sample'
 import { formatDateTime } from '@/utils/date-time'
@@ -113,13 +114,13 @@ import SvFullscreen from '@/components/SvFullscreen/SvFullscreen.vue'
 import SvPagination from '@/components/SvPagination/SvPagination.vue'
 import ActionDialog from './components/ActionDialog.vue'
 import FilterForm from './components/FilterForm.vue'
-import { dict_enabled, dict_multi_select, dict_single_select } from './dict-data'
 
-/** 页面统一向子组件提供字典。 */
+/** 加载页面字典，并统一向子组件提供。 */
+const { sys_status, test_single_select, test_multi_select } = useDict('sys_status', 'test_single_select', 'test_multi_select')
 provide('__DICT__', {
-  dict_single_select,
-  dict_multi_select,
-  dict_enabled
+  sys_status,
+  test_single_select,
+  test_multi_select
 })
 
 const dataList = shallowRef<TestSampleListItem[]>([])

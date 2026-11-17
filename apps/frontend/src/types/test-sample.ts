@@ -7,7 +7,7 @@ export interface TestSampleListItem {
   number: number
   /** 排序值，数值越小越靠前。 */
   index: number
-  enabled: boolean
+  status: string
   singleSelect: string
   multiSelect: string[]
   /** 当前未接入登录，由表单填写最后一次操作人的名称。 */
@@ -24,7 +24,7 @@ export interface TestSampleQueryParams {
   description?: string
   icon?: string
   numberRange?: [number, number]
-  enabled?: boolean
+  status?: string
   singleSelect?: string
   multiSelect?: string[]
   operator?: string

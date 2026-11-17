@@ -15,10 +15,10 @@
         <el-form-item prop="description" label="测试描述">
           <el-input v-model.trim="formData.description" clearable placeholder="请输入测试描述" :maxlength="2000" />
         </el-form-item>
-        <el-form-item prop="enabled" label="测试开关">
+        <el-form-item prop="status" label="测试状态">
           <SvDictSelect
-            v-model="formData.enabled"
-            :dict-list="dict_enabled"
+            v-model="formData.status"
+            :dict-list="sys_status"
             label-key="label"
             value-key="value"
             placeholder="全部"
@@ -28,7 +28,7 @@
         <el-form-item prop="singleSelect" label="测试单选">
           <SvDictSelect
             v-model="formData.singleSelect"
-            :dict-list="dict_single_select"
+            :dict-list="test_single_select"
             label-key="label"
             value-key="value"
             placeholder="全部"
@@ -38,7 +38,7 @@
         <el-form-item prop="multiSelect" label="测试多选">
           <SvDictSelect
             v-model="formData.multiSelect"
-            :dict-list="dict_multi_select"
+            :dict-list="test_multi_select"
             label-key="label"
             value-key="value"
             placeholder="包含全部已选项"
@@ -87,15 +87,15 @@ const emit = defineEmits<{
 }>()
 
 /** 注入字典数据。 */
-const { dict_single_select, dict_multi_select, dict_enabled } = inject<any>('__DICT__')
+const { sys_status, test_single_select, test_multi_select } = inject<any>('__DICT__')
 
-/** 默认筛选条件；单选和开关未筛选时使用 undefined，pageNum 与 pageSize 由父页面管理。 */
+/** 默认筛选条件；单选和状态未筛选时使用 undefined，pageNum 与 pageSize 由父页面管理。 */
 const defaultQueryParams: Omit<TestSampleQueryParams, 'pageNum' | 'pageSize'> = {
   name: '',
   description: '',
   icon: '',
   numberRange: [0, 999],
-  enabled: undefined,
+  status: undefined,
   singleSelect: undefined,
   multiSelect: [],
   operator: '',
