@@ -17,7 +17,7 @@
     "components": "@/components",
     "utils": "@/utils",
     "ui": "@/components/ui",
-    "lib": "@/utils",
+    "lib": "@/lib",
     "composables": "@/composables"
   },
   "registries": {}
