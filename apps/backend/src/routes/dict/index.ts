@@ -10,6 +10,7 @@ import type {
   DictUpdateParams,
 } from '../../types/dict.js'
 import dictDetailRoutes from './dict-detail/index.js'
+import { getDictDetailCacheKey } from './cache.js'
 import {
   dictDeleteResponseSchema,
   dictDeleteSchema,
@@ -77,12 +78,26 @@ const dictRoutes: FastifyPluginAsync = async (app) => {
     schema: { body: dictUpdateSchema, response: { 200: dictResponseSchema } },
   }, async (request, reply) => {
     const { id, ...input } = request.body
-    const [data] = await app.db.update(dict).set({ ...input, updatedAt: new Date() })
-      .where(eq(dict.id, id)).returning()
-    if (!data) {
+    const result = await app.db.transaction(async (tx) => {
+      // 锁定原记录，确保并发修改编码时能清理实际的旧编码缓存。
+      const [previous] = await tx.select({ dictType: dict.dictType }).from(dict)
+        .where(eq(dict.id, id)).for('update')
+      if (!previous) return
+
+      const [data] = await tx.update(dict).set({ ...input, updatedAt: new Date() })
+        .where(eq(dict.id, id)).returning()
+      return { data, previousDictType: previous.dictType }
+    })
+    if (!result) {
       return reply.code(404).send({ code: 404, message: '字典不存在或已被删除' })
     }
-    return { code: 200, message: '修改成功', data }
+    if (result.previousDictType !== result.data.dictType) {
+      await app.redis.del(
+        getDictDetailCacheKey(result.previousDictType),
+        getDictDetailCacheKey(result.data.dictType),
+      )
+    }
+    return { code: 200, message: '修改成功', data: result.data }
   })
 
   app.post<{ Body: DictDeleteParams }>('/delete', {
@@ -90,7 +105,10 @@ const dictRoutes: FastifyPluginAsync = async (app) => {
   }, async (request) => {
     // 外键阻止删除非空字典；批量删除是同一条 SQL，不会只删除其中一部分。
     const deleted = await app.db.delete(dict).where(inArray(dict.id, request.body.ids))
-      .returning({ id: dict.id })
+      .returning({ id: dict.id, dictType: dict.dictType })
+    if (deleted.length > 0) {
+      await app.redis.del(...deleted.map((item) => getDictDetailCacheKey(item.dictType)))
+    }
     return { code: 200, message: '删除成功', data: { deletedCount: deleted.length } }
   })
 }

@@ -7,8 +7,8 @@ export function apiDictList(params: DictQueryParams) {
   return useRequest<ApiResponse<DictListItem[]>>({ url: '/dict/list', method: 'get', params })
 }
 
-/** 按字典类型查询所属字典，支持详情页直接访问。 */
-export function apiDictDetail(dictType: string) {
+/** 按字典编码查询字典类型详情，支持详情页直接访问。 */
+export function apiDictType(dictType: string) {
   return useRequest<ApiResponse<DictListItem>>({ url: `/dict/type/${dictType}`, method: 'get' })
 }
 
@@ -27,8 +27,8 @@ export function apiDictDelete(data: ApiDeleteParams) {
   return useRequest<ApiResponse<ApiDeleteResult>>({ url: '/dict/delete', method: 'post', data })
 }
 
-/** 按路径中的字典类型分页查询数据项。 */
-export function apiDictDetailList(params: DictDetailQueryParams) {
+/** 按字典编码查询数据项，pageSize 为 -1 时返回全量数据。 */
+export function apiDictDetail(params: DictDetailQueryParams) {
   return useRequest<ApiResponse<DictDetailListItem[]>>({ url: `/dict/detail/${params.dictType}`, method: 'get', params })
 }
 

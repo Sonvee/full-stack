@@ -88,7 +88,7 @@
 import { onMounted, provide, ref, shallowRef, useTemplateRef } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { apiDictDetailAdd, apiDictDetailDelete, apiDictDetailList, apiDictDetailUpdate, apiDictDetail } from '@/api/dict'
+import { apiDictDetail, apiDictDetailAdd, apiDictDetailDelete, apiDictDetailUpdate, apiDictType } from '@/api/dict'
 import { useSystemSettingStore } from '@/stores/system-setting'
 import type { DictDetailListItem, DictDetailQueryParams, DictListItem } from '@/types/dict'
 import { formatDateTime } from '@/utils/date-time'
@@ -156,8 +156,8 @@ async function toQuery() {
   loading.value = true
   try {
     const [dictRes, res] = await Promise.all([
-      apiDictDetail(dictType),
-      apiDictDetailList(queryParams.value)
+      apiDictType(dictType),
+      apiDictDetail(queryParams.value)
     ])
     dict.value = dictRes.data
     dataList.value = res.data ?? []
