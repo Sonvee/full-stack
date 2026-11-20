@@ -10,14 +10,28 @@
 
     <!-- 表格工具栏 -->
     <div class="flex shrink-0 flex-wrap items-center">
-      <el-button type="primary" @click="toAdd"><i class="sv-icon-plus mr-2" />新增</el-button>
-      <el-button type="danger" :disabled="selectedList.length === 0" @click="toDelete()"> <i class="sv-icon-delete mr-2" />删除 </el-button>
+      <el-button type="primary" @click="toAdd">
+        <template #icon>
+          <i class="sv-icon-plus" />
+        </template>
+        新增
+      </el-button>
+      <el-button type="danger" :disabled="selectedList.length === 0" @click="toDelete()">
+        <template #icon>
+          <i class="sv-icon-delete" />
+        </template>
+        删除
+      </el-button>
       <span class="min-w-0 flex-1" />
       <el-button circle title="刷新" @click="toQuery">
-        <i class="sv-icon-refresh" />
+        <template #icon>
+          <i class="sv-icon-refresh" />
+        </template>
       </el-button>
       <el-button circle :title="showFilters ? '隐藏筛选' : '显示筛选'" @click="toToggleFilter">
-        <i :class="showFilters ? 'sv-icon-filterremove' : 'sv-icon-filter'" />
+        <template #icon>
+          <i :class="showFilters ? 'sv-icon-filterremove' : 'sv-icon-filter'" />
+        </template>
       </el-button>
     </div>
 

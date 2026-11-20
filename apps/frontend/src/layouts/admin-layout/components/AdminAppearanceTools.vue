@@ -6,7 +6,9 @@
 
     <el-dropdown trigger="click" placement="bottom-end">
       <el-button text circle :title="`尺寸模式：${currentSize.label}`">
-        <i class="sv-icon-formatsize text-lg" />
+        <template #icon>
+          <i class="sv-icon-formatsize text-lg" />
+        </template>
       </el-button>
       <template #dropdown>
         <el-dropdown-menu>
@@ -28,7 +30,9 @@
 
     <el-dropdown trigger="click" placement="bottom-end">
       <el-button text circle :title="`圆角模式：${currentRadius.label}`">
-        <i class="sv-icon-borderstyle text-lg" />
+        <template #icon>
+          <i class="sv-icon-borderstyle text-lg" />
+        </template>
       </el-button>
       <template #dropdown>
         <el-dropdown-menu>
@@ -50,7 +54,9 @@
 
     <el-dropdown trigger="click" placement="bottom-end">
       <el-button text circle :title="`主题色：${currentThemeColor.label}`">
-        <i class="sv-icon-palette text-lg" />
+        <template #icon>
+          <i class="sv-icon-palette text-lg" />
+        </template>
       </el-button>
       <template #dropdown>
         <el-dropdown-menu>
@@ -73,7 +79,9 @@
 
     <el-dropdown trigger="click" placement="bottom-end">
       <el-button text circle :title="`皮肤外观：${currentSkin.label}`">
-        <i :class="currentSkin.icon" class="text-lg" />
+        <template #icon>
+          <i :class="currentSkin.icon" class="text-lg" />
+        </template>
       </el-button>
       <template #dropdown>
         <el-dropdown-menu>

@@ -6,7 +6,9 @@
     :disabled="pending || (props.f11 ? !isSupported : !props.container)"
     @click="toggle"
   >
-    <i :class="isFullscreen ? 'sv-icon-fullscreenexit' : 'sv-icon-fullscreen'" class="text-lg"/>
+    <template #icon>
+      <i :class="isFullscreen ? 'sv-icon-fullscreenexit' : 'sv-icon-fullscreen'" class="text-lg" />
+    </template>
   </el-button>
 </template>
 

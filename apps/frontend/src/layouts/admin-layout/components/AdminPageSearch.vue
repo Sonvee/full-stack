@@ -7,7 +7,9 @@
     <kbd class="shrink-0 rounded-sm bg-muted px-1 py-0.5 text-xs text-muted-foreground"> Ctrl + K </kbd>
   </el-button>
   <el-button text circle class="sm:hidden!" title="搜索页面" @click="openSearch">
-    <i class="sv-icon-magnify" />
+    <template #icon>
+      <i class="sv-icon-magnify" />
+    </template>
   </el-button>
 
   <el-dialog v-model="isOpen" title="搜索页面" width="min(36rem, calc(100vw - 2rem))" align-center append-to-body destroy-on-close>

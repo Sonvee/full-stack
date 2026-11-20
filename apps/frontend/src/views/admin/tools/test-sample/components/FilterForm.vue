@@ -62,8 +62,18 @@
           <SvDateTimePicker v-model="formData.updatedRange" />
         </el-form-item>
         <div class="filter-form-actions flex min-w-0 flex-wrap items-center justify-end gap-2 self-end [&>.el-button]:ml-0!">
-          <el-button native-type="submit" type="primary"><i class="sv-icon-magnify mr-2" />查询</el-button>
-          <el-button @click="reset"><i class="sv-icon-reload mr-2" />重置</el-button>
+          <el-button native-type="submit" type="primary">
+            <template #icon>
+              <i class="sv-icon-magnify" />
+            </template>
+            查询
+          </el-button>
+          <el-button @click="reset">
+            <template #icon>
+              <i class="sv-icon-reload" />
+            </template>
+            重置
+          </el-button>
           <el-button class="filter-form-toggle" text @click="toggleExpanded">
             {{ expanded ? '收起条件' : '展开条件' }}
             <i class="ml-2" :class="expanded ? 'sv-icon-chevronup' : 'sv-icon-chevrondown'" />

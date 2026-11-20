@@ -13,18 +13,40 @@
 
     <!-- 表格工具栏 -->
     <div class="flex shrink-0 flex-wrap items-center">
-      <el-button type="primary" :disabled="!dict" @click="toAdd"><i class="sv-icon-plus mr-2" />新增</el-button>
-      <el-button type="danger" :disabled="selectedList.length === 0" @click="toDelete()"> <i class="sv-icon-delete mr-2" />删除 </el-button>
-      <el-button type="warning" :disabled="!dict" :loading="cacheLoading" @click="toUpdateCache">
-        <i class="sv-icon-database-cache mr-2" />更新字典缓存
+      <el-button type="primary" :disabled="!dict" @click="toAdd">
+        <template #icon>
+          <i class="sv-icon-plus" />
+        </template>
+        新增
       </el-button>
-      <el-button @click="toBack"><i class="sv-icon-arrowleft mr-2" />返回字典管理</el-button>
+      <el-button type="danger" :disabled="selectedList.length === 0" @click="toDelete()">
+        <template #icon>
+          <i class="sv-icon-delete" />
+        </template>
+        删除
+      </el-button>
+      <el-button type="warning" :disabled="!dict" :loading="cacheLoading" @click="toUpdateCache">
+        <template #icon>
+          <i class="sv-icon-database-cache" />
+        </template>
+        更新字典缓存
+      </el-button>
+      <el-button @click="toBack">
+        <template #icon>
+          <i class="sv-icon-arrowleft" />
+        </template>
+        返回字典管理
+      </el-button>
       <span class="min-w-0 flex-1" />
       <el-button circle title="刷新" @click="toQuery">
-        <i class="sv-icon-refresh" />
+        <template #icon>
+          <i class="sv-icon-refresh" />
+        </template>
       </el-button>
       <el-button circle :title="showFilters ? '隐藏筛选' : '显示筛选'" @click="toToggleFilter">
-        <i :class="showFilters ? 'sv-icon-filterremove' : 'sv-icon-filter'" />
+        <template #icon>
+          <i :class="showFilters ? 'sv-icon-filterremove' : 'sv-icon-filter'" />
+        </template>
       </el-button>
     </div>
 

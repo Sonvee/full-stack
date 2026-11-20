@@ -1,6 +1,8 @@
 <template>
   <el-button text circle title="展开或收起侧栏" @click="toggleSidebar">
-    <i class="text-lg" :class="isOpen ? 'sv-icon-fold' : 'sv-icon-expand'" />
+    <template #icon>
+      <i class="text-lg" :class="isOpen ? 'sv-icon-fold' : 'sv-icon-expand'" />
+    </template>
   </el-button>
 </template>
 

@@ -10,14 +10,28 @@
 
     <!-- 表格工具栏 -->
     <div class="flex shrink-0 flex-wrap items-center">
-      <el-button type="primary" @click="toAdd"><i class="sv-icon-plus mr-2" />新增</el-button>
-      <el-button type="danger" :disabled="selectedList.length === 0" @click="toDelete()"> <i class="sv-icon-delete mr-2" />删除 </el-button>
+      <el-button type="primary" @click="toAdd">
+        <template #icon>
+          <i class="sv-icon-plus" />
+        </template>
+        新增
+      </el-button>
+      <el-button type="danger" :disabled="selectedList.length === 0" @click="toDelete()">
+        <template #icon>
+          <i class="sv-icon-delete" />
+        </template>
+        删除
+      </el-button>
       <span class="min-w-0 flex-1" />
       <el-button circle title="刷新" @click="toQuery">
-        <i class="sv-icon-refresh" />
+        <template #icon>
+          <i class="sv-icon-refresh" />
+        </template>
       </el-button>
       <el-button circle :title="showFilters ? '隐藏筛选' : '显示筛选'" @click="toToggleFilter">
-        <i :class="showFilters ? 'sv-icon-filterremove' : 'sv-icon-filter'" />
+        <template #icon>
+          <i :class="showFilters ? 'sv-icon-filterremove' : 'sv-icon-filter'" />
+        </template>
       </el-button>
     </div>
 
@@ -28,7 +42,16 @@
         <el-table-column prop="name" label="字典名称" :min-width="160" show-overflow-tooltip />
         <el-table-column prop="dictType" label="字典类型" :min-width="180" show-overflow-tooltip>
           <template #default="{ row }">
-            <el-button type="primary" link title="管理字典数据" @click="toDetail(row as DictListItem)">{{ row.dictType }}</el-button>
+            <div class="flex items-center">
+              <el-button type="primary" link @click="toDetail(row as DictListItem)">
+                {{ row.dictType }}
+              </el-button>
+              <el-button type="primary" link class="shrink-0" title="复制字典类型" @click.stop="toCopy(row.dictType)">
+                <template #icon>
+                  <i class="sv-icon-contentcopy" />
+                </template>
+              </el-button>
+            </div>
           </template>
         </el-table-column>
         <el-table-column prop="status" label="状态" :width="100" align="center">
@@ -81,6 +104,7 @@
 <script lang="ts" setup>
 import { onMounted, provide, ref, shallowRef, useTemplateRef } from 'vue'
 import { useRouter } from 'vue-router'
+import { useClipboard } from '@vueuse/core'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { apiDictAdd, apiDictDelete, apiDictList, apiDictUpdate } from '@/api/dict'
 import { useSystemSettingStore } from '@/stores/system-setting'
@@ -99,6 +123,7 @@ provide('__DICT__', {
 })
 
 const router = useRouter()
+const { copy, isSupported } = useClipboard()
 const dataList = shallowRef<DictListItem[]>([])
 const loading = shallowRef(false)
 const total = shallowRef(0)
@@ -182,6 +207,21 @@ function toUpdate(row: DictListItem) {
 /** 打开当前字典的数据管理子页面。 */
 function toDetail(row: DictListItem) {
   void router.push({ name: 'admin-dict-detail', params: { dictType: row.dictType } })
+}
+
+/** 复制当前行的字典类型。 */
+async function toCopy(dictType: string) {
+  if (!isSupported.value) {
+    ElMessage.error('当前浏览器不支持剪贴板复制')
+    return
+  }
+
+  try {
+    await copy(dictType)
+    ElMessage.success('字典类型已复制')
+  } catch {
+    ElMessage.error('复制失败，请检查浏览器剪贴板权限')
+  }
 }
 
 /** 新增或修改成功后关闭弹窗并刷新列表，新增时回到第一页。 */
