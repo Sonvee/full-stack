@@ -1,23 +1,26 @@
 {
-  "version": 1,
+  "version": 2,
   "skills": {
     "code-with-docs": {
       "source": "Sonvee/sv-ai",
       "sourceType": "github",
       "skillPath": "skills/code-with-docs/SKILL.md",
-      "computedHash": "cfebbba4b3daf535d563942fdc559e6b8626d8d14aba563201dfafed5886f35b"
+      "computedHash": "087826c179ba83d896e64f5b51282166d313380b06afff57976d16ab1f64abba",
+      "commit": "d1aaa49252a030e122702066660f83716f629cd3"
     },
     "sove-coding-style": {
       "source": "Sonvee/sv-ai",
       "sourceType": "github",
       "skillPath": "skills/sove-coding-style/SKILL.md",
-      "computedHash": "0134e3983ae28321189690f35d5362f05cbb840c6b2fbfcc78bd7daed6b0731e"
+      "computedHash": "15c9e41396b6a7698febe0821a5dd5bc2b71d73f0ddbc621019270d6f1a3712b",
+      "commit": "d1aaa49252a030e122702066660f83716f629cd3"
     },
     "sove-skills": {
       "source": "Sonvee/sv-ai",
       "sourceType": "github",
       "skillPath": "skills/sove-skills/SKILL.md",
-      "computedHash": "42b679fe36fe8de84c56c94e192f67abd2dde67111cbe244dd94c6eaa6c30441"
+      "computedHash": "62553e02abbf3312b046b86e94c8f5e55f6e500d2fb3d76a955d69089d7e4f8a",
+      "commit": "d1aaa49252a030e122702066660f83716f629cd3"
     }
   }
 }

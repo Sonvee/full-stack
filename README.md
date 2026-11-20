@@ -48,6 +48,14 @@ node --version
 pnpm --version
 ```
 
+## Skills
+
+更新项目 skills：
+
+```bash
+npx skills update -p
+```
+
 ## 本地开发
 
 仓库使用根目录的 pnpm workspace 统一管理前端、后端和共享 packages，依赖安装与锁文件统一在仓库根目录维护。

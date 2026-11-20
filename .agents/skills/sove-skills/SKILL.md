@@ -124,6 +124,10 @@ Normative keywords such as MUST, MUST NOT, SHOULD, and SHOULD NOT are intentiona
 - Plans MAY use TDD and MAY include creating or running targeted tests when that workflow improves correctness or clarifies the acceptance criteria.
 - Do not default to a full test suite, broad build matrix, or repeated verification. State the minimum sufficient checks and the reason for any wider validation.
 
+### 12. UI Layout Rules
+
+- Avoid unnecessary secondary labels and descriptions. Let the layout do the explaining.
+
 ### Conflict Handling
 
 - Follow higher-priority instructions from the active platform and instruction hierarchy.
